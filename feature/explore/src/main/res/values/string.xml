@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="popular_anime">Popular </string>
+    <string name="airing_anime">Now Airing</string>
+    <string name="upcoming_anim">Upcoming</string>
+    <string name="anime_not_found">Sorry, we could not find any result related to %s</string>
+</resources>

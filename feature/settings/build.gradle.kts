@@ -1,6 +1,8 @@
 plugins {
-    alias(libs.plugins.com.android.library)
-    alias(libs.plugins.org.jetbrains.kotlin.android)
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -24,20 +26,37 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
 dependencies {
+    // Module Implementation
+    implementation(project(":core:common"))
+    implementation(project(":core:domain"))
 
-    implementation(libs.core.ktx)
-    implementation(libs.appcompat)
-    implementation(libs.material)
+    //  Compose Toolkit
+    implementation(platform(libs.compose.bom))
+    implementation(libs.bundles.compose.toolkit)
+    implementation(libs.compose.navigation)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.compose.junit)
+    debugImplementation(libs.bundles.compose.tooling.and.manifest)
+
+    //  Coil
+    implementation(libs.coil.compose)
+
+    // Android JUnit
+    androidTestImplementation(libs.android.junit)
+
+    // Junit
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+
+    // Dagger-Hilt
+    implementation(libs.dagger.hilt.module)
+    kapt(libs.dagger.hilt.compiler)
 }
