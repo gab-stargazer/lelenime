@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "802532355624",
+    "project_id": "lelenime-a12cc",
+    "storage_bucket": "lelenime-a12cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:802532355624:android:f73e9994a46e2f51958f1d",
+        "android_client_info": {
+          "package_name": "com.lelestacia.lelenime"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "802532355624-c639kqf0m7a33s7svcl2nkprkatoj491.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlJ7kRtYmdWKRrz0XOXj-9pRk-rCPP7oU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "802532355624-c639kqf0m7a33s7svcl2nkprkatoj491.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

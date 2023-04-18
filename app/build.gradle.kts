@@ -3,6 +3,9 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    id("com.google.firebase.firebase-perf")
 }
 
 android {
@@ -73,6 +76,9 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose.toolkit)
     implementation(libs.compose.navigation)
+    implementation(libs.firebase.crashlytics.ktx)
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.perf.ktx)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.compose.junit)
     debugImplementation(libs.bundles.compose.tooling.and.manifest)
