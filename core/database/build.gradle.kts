@@ -1,6 +1,8 @@
 plugins {
-    alias(libs.plugins.com.android.library)
-    alias(libs.plugins.org.jetbrains.kotlin.android)
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -8,10 +10,17 @@ android {
     compileSdk = 33
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["room.schemaLocation"] = "$projectDir/schemas"
+                arguments["room.incremental"] = "true"
+                arguments["room.expandProjection"] = "true"
+            }
+        }
     }
 
     buildTypes {
@@ -24,20 +33,38 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
 dependencies {
+    // Room Bundle
+    implementation(libs.bundles.room)
+    kapt(libs.room.compiler)
 
-    implementation(libs.core.ktx)
-    implementation(libs.appcompat)
-    implementation(libs.material)
+    // GSON
+    implementation(libs.retrofit.gson.deserializer)
+
+    // Dagger-Hilt
+    implementation(libs.dagger.hilt.module)
+    kapt(libs.dagger.hilt.compiler)
+
+    //  Datastore-Preferences
+    implementation(libs.datastore.pref)
+
+    // Android JUnit
+    androidTestImplementation(libs.android.junit)
+
+    // Junit
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+}
+
+kapt {
+    correctErrorTypes = true
+    showProcessorStats = true
+    useBuildCache = true
 }

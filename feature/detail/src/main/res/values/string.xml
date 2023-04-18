@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rank_and_score">#%s - %s</string>
+    <string name="rated_by">Rated by %d people</string>
+    <string name="type">Type</string>
+    <string name="episode">Episode</string>
+    <string name="status">Status</string>
+    <string name="season">Season</string>
+    <string name="aired">Aired</string>
+    <string name="studio">Studio</string>
+    <string name="source">Source</string>
+    <string name="genre">Genre</string>
+    <string name="duration">Duration</string>
+    <string name="rating">Rating</string>
+    <string name="information_value">:\t%s</string>
+</resources>

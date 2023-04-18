@@ -1,6 +1,11 @@
 plugins {
-    alias(libs.plugins.com.android.application)
-    alias(libs.plugins.org.jetbrains.kotlin.android)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    id("com.google.firebase.firebase-perf")
 }
 
 android {
@@ -9,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.lelestacia.lelenime"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -28,19 +33,26 @@ android {
                 "proguard-rules.pro"
             )
         }
+        create("benchmark") {
+            initWith(buildTypes.getByName("release"))
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += listOf("release")
+            isDebuggable = false
+        }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.2"
+        kotlinCompilerExtensionVersion = "1.4.3"
     }
     packaging {
         resources {
@@ -51,19 +63,62 @@ android {
 
 dependencies {
 
-    implementation(libs.core.ktx)
-    implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.activity.compose)
+    //  Module Implementation
+    implementation(project(":core:common"))
+    implementation(project(":core:model"))
+    implementation(project(":core:domain"))
+    implementation(project(":feature:explore"))
+    implementation(project(":feature:collection"))
+    implementation(project(":feature:detail"))
+    implementation(project(":feature:more"))
+
+    //  Compose Toolkit
     implementation(platform(libs.compose.bom))
-    implementation(libs.ui)
-    implementation(libs.ui.graphics)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+    implementation(libs.bundles.compose.toolkit)
+    implementation(libs.compose.navigation)
+    implementation(libs.firebase.crashlytics.ktx)
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.perf.ktx)
     androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.ui.test.junit4)
-    debugImplementation(libs.ui.tooling)
-    debugImplementation(libs.ui.test.manifest)
+    androidTestImplementation(libs.compose.junit)
+    debugImplementation(libs.bundles.compose.tooling.and.manifest)
+
+    // KTX
+    implementation(libs.kotlin.ktx)
+
+    // Lifecycle
+    implementation(libs.lifecycle.runtime)
+
+    //  Activity Compose
+    implementation(libs.activity.compose)
+
+    // Android JUnit
+    androidTestImplementation(libs.android.junit)
+
+    // Junit
+    testImplementation(libs.junit)
+
+    // Espresso UI Test
+    androidTestImplementation(libs.espresso)
+
+    //  Dagger Hilt
+    implementation(libs.dagger.hilt.module)
+    kapt(libs.dagger.hilt.compiler)
+    implementation(libs.dagger.hilt.compose)
+
+    //  Timber
+    implementation(libs.timber)
+
+    //  Accompanist
+    implementation(libs.accompanist.system.ui.controller)
+    implementation(libs.accompanist.animation.navigation)
+
+    //  Profiler
+    implementation(libs.baseline.profiler)
+}
+
+kapt {
+    correctErrorTypes = true
+    showProcessorStats = true
+    useBuildCache = true
 }

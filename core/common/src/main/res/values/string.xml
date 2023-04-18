@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="information_value">:\t%s</string>
+    <string name="card">Card</string>
+    <string name="compact_card">Compact Card</string>
+    <string name="list">List</string>
+    <string name="unknown_error">We encounter unknown error</string>
+    <string name="retry">Retry</string>
+    <string name="favorite_btn">Favorite Button</string>
+    <string name="cover_images">Cover image from Anime %s</string>
+    <string name="not_yet_aired">Not yet aired</string>
+    <string name="currently_airing">Currently Airing</string>
+    <string name="finished_airing">Finished Airing</string>
+    <string name="rank">#%s</string>
+    <string name="score_icon">Score Icon</string>
+    <string name="scoredBy_icon">Scored By People Icon</string>
+    <string name="anime_status_icon">Anime airing status Icon</string>
+    <string name="empty_synopsis">"No Synopsis Provided By Mal"</string>
+</resources>
