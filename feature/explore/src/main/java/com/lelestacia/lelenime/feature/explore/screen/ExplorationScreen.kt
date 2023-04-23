@@ -41,6 +41,7 @@ import com.lelestacia.lelenime.feature.explore.component.DashboardSearchHeader
 import com.lelestacia.lelenime.feature.explore.screen.DisplayType
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState
+import timber.log.Timber
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -97,6 +98,7 @@ fun ExplorationScreen(
     ) { paddingValue ->
         when (val refreshing = pagingAnime.loadState.refresh) {
             is LoadState.Error -> {
+                Timber.e(refreshing.error)
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
