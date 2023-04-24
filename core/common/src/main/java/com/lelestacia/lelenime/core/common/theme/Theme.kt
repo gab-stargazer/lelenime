@@ -105,7 +105,7 @@ fun LelenimeTheme(
         }
     }
 
-    CompositionLocalProvider(LocalPadding provides Padding()) {
+    CompositionLocalProvider(LocalSpacing provides Spacing()) {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = Typography,

@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 
-data class Padding(
+data class Spacing(
     val default: Dp = 0.dp,
     val extraSmall: Dp = 4.dp,
     val small: Dp = 8.dp,
@@ -18,9 +18,9 @@ data class Padding(
     val extraLarge: Dp = 24.dp
 )
 
-val LocalPadding: ProvidableCompositionLocal<Padding> = compositionLocalOf { Padding() }
+val LocalSpacing: ProvidableCompositionLocal<Spacing> = compositionLocalOf { Spacing() }
 
-val MaterialTheme.padding: Padding
+val MaterialTheme.spacing: Spacing
     @Composable
     @ReadOnlyComposable
-    get() = LocalPadding.current
+    get() = LocalSpacing.current
