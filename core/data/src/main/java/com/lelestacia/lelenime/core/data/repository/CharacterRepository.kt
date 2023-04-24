@@ -34,15 +34,14 @@ class CharacterRepository @Inject constructor(
 ): ICharacterRepository {
 
     /**
-     * Retrieves a list of characters associated with the specified anime ID from the local database or the API.
-     * If the data is available in the local database and is up-to-date, it will be returned immediately.
-     * Otherwise, the function will fetch the data from the API and insert it into the local database before returning it.
-     *
-     * @param animeID The ID of the anime to retrieve characters for.
-     * @return A flow that emits a [Resource] object with a list of [Character] objects on success, or an error message on failure.
-     *         The flow will also emit a loading state before starting the retrieval process.
+    * A function that returns a flow of [Resource] which emits a list of [Character] for a given anime ID.
+    * This function first fetches the anime characters' data from the local database using the [ICharacterDatabaseService].
+    * If the local data is empty or outdated, this function then fetches the data from the remote API using the [IAnimeNetworkService].
+    * The fetched data is then stored in the local database.
+    * The [Resource] emitted by the flow contains a [List] of [Character] entities.
+    * @param animeID the ID of the anime for which the characters' data is required
+    * @return a [Flow] of [Resource] of [List] of [Character]
      */
-
     override fun getAnimeCharactersByAnimeID(animeID: Int): Flow<Resource<List<Character>>> =
         flow<Resource<List<Character>>> {
             val animeCharactersCrossRef: List<AnimeCharacterReferenceEntity> =
@@ -54,12 +53,6 @@ class CharacterRepository @Inject constructor(
                     animeNetworkService.getAnimeCharactersByAnimeID(animeID = animeID)
 
                 if (apiResponse.isEmpty()) {
-
-                    /**
-                     * Returning here, because since the API doesn't return anything,
-                     * that means the data on the server are also empty
-                     */
-
                     emit(Resource.Success(data = emptyList()))
                     return@flow
                 }
@@ -93,13 +86,6 @@ class CharacterRepository @Inject constructor(
                     emit(Resource.Success(data = characterEntities.map { it.asCharacter() }))
                     return@flow
                 }
-
-                /**
-                 *  At this point, characters' data, voice actors data,
-                 *  and its corresponding reference have been inserted into its own table to be queried in further usage.
-                 *  Also, there's no need to continue the process since the data are coming straight from the API
-                 *  and don't need further inspection
-                 */
             }
 
             val charactersID: List<Int> = animeCharactersCrossRef.map { it.characterID }

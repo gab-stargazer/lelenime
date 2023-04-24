@@ -20,7 +20,6 @@ class JikanErrorParserUtil {
      * @param t the [Throwable] for which to generate the error message.
      * @return a human-readable error message for the given [Throwable].
      */
-
     operator fun invoke(t: Throwable): String {
         if (t is HttpException) {
             val errorResponse = t.response()?.errorBody()
