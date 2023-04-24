@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -80,7 +81,7 @@ fun AnimeCard(
                 ),
                 filterQuality = FilterQuality.Low,
                 modifier = Modifier
-                    .widthIn(min = 100.dp, max = 150.dp)
+                    .width(200.dp)
                     .aspectRatio(3f / 4f)
                     .clip(RoundedCornerShape(4.dp))
                     .clickable {
