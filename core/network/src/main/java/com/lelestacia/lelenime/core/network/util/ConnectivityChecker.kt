@@ -9,7 +9,26 @@ import android.net.NetworkCapabilities.TRANSPORT_CELLULAR
 import android.net.NetworkCapabilities.TRANSPORT_ETHERNET
 import android.net.NetworkCapabilities.TRANSPORT_WIFI
 
+/**
+ * Utility class to check the device's connectivity status.
+ *
+ * Usage:
+ * val connectivityChecker = ConnectivityChecker()
+ * val isConnected = connectivityChecker(context)
+ *
+ * @return true if the device has an active Wi-Fi, cellular, Bluetooth or Ethernet connection,
+ * false otherwise.
+ */
 class ConnectivityChecker {
+
+    /**
+     * Check the device's connectivity status.
+     *
+     * @param mContext the context of the calling activity or application.
+     *
+     * @return true if the device has an active Wi-Fi, cellular, Bluetooth or Ethernet connection,
+     * false otherwise.
+     */
     operator fun invoke(mContext: Context): Boolean {
         val connectivityManager: ConnectivityManager = mContext
             .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

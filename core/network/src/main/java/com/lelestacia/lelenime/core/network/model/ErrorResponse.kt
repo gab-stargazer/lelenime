@@ -10,7 +10,6 @@ import com.google.gson.annotations.SerializedName
  * @property message The error message.
  * @property error The specific error string.
  */
-
 data class ErrorResponse(
     @SerializedName("status")
     val status: Int,
