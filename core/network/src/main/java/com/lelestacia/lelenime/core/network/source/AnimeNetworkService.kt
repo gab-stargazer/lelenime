@@ -3,6 +3,7 @@ package com.lelestacia.lelenime.core.network.source
 import androidx.paging.PagingSource
 import com.lelestacia.lelenime.core.network.endpoint.AnimeAPI
 import com.lelestacia.lelenime.core.network.model.anime.AnimeResponse
+import com.lelestacia.lelenime.core.network.model.character.CharacterResponse
 import javax.inject.Inject
 
 class AnimeNetworkService @Inject constructor(
@@ -40,5 +41,9 @@ class AnimeNetworkService @Inject constructor(
             status = status,
             rating = rating
         )
+    }
+
+    override suspend fun getAnimeCharactersByAnimeID(animeID: Int): List<CharacterResponse> {
+        return animeAPI.getAnimeCharactersByAnimeID(id = animeID).data
     }
 }

@@ -56,6 +56,9 @@ dependencies {
 
     // Junit
     testImplementation(libs.junit)
+
+    // Retrofit
+    implementation(libs.bundles.retrofit.gson)
 }
 
 kapt {

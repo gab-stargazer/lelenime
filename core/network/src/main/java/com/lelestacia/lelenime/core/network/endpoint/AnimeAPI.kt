@@ -1,8 +1,11 @@
 package com.lelestacia.lelenime.core.network.endpoint
 
 import com.lelestacia.lelenime.core.network.model.GenericPaginationResponse
+import com.lelestacia.lelenime.core.network.model.GenericResponse
 import com.lelestacia.lelenime.core.network.model.anime.AnimeResponse
+import com.lelestacia.lelenime.core.network.model.character.CharacterResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface AnimeAPI {
@@ -51,4 +54,9 @@ interface AnimeAPI {
         @Query("rating")rating: String,
         @Query("page") page: Int
     ): GenericPaginationResponse<AnimeResponse>
+
+    @GET("anime/{id}/characters")
+    suspend fun getAnimeCharactersByAnimeID(
+        @Path("{id}") id: Int
+    ): GenericResponse<List<CharacterResponse>>
 }

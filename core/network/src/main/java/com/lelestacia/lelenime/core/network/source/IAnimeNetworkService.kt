@@ -2,6 +2,7 @@ package com.lelestacia.lelenime.core.network.source
 
 import androidx.paging.PagingSource
 import com.lelestacia.lelenime.core.network.model.anime.AnimeResponse
+import com.lelestacia.lelenime.core.network.model.character.CharacterResponse
 
 interface IAnimeNetworkService {
     fun getAiringAnime(): PagingSource<Int, AnimeResponse>
@@ -13,4 +14,5 @@ interface IAnimeNetworkService {
         status: String? = null,
         rating: String? = null
     ): PagingSource<Int, AnimeResponse>
+    suspend fun getAnimeCharactersByAnimeID(animeID: Int): List<CharacterResponse>
 }
