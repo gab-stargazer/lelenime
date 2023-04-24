@@ -9,7 +9,7 @@ buildscript {
         classpath(libs.gradle)
         classpath(libs.google.services)
         classpath(libs.firebase.crashlytics.gradle)
-        classpath(libs.perf.plugin)
+        classpath(libs.firebase.perf.gradle)
     }
 }
 
