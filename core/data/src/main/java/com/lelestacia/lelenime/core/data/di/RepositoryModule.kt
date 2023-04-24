@@ -1,10 +1,13 @@
 package com.lelestacia.lelenime.core.data.di
 
 import com.lelestacia.lelenime.core.data.repository.AnimeRepository
+import com.lelestacia.lelenime.core.data.repository.CharacterRepository
 import com.lelestacia.lelenime.core.data.repository.IAnimeRepository
+import com.lelestacia.lelenime.core.data.repository.ICharacterRepository
 import com.lelestacia.lelenime.core.data.repository.IUserPreferencesRepository
 import com.lelestacia.lelenime.core.data.repository.UserPreferencesRepository
 import com.lelestacia.lelenime.core.database.animeStuff.service.IAnimeDatabaseService
+import com.lelestacia.lelenime.core.database.animeStuff.service.ICharacterDatabaseService
 import com.lelestacia.lelenime.core.database.userPreferences.IUserPreferencesService
 import com.lelestacia.lelenime.core.network.source.IAnimeNetworkService
 import dagger.Module
@@ -35,5 +38,16 @@ object RepositoryModule {
     ): IUserPreferencesRepository =
         UserPreferencesRepository(
             userPreferencesService = userPreferencesService
+        )
+
+    @Singleton
+    @Provides
+    fun provideCharacterRepository(
+        animeNetworkService: IAnimeNetworkService,
+        characterDatabaseService: ICharacterDatabaseService,
+    ):ICharacterRepository =
+        CharacterRepository(
+            animeNetworkService = animeNetworkService,
+            characterDatabaseService = characterDatabaseService
         )
 }
