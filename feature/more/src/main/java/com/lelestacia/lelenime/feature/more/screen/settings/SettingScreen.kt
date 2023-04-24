@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
 import com.lelestacia.lelenime.feature.more.component.DarkModeSettings
 import com.lelestacia.lelenime.feature.more.component.DisplayStyleSettings
 import com.lelestacia.lelenime.feature.more.component.DynamicColorSettings
@@ -68,14 +69,14 @@ fun SettingScreen(
                 isOpened = state.isDisplayStylePreferencesMenuOpened,
                 selectedStyle = state.displayStylePreferences,
                 onEvent = { onEvent(SettingScreenEvent.UpdateDisplayStylePreferences(it)) },
-                changeState = { onEvent(SettingScreenEvent.DisplayStylePreferencesMenuStateChanged) }
+                onStateChanged = { onEvent(SettingScreenEvent.DisplayStylePreferencesMenuStateChanged) }
             )
             Divider()
             DarkModeSettings(
                 isOpened = state.isDarkModePreferencesMenuOpened,
                 selectedTheme = state.darkModePreferences,
                 onEvent = { onEvent(SettingScreenEvent.UpdateDarkModePreferences(it)) },
-                changeState = { onEvent(SettingScreenEvent.DarkModePreferencesMenuStateChanged) }
+                onStateChanged = { onEvent(SettingScreenEvent.DarkModePreferencesMenuStateChanged) }
             )
             if (Build.VERSION.SDK_INT >= 31) {
                 Divider()
@@ -85,12 +86,39 @@ fun SettingScreen(
     }
 }
 
-@Preview
+@Preview(
+    showBackground = true,
+    name = "Setting Screen Day Mode",
+    group = "Setting Screen"
+)
 @Composable
 fun PreviewSettingScreen() {
-    SettingScreen(
-        state = SettingScreenState(),
-        onEvent = {},
-        navController = rememberNavController()
-    )
+    LelenimeTheme(
+        dynamicColor = false
+    ) {
+        SettingScreen(
+            state = SettingScreenState(),
+            onEvent = {},
+            navController = rememberNavController()
+        )
+    }
+}
+
+@Preview(
+    showBackground = true,
+    name = "Setting Screen Dark Mode",
+    group = "Setting Screen",
+)
+@Composable
+fun PreviewSettingScreenDarkMode() {
+    LelenimeTheme(
+        darkTheme = true,
+        dynamicColor = false
+    ) {
+        SettingScreen(
+            state = SettingScreenState(),
+            onEvent = {},
+            navController = rememberNavController()
+        )
+    }
 }

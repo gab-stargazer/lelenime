@@ -13,12 +13,15 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
+import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
+import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.feature.more.R
 
 @Composable
@@ -26,16 +29,21 @@ fun DarkModeSettings(
     isOpened: Boolean,
     selectedTheme: Int,
     onEvent: (Int) -> Unit,
-    changeState: () -> Unit
+    onStateChanged: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)
+            .padding(
+                horizontal = MaterialTheme.spacing.large,
+                vertical = MaterialTheme.spacing.default
+            )
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(
+                space = MaterialTheme.spacing.extraSmall
+            ),
             modifier = Modifier.weight(1f)
         ) {
             Text(
@@ -51,7 +59,7 @@ fun DarkModeSettings(
                 style = MaterialTheme.typography.titleMedium
             )
         }
-        IconButton(onClick = { changeState.invoke() }) {
+        IconButton(onClick = { onStateChanged.invoke() }) {
             Icon(
                 imageVector =
                 if (isOpened) {
@@ -63,7 +71,7 @@ fun DarkModeSettings(
             )
             DropdownMenu(
                 expanded = isOpened,
-                onDismissRequest = { changeState.invoke() }
+                onDismissRequest = { onStateChanged.invoke() }
             ) {
                 DropdownMenuItem(
                     text = {
@@ -71,7 +79,7 @@ fun DarkModeSettings(
                     },
                     onClick = {
                         onEvent(3)
-                        changeState.invoke()
+                        onStateChanged.invoke()
                     }
                 )
 
@@ -79,7 +87,7 @@ fun DarkModeSettings(
                     text = { Text(text = stringResource(id = R.string.day_theme_preferences)) },
                     onClick = {
                         onEvent(1)
-                        changeState.invoke()
+                        onStateChanged.invoke()
                     }
                 )
 
@@ -87,10 +95,46 @@ fun DarkModeSettings(
                     text = { Text(text = stringResource(id = R.string.dark_theme_preferences)) },
                     onClick = {
                         onEvent(2)
-                        changeState.invoke()
+                        onStateChanged.invoke()
                     }
                 )
             }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewDarkModeSettings() {
+    LelenimeTheme(
+        darkTheme = false,
+        dynamicColor = false
+    ) {
+        Surface {
+            DarkModeSettings(
+                isOpened = false,
+                selectedTheme = 1,
+                onEvent = {},
+                onStateChanged = {}
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewDarkModeSettingsDarkMode() {
+    LelenimeTheme(
+        darkTheme = true,
+        dynamicColor = false
+    ) {
+        Surface {
+            DarkModeSettings(
+                isOpened = false,
+                selectedTheme = 1,
+                onEvent = {},
+                onStateChanged = {}
+            )
         }
     }
 }
