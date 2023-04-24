@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.ui.theme
+package com.lelestacia.lelenime.core.common.theme
 
 import androidx.compose.ui.graphics.Color
 

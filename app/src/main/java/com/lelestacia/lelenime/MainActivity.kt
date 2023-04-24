@@ -39,7 +39,7 @@ import com.lelestacia.lelenime.feature.more.screen.more.MoreScreen
 import com.lelestacia.lelenime.feature.more.screen.settings.SettingScreen
 import com.lelestacia.lelenime.feature.more.screen.settings.SettingViewModel
 import com.lelestacia.lelenime.ui.component.LeleNimeBottomBar
-import com.lelestacia.lelenime.ui.theme.LelenimeTheme
+import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
