@@ -21,10 +21,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
+import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.feature.more.component.DarkModeSettings
 import com.lelestacia.lelenime.feature.more.component.DisplayStyleSettings
 import com.lelestacia.lelenime.feature.more.component.DynamicColorSettings
@@ -59,12 +59,16 @@ fun SettingScreen(
         }
     ) { paddingValue ->
         Column(
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+            verticalArrangement = Arrangement.spacedBy(
+                space = MaterialTheme.spacing.medium
+            ),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValue)
         ) {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(
+                height = MaterialTheme.spacing.medium)
+            )
             DisplayStyleSettings(
                 isOpened = state.isDisplayStylePreferencesMenuOpened,
                 selectedStyle = state.displayStylePreferences,
