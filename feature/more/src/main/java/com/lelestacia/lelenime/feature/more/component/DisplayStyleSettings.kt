@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.lelestacia.lelenime.core.common.displayStyle.DisplayStyle
 import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
@@ -58,9 +57,7 @@ fun DisplayStyleSettings(
                     DisplayStyle.COMPACT_CARD -> stringResource(id = com.lelestacia.lelenime.core.common.R.string.compact_card)
                     DisplayStyle.LIST -> stringResource(id = com.lelestacia.lelenime.core.common.R.string.list)
                 },
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold
-                )
+                style = MaterialTheme.typography.titleMedium
             )
         }
         IconButton(onClick = { onStateChanged.invoke() }) {
