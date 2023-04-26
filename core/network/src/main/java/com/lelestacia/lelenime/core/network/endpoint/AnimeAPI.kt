@@ -133,6 +133,6 @@ interface AnimeAPI {
      */
     @GET("anime/{id}/characters")
     suspend fun getAnimeCharactersByAnimeID(
-        @Path("{id}") id: Int
+        @Path("id") id: Int
     ): GenericResponse<List<CharacterResponse>>
 }
