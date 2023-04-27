@@ -1,6 +1,7 @@
 package com.lelestacia.lelenime.core.domain.di
 
 import com.lelestacia.lelenime.core.data.repository.IAnimeRepository
+import com.lelestacia.lelenime.core.data.repository.ICharacterRepository
 import com.lelestacia.lelenime.core.data.repository.IUserPreferencesRepository
 import com.lelestacia.lelenime.core.domain.usecases.collection.CollectionUseCases
 import com.lelestacia.lelenime.core.domain.usecases.collection.ICollectionUseCases
@@ -36,9 +37,13 @@ object UseCasesModule {
 
     @Provides
     @ViewModelScoped
-    fun provideDetailAnimeUseCases(animeRepository: IAnimeRepository): IDetailUseCases =
+    fun provideDetailAnimeUseCases(
+        animeRepository: IAnimeRepository,
+        characterRepository: ICharacterRepository
+    ): IDetailUseCases =
         DetailUseCases(
-            repository = animeRepository
+            animeRepository = animeRepository,
+            characterRepository = characterRepository
         )
 
     @Provides

@@ -332,26 +332,27 @@ class MainActivity : ComponentActivity() {
                                     animationSpec = tween(500)
                                 )
                             }
-                        ) {
+                        ) {navBackstack ->
+                            val animeID = navBackstack.arguments?.getInt("mal_id") ?: 0
                             val viewModel = hiltViewModel<DetailViewModel>()
-                            val animeResource by viewModel.anime.collectAsStateWithLifecycle()
 
-                            uiController.setStatusBarColor(
-                                color = MaterialTheme.colorScheme.background,
-                                darkIcons = darkIcons
-                            )
+                            val animeResource by viewModel.anime.collectAsStateWithLifecycle()
+                            val characterResource by viewModel.characters.collectAsStateWithLifecycle()
+
+
 
                             DetailScreen(
-                                animeID = it.arguments?.getInt("mal_id") ?: 0,
+                                animeID = animeID,
+                                navController = navController,
+                                animeResource = animeResource,
+                                charactersResource = characterResource,
+                                initiateView = viewModel::initiateView,
+                                updateAnimeByAnimeID = viewModel::updateAnimeByAnimeID,
                                 isDarkMode = when (theme) {
                                     1 -> false
                                     2 -> true
                                     else -> isSystemInDarkTheme()
-                                },
-                                navHostController = navController,
-                                anime = animeResource,
-                                initiate = viewModel::getAnimeByAnimeID,
-                                updateAnimeByAnimeID = viewModel::updateAnimeByAnimeID
+                                }
                             )
                         }
                     }

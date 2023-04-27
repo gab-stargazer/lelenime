@@ -3,15 +3,20 @@ package com.lelestacia.lelenime.feature.detail.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.feature.detail.R
 import com.lelestacia.lelenime.feature.detail.util.DateParser
@@ -23,134 +28,116 @@ fun AnimeInformation(
     dateParser: DateParser = DateParser(),
     listToString: ListToString = ListToString()
 ) {
-    Row(
+    Surface(
+        color = MaterialTheme.colorScheme.surfaceVariant,
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = MaterialTheme.spacing.large)
+            .clip(RoundedCornerShape(8.dp))
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(end = 8.dp)
+            verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.small),
+            modifier = Modifier.padding(all = MaterialTheme.spacing.medium)
         ) {
             Text(
-                text = stringResource(id = R.string.type),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold
+                text = "Information",
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.Bold
+                )
             )
-            Text(
-                text = stringResource(id = R.string.episode),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = stringResource(id = R.string.season),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = stringResource(id = R.string.aired),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = stringResource(id = R.string.studio),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = stringResource(id = R.string.source),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = stringResource(id = R.string.genre),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = stringResource(id = R.string.duration),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = stringResource(id = R.string.rating),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold
-            )
-        }
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(
-                text = stringResource(
-                    id = R.string.information_value,
-                    anime.type
-                ),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Normal
-            )
-            Text(
-                text = stringResource(
-                    id = R.string.information_value,
-                    anime.episodes ?: "Unknown"
-                ),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Normal
-            )
-            val season =
-                if (anime.season.isNullOrEmpty()) {
-                    "Unknown"
-                } else {
-                    "${
-                    anime.season?.replaceFirstChar {
-                        if (it.isLowerCase()) it.titlecase() else it.toString()
+
+            //  Type
+            Row {
+                Text(text = stringResource(id = R.string.type))
+                Text(
+                    text = anime.type,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            Divider(color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+            //  Episodes
+            Row {
+                Text(text = stringResource(id = R.string.episode))
+                Text(
+                    text = (anime.episodes ?: 0).toString(),
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            Divider(color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+            //  Season
+            anime.season?.let { unformattedSeason ->
+                val season = "${
+                    unformattedSeason.replaceFirstChar {
+                        it.titlecase()
                     }
-                    } ${anime.year}"
+                } ${anime.year}"
+                Row {
+                    Text(text = stringResource(id = R.string.season))
+                    Text(
+                        text = season,
+                        textAlign = TextAlign.End,
+                        modifier = Modifier.weight(1f)
+                    )
                 }
-            Text(
-                text = stringResource(id = R.string.information_value, season),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Normal
-            )
-            Text(
-                text = stringResource(
-                    id = R.string.information_value,
-                    "${dateParser.invoke(anime.startedDate)} - ${dateParser.invoke(anime.finishedDate)}"
-                ),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Normal
-            )
-            Text(
-                text = stringResource(
-                    id = R.string.information_value,
-                    listToString.invoke(anime.studios)
-                ),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Normal
-            )
-            Text(
-                text = stringResource(id = R.string.information_value, anime.source),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Normal
-            )
-            Text(
-                text = stringResource(
-                    id = R.string.information_value,
-                    listToString.invoke(anime.genres)
-                ),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Normal
-            )
-            Text(
-                text = stringResource(id = R.string.information_value, anime.duration),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Normal
-            )
-            Text(
-                text = stringResource(id = R.string.information_value, anime.rating),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Normal
-            )
+                Divider(color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+
+            //  Airing Information
+            anime.startedDate?.let { startedDate ->
+                val airingPeriod =
+                    if (anime.finishedDate.isNullOrEmpty()) {
+                        dateParser(startedDate)
+                    } else {
+                        "${dateParser(startedDate)} - ${dateParser(anime.finishedDate)}"
+                    }
+                Row {
+                    Text(text = stringResource(id = R.string.aired))
+                    Text(
+                        text = airingPeriod,
+                        textAlign = TextAlign.End,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+                Divider(color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+
+            //  Studio
+            if (anime.studios.isNotEmpty()) {
+                val studios = listToString(anime.studios)
+                Row {
+                    Text(text = stringResource(id = R.string.studio))
+                    Text(
+                        text = studios,
+                        textAlign = TextAlign.End,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+                Divider(color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+
+            //  Duration
+            Row {
+                Text(text = stringResource(id = R.string.duration))
+                Text(
+                    text = anime.duration,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            Divider(color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+            //  Rating
+            Row {
+                Text(text = stringResource(id = R.string.rating))
+                Text(
+                    text = anime.rating,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
     }
 }
