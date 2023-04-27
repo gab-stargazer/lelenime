@@ -53,7 +53,7 @@ import com.lelestacia.lelenime.feature.detail.component.AnimeInformation
 import com.lelestacia.lelenime.feature.detail.component.AnimeSynopsis
 import com.lelestacia.lelenime.feature.detail.component.CharacterImage
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnusedCrossfadeTargetStateParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
@@ -178,8 +178,7 @@ fun DetailScreen(
                 AnimeSynopsis(synopsis = anime.synopsis)
 
                 //  Character
-
-                when (val resource = charactersResource) {
+                when (charactersResource) {
                     is Resource.Error -> {
                         Column(
                             verticalArrangement = Arrangement.SpaceAround,
@@ -191,7 +190,7 @@ fun DetailScreen(
                                     vertical = MaterialTheme.spacing.extraLarge
                                 )
                         ) {
-                            Text(text = resource.message ?: stringResource(unknown_error))
+                            Text(text = charactersResource.message ?: stringResource(unknown_error))
                             Spacer(modifier = Modifier.height(8.dp))
                             Button(onClick = { initiateView(animeID) }) {
                                 Text(text = "Try Again")

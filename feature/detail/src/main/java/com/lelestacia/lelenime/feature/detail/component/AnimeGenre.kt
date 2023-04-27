@@ -48,11 +48,13 @@ fun AnimeGenres(genres: List<String>) {
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
                 maxItemsInEachRow = 3
             ) {
-                genres.forEach { genre ->
-                    AssistChip(
-                        onClick = { /*TODO*/ },
-                        label = { Text(text = genre) }
-                    )
+                if (genres.isNotEmpty()) {
+                    genres.forEach { genre ->
+                        AssistChip(
+                            onClick = { /*TODO*/ },
+                            label = { Text(text = genre) }
+                        )
+                    }
                 }
             }
         }

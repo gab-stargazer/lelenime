@@ -57,8 +57,11 @@ dependencies {
     // Junit
     testImplementation(libs.junit)
 
-    // Retrofit
+    // Retrofit + GSON
     implementation(libs.bundles.retrofit.gson)
+
+    //  Timber
+    implementation(libs.timber)
 }
 
 kapt {

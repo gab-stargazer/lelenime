@@ -57,10 +57,9 @@ fun AnimeSynopsis(synopsis: String?) {
             if (synopsis.isNullOrEmpty()) {
                 Text(
                     text = stringResource(id = com.lelestacia.lelenime.core.common.R.string.empty_synopsis),
-                    textAlign = TextAlign.Justify,
                     modifier = Modifier.fillMaxWidth()
                 )
-                return@Column
+                return@Surface
             }
 
             Text(

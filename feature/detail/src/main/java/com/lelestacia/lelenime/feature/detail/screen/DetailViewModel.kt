@@ -27,7 +27,7 @@ class DetailViewModel @Inject constructor(
     val characters: StateFlow<Resource<List<Character>>> get() = _characters.asStateFlow()
 
     fun initiateView(animeID: Int) {
-        if (_anime.value is Resource.None) {
+        if (_anime.value is Resource.None || _anime.value is Resource.Error) {
             getAnimeByAnimeID(animeID)
         }
 

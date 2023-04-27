@@ -77,6 +77,9 @@ dependencies {
 
     //  Accompanist
     implementation(libs.accompanist.flow.layout)
+
+    //  Timber
+    implementation(libs.timber)
 }
 
 kapt {

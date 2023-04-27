@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onStart
 import retrofit2.HttpException
+import timber.log.Timber
 import java.util.Date
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -31,26 +32,28 @@ class CharacterRepository @Inject constructor(
     private val characterDatabaseService: ICharacterDatabaseService,
     private val errorParser: JikanErrorParserUtil = JikanErrorParserUtil(),
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-): ICharacterRepository {
+) : ICharacterRepository {
 
     /**
-    * A function that returns a flow of [Resource] which emits a list of [Character] for a given anime ID.
-    * This function first fetches the anime characters' data from the local database using the [ICharacterDatabaseService].
-    * If the local data is empty or outdated, this function then fetches the data from the remote API using the [IAnimeNetworkService].
-    * The fetched data is then stored in the local database.
-    * The [Resource] emitted by the flow contains a [List] of [Character] entities.
-    * @param animeID the ID of the anime for which the characters' data is required
-    * @return a [Flow] of [Resource] of [List] of [Character]
+     * A function that returns a flow of [Resource] which emits a list of [Character] for a given anime ID.
+     * This function first fetches the anime characters' data from the local database using the [ICharacterDatabaseService].
+     * If the local data is empty or outdated, this function then fetches the data from the remote API using the [IAnimeNetworkService].
+     * The fetched data is then stored in the local database.
+     * The [Resource] emitted by the flow contains a [List] of [Character] entities.
+     * @param animeID the ID of the anime for which the characters' data is required
+     * @return a [Flow] of [Resource] of [List] of [Character]
      */
     override fun getAnimeCharactersByAnimeID(animeID: Int): Flow<Resource<List<Character>>> =
         flow<Resource<List<Character>>> {
             val animeCharactersCrossRef: List<AnimeCharacterReferenceEntity> =
                 characterDatabaseService.getCharactersByAnimeID(animeID = animeID)
+            Timber.d("Database Responded with ${animeCharactersCrossRef.size} character references for Anime ID $animeID")
 
             if (animeCharactersCrossRef.isEmpty()) {
 
                 val apiResponse: List<CharacterResponse> =
                     animeNetworkService.getAnimeCharactersByAnimeID(animeID = animeID)
+                Timber.d("API Responded with ${apiResponse.size} characters  for Anime ID $animeID")
 
                 if (apiResponse.isEmpty()) {
                     emit(Resource.Success(data = emptyList()))
@@ -103,7 +106,8 @@ class CharacterRepository @Inject constructor(
             val isDataOutDated = (TimeUnit.MILLISECONDS.toHours(timeDifference) % 24).toInt() > 24
 
             if (isDataOutDated) {
-                val apiResponse: List<CharacterResponse> = animeNetworkService.getAnimeCharactersByAnimeID(animeID = animeID)
+                val apiResponse: List<CharacterResponse> = animeNetworkService
+                    .getAnimeCharactersByAnimeID(animeID = animeID)
 
                 val newCharacters: List<CharacterEntity> =
                     apiResponse.map(CharacterResponse::asNewEntity)
@@ -121,14 +125,19 @@ class CharacterRepository @Inject constructor(
             emit(Resource.Loading)
         }.catch { t ->
             when (t) {
-                is HttpException -> emit(Resource.Error(
-                    data = null,
-                    message = errorParser(t)
-                ))
-                else -> emit(Resource.Error(
-                    data = null,
-                    message = "Error: ${t.message}"
-                ))
+                is HttpException -> emit(
+                    Resource.Error(
+                        data = null,
+                        message = errorParser(t)
+                    )
+                )
+
+                else -> emit(
+                    Resource.Error(
+                        data = null,
+                        message = "Error: ${t.message}"
+                    )
+                )
             }
         }.flowOn(ioDispatcher)
 }
