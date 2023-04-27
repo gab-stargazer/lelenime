@@ -1,9 +1,9 @@
 [versions]
 accompanist-version = "0.30.0"
-activity-compose-version = "1.7.0"
+activity-compose-version = "1.7.1"
 android-version = "8.1.0-alpha11"
 android-junit-version = "1.1.5"
-compose-bom-version = "2023.04.00"
+compose-bom-version = "2023.04.01"
 datastore-pref-version = "1.0.0"
 espresso-version = "3.5.1"
 google-services-version = "4.3.15"
