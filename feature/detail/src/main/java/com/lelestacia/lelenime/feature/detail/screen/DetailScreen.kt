@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.lelestacia.lelenime.core.common.R.string.unknown_error
@@ -48,10 +49,12 @@ import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.core.common.util.isNotNullOrEmpty
 import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.core.model.character.Character
+import com.lelestacia.lelenime.feature.detail.R
 import com.lelestacia.lelenime.feature.detail.component.AnimeGenres
 import com.lelestacia.lelenime.feature.detail.component.AnimeHeader
 import com.lelestacia.lelenime.feature.detail.component.AnimeInformation
 import com.lelestacia.lelenime.feature.detail.component.AnimeSynopsis
+import com.lelestacia.lelenime.feature.detail.component.CardSection
 import com.lelestacia.lelenime.feature.detail.component.CharacterImage
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -170,16 +173,22 @@ fun DetailScreen(
                 }
 
                 //  Anime Information
-                AnimeInformation(anime = anime)
+                CardSection {
+                    AnimeInformation(anime = anime)
+                }
 
                 //  Anime Genres
                 if (anime.genres.isNotEmpty()) {
-                    AnimeGenres(genres = anime.genres)
+                    CardSection {
+                        AnimeGenres(genres = anime.genres)
+                    }
                 }
 
                 //  Synopsis
                 if (anime.synopsis.isNotNullOrEmpty()) {
-                    AnimeSynopsis(synopsis = anime.synopsis as String)
+                    CardSection {
+                        AnimeSynopsis(synopsis = anime.synopsis as String)
+                    }
                 }
 
                 //  Character
@@ -232,7 +241,7 @@ fun DetailScreen(
                                     verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.small)
                                 ) {
                                     Text(
-                                        text = "Characters",
+                                        text = stringResource(R.string.characters),
                                         style = MaterialTheme.typography.headlineSmall.copy(
                                             fontWeight = FontWeight.Bold
                                         ),
@@ -261,6 +270,20 @@ fun DetailScreen(
                                         }
                                     }
                                     Spacer(modifier = Modifier.height(height = 16.dp))
+                                }
+                            } else {
+                                CardSection {
+                                    Text(
+                                        text = stringResource(R.string.characters),
+                                        style = MaterialTheme.typography.titleLarge.copy(
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    )
+                                    Text(
+                                        text = "This Anime doesn't have characters information",
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
                                 }
                             }
                         }
