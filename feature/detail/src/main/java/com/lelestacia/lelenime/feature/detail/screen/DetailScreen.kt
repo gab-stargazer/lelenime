@@ -1,7 +1,8 @@
 package com.lelestacia.lelenime.feature.detail.screen
 
-import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -37,6 +38,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -57,7 +59,6 @@ import com.lelestacia.lelenime.feature.detail.component.AnimeSynopsis
 import com.lelestacia.lelenime.feature.detail.component.CardSection
 import com.lelestacia.lelenime.feature.detail.component.CharacterImage
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
@@ -68,6 +69,7 @@ fun DetailScreen(
     initiateView: (Int) -> Unit,
     updateAnimeByAnimeID: (Int) -> Unit
 ) {
+    val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val scrollState = rememberScrollState()
     LaunchedEffect(key1 = Unit) { initiateView(animeID) }
@@ -98,7 +100,16 @@ fun DetailScreen(
                 ),
                 scrollBehavior = scrollBehavior,
                 actions = {
-                    IconButton(onClick = { /*TODO: Implement Share Action*/ }) {
+                    IconButton(onClick = {
+                        val sendIntent: Intent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(Intent.EXTRA_TEXT, "https://myanimelist.net/anime/${(animeResource as Resource.Success).data!!.malID}")
+                            type = "text/plain"
+                        }
+
+                        val shareIntent = Intent.createChooser(sendIntent, null)
+                        context.startActivity(shareIntent)
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.Share,
                             contentDescription = "Share this Anime"
@@ -114,6 +125,7 @@ fun DetailScreen(
                 verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.medium),
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
                     .verticalScroll(scrollState)
                     .padding(paddingValue)
                     .animateContentSize()
@@ -135,7 +147,7 @@ fun DetailScreen(
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.spacing.large)
+                        .padding(horizontal = MaterialTheme.spacing.large),
                 ) {
                     Icon(
                         imageVector =
@@ -144,16 +156,18 @@ fun DetailScreen(
                         } else {
                             Icons.Default.FavoriteBorder
                         },
-                        contentDescription = "Favorite Icon"
+                        contentDescription = "Favorite Icon",
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text =
                         if (anime.isFavorite) {
                             "Remove from favorite"
                         } else {
                             "Add to favorite"
-                        }
+                        },
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
 
