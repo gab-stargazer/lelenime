@@ -45,6 +45,7 @@ import androidx.navigation.NavHostController
 import com.lelestacia.lelenime.core.common.R.string.unknown_error
 import com.lelestacia.lelenime.core.common.Resource
 import com.lelestacia.lelenime.core.common.theme.spacing
+import com.lelestacia.lelenime.core.common.util.isNotNullOrEmpty
 import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.core.model.character.Character
 import com.lelestacia.lelenime.feature.detail.component.AnimeGenres
@@ -172,10 +173,14 @@ fun DetailScreen(
                 AnimeInformation(anime = anime)
 
                 //  Anime Genres
-                AnimeGenres(genres = anime.genres)
+                if (anime.genres.isNotEmpty()) {
+                    AnimeGenres(genres = anime.genres)
+                }
 
                 //  Synopsis
-                AnimeSynopsis(synopsis = anime.synopsis)
+                if (anime.synopsis.isNotNullOrEmpty()) {
+                    AnimeSynopsis(synopsis = anime.synopsis as String)
+                }
 
                 //  Character
                 when (charactersResource) {
@@ -222,39 +227,41 @@ fun DetailScreen(
                     Resource.None -> Unit
                     is Resource.Success -> {
                         charactersResource.data?.let { characters ->
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.small)
-                            ) {
-                                Text(
-                                    text = "Characters",
-                                    style = MaterialTheme.typography.headlineSmall.copy(
-                                        fontWeight = FontWeight.Bold
-                                    ),
-                                    modifier = Modifier.padding(
-                                        horizontal = MaterialTheme.spacing.large,
-                                        vertical = MaterialTheme.spacing.default
-                                    )
-                                )
-                                LazyRow(
-                                    contentPadding = PaddingValues(
-                                        horizontal = MaterialTheme.spacing.large,
-                                        vertical = MaterialTheme.spacing.default
-                                    ),
-                                    horizontalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.extraSmall)
+                            if (characters.isNotEmpty()) {
+                                Column(
+                                    verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.small)
                                 ) {
-                                    items(
-                                        items = characters,
-                                        key = { character ->
-                                            character.malID
-                                        }
-                                    ) { character ->
-                                        CharacterImage(
-                                            character = character,
-                                            onCharacterClicked = { }
+                                    Text(
+                                        text = "Characters",
+                                        style = MaterialTheme.typography.headlineSmall.copy(
+                                            fontWeight = FontWeight.Bold
+                                        ),
+                                        modifier = Modifier.padding(
+                                            horizontal = MaterialTheme.spacing.large,
+                                            vertical = MaterialTheme.spacing.default
                                         )
+                                    )
+                                    LazyRow(
+                                        contentPadding = PaddingValues(
+                                            horizontal = MaterialTheme.spacing.large,
+                                            vertical = MaterialTheme.spacing.default
+                                        ),
+                                        horizontalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.extraSmall)
+                                    ) {
+                                        items(
+                                            items = characters,
+                                            key = { character ->
+                                                character.malID
+                                            }
+                                        ) { character ->
+                                            CharacterImage(
+                                                character = character,
+                                                onCharacterClicked = { }
+                                            )
+                                        }
                                     }
+                                    Spacer(modifier = Modifier.height(height = 16.dp))
                                 }
-                                Spacer(modifier = Modifier.height(height = 16.dp))
                             }
                         }
                     }
