@@ -36,7 +36,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.lelestacia.lelenime.core.common.R.string.unknown_error
 import com.lelestacia.lelenime.core.common.Resource
+import com.lelestacia.lelenime.core.common.route.Screen
 import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.core.common.util.isNotNullOrEmpty
 import com.lelestacia.lelenime.core.model.Anime
@@ -62,7 +62,6 @@ import com.lelestacia.lelenime.feature.detail.component.CharacterImage
 @Composable
 fun DetailScreen(
     navController: NavHostController,
-    isDarkMode: Boolean,
     animeID: Int,
     animeResource: Resource<Anime>,
     charactersResource: Resource<List<Character>>,
@@ -83,9 +82,7 @@ fun DetailScreen(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = {
-                            navController.popBackStack()
-                        }
+                        onClick = { navController.popBackStack() }
                     ) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
@@ -96,18 +93,8 @@ fun DetailScreen(
                 colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background,
                     scrolledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    titleContentColor =
-                    if (isDarkMode) {
-                        Color.White
-                    } else {
-                        Color.Black
-                    },
-                    navigationIconContentColor =
-                    if (isDarkMode) {
-                        Color.White
-                    } else {
-                        Color.Black
-                    }
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onBackground,
                 ),
                 scrollBehavior = scrollBehavior,
                 actions = {
@@ -120,8 +107,7 @@ fun DetailScreen(
                 }
             )
         },
-        modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { paddingValue ->
         animeResource.data?.let { anime ->
             Column(
@@ -132,7 +118,6 @@ fun DetailScreen(
                     .padding(paddingValue)
                     .animateContentSize()
             ) {
-                //  Header
                 AnimeHeader(
                     malID = anime.malID,
                     coverImages = anime.coverImages,
@@ -172,23 +157,16 @@ fun DetailScreen(
                     )
                 }
 
-                //  Anime Information
                 CardSection {
                     AnimeInformation(anime = anime)
                 }
 
-                //  Anime Genres
                 if (anime.genres.isNotEmpty()) {
-                    CardSection {
-                        AnimeGenres(genres = anime.genres)
-                    }
+                    CardSection { AnimeGenres(genres = anime.genres) }
                 }
 
-                //  Synopsis
                 if (anime.synopsis.isNotNullOrEmpty()) {
-                    CardSection {
-                        AnimeSynopsis(synopsis = anime.synopsis as String)
-                    }
+                    CardSection { AnimeSynopsis(synopsis = anime.synopsis as String) }
                 }
 
                 //  Character
@@ -265,7 +243,11 @@ fun DetailScreen(
                                         ) { character ->
                                             CharacterImage(
                                                 character = character,
-                                                onCharacterClicked = { }
+                                                onCharacterClicked = {
+                                                    navController.navigate(
+                                                        Screen.DetailCharacterScreen.createRoute(it)
+                                                    )
+                                                }
                                             )
                                         }
                                     }

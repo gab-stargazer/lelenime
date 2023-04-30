@@ -10,18 +10,19 @@ import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
 import com.lelestacia.lelenime.feature.explore.screen.DisplayType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DisplayTypeButton(
     isActive: Boolean,
-    isDarkMode: Boolean,
     displayType: DisplayType,
     icon: ImageVector,
     onClicked: (DisplayType) -> Unit
@@ -50,32 +51,16 @@ fun DisplayTypeButton(
                 Color.Transparent
             },
             leadingIconContentColor =
-            if (isDarkMode) {
-                if (isActive) {
-                    Color.Black
-                } else {
-                    MaterialTheme.colorScheme.primary
-                }
+            if (isActive) {
+                MaterialTheme.colorScheme.onPrimary
             } else {
-                if (isActive) {
-                    Color.White
-                } else {
-                    MaterialTheme.colorScheme.primary
-                }
+                MaterialTheme.colorScheme.onBackground
             },
             labelColor =
-            if (isDarkMode) {
-                if (isActive) {
-                    Color.Black
-                } else {
-                    Color.White
-                }
+            if (isActive) {
+                MaterialTheme.colorScheme.onPrimary
             } else {
-                if (isActive) {
-                    Color.White
-                } else {
-                    Color.Black
-                }
+                MaterialTheme.colorScheme.onBackground
             }
         ),
         border = AssistChipDefaults.assistChipBorder(
@@ -83,7 +68,7 @@ fun DisplayTypeButton(
             if (isActive) {
                 Color.Transparent
             } else {
-                MaterialTheme.colorScheme.outline
+                MaterialTheme.colorScheme.outlineVariant
             }
         )
     )
@@ -92,47 +77,55 @@ fun DisplayTypeButton(
 @Preview(uiMode = UI_MODE_NIGHT_NO or UI_MODE_TYPE_NORMAL)
 @Composable
 fun PreviewDisplayTypeButtonActive() {
-    DisplayTypeButton(
-        isActive = true,
-        isDarkMode = false,
-        displayType = DisplayType.POPULAR,
-        icon = Icons.Filled.Favorite,
-        onClicked = {}
-    )
+    LelenimeTheme {
+        Surface {
+            DisplayTypeButton(
+                isActive = true,
+                displayType = DisplayType.POPULAR,
+                icon = Icons.Filled.Favorite
+            ) {}
+        }
+    }
 }
 
 @Preview(uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL)
 @Composable
 fun PreviewDisplayTypeButtonActiveDarkMode() {
-    DisplayTypeButton(
-        isActive = true,
-        isDarkMode = false,
-        displayType = DisplayType.POPULAR,
-        icon = Icons.Filled.Favorite,
-        onClicked = {}
-    )
+    LelenimeTheme {
+        Surface {
+            DisplayTypeButton(
+                isActive = true,
+                displayType = DisplayType.POPULAR,
+                icon = Icons.Filled.Favorite
+            ) {}
+        }
+    }
 }
 
 @Preview(uiMode = UI_MODE_NIGHT_NO or UI_MODE_TYPE_NORMAL)
 @Composable
 fun PreviewDisplayTypeButtonInactive() {
-    DisplayTypeButton(
-        isActive = false,
-        isDarkMode = false,
-        displayType = DisplayType.POPULAR,
-        icon = Icons.Filled.Favorite,
-        onClicked = {}
-    )
+    LelenimeTheme {
+        Surface {
+            DisplayTypeButton(
+                isActive = false,
+                displayType = DisplayType.POPULAR,
+                icon = Icons.Filled.Favorite
+            ) {}
+        }
+    }
 }
 
 @Preview(uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL)
 @Composable
 fun PreviewDisplayTypeButtonInactiveDarkMode() {
-    DisplayTypeButton(
-        isActive = false,
-        isDarkMode = false,
-        displayType = DisplayType.POPULAR,
-        icon = Icons.Filled.Favorite,
-        onClicked = {}
-    )
+    LelenimeTheme {
+        Surface {
+            DisplayTypeButton(
+                isActive = false,
+                displayType = DisplayType.POPULAR,
+                icon = Icons.Filled.Favorite
+            ) {}
+        }
+    }
 }

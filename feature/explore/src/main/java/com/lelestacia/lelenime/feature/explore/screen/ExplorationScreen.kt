@@ -1,4 +1,4 @@
-package com.lelestacia.explore.screen
+package com.lelestacia.lelenime.feature.explore.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,7 +38,6 @@ import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.feature.explore.R
 import com.lelestacia.lelenime.feature.explore.component.DashboardDisplayTypeHeader
 import com.lelestacia.lelenime.feature.explore.component.DashboardSearchHeader
-import com.lelestacia.lelenime.feature.explore.screen.DisplayType
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState
 import timber.log.Timber
@@ -50,7 +49,6 @@ import timber.log.Timber
 @Composable
 fun ExplorationScreen(
     screenState: ExploreScreenState,
-    isDarkMode: Boolean,
     onEvent: (ExploreScreenEvent) -> Unit,
     onAnimeClicked: (Anime) -> Unit,
     modifier: Modifier = Modifier
@@ -84,9 +82,7 @@ fun ExplorationScreen(
                 )
                 DashboardDisplayTypeHeader(
                     state = screenState,
-                    isDarkMode = isDarkMode,
-                    onEvent = onEvent,
-                    modifier = Modifier.padding(start = 12.dp)
+                    onEvent = onEvent
                 )
                 Divider()
             }
@@ -187,7 +183,6 @@ fun ExplorationScreen(
 fun PreviewExplorationScreen() {
     ExplorationScreen(
         screenState = ExploreScreenState(),
-        isDarkMode = false,
         onEvent = {},
         onAnimeClicked = {}
     )

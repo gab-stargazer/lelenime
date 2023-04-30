@@ -116,6 +116,7 @@ dependencies {
     //  Accompanist
     implementation(libs.accompanist.system.ui.controller)
     implementation(libs.accompanist.animation.navigation)
+    implementation(libs.accompanist.bottomsheet.navigation)
 
     //  Profiler
     implementation(libs.baseline.profiler)
