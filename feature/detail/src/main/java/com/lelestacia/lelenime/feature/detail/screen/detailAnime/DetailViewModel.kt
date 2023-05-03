@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.feature.detail.screen
+package com.lelestacia.lelenime.feature.detail.screen.detailAnime
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.feature.detail.screen
+package com.lelestacia.lelenime.feature.detail.screen.detailAnime
 
 import android.content.Intent
 import androidx.compose.animation.animateContentSize
@@ -103,7 +103,10 @@ fun DetailScreen(
                     IconButton(onClick = {
                         val sendIntent: Intent = Intent().apply {
                             action = Intent.ACTION_SEND
-                            putExtra(Intent.EXTRA_TEXT, "https://myanimelist.net/anime/${(animeResource as Resource.Success).data!!.malID}")
+                            putExtra(
+                                Intent.EXTRA_TEXT,
+                                "https://myanimelist.net/anime/${(animeResource as Resource.Success).data!!.malID}"
+                            )
                             type = "text/plain"
                         }
 
@@ -178,9 +181,18 @@ fun DetailScreen(
                 if (anime.genres.isNotEmpty()) {
                     CardSection { AnimeGenres(genres = anime.genres) }
                 }
-
+                
                 if (anime.synopsis.isNotNullOrEmpty()) {
-                    CardSection { AnimeSynopsis(synopsis = anime.synopsis as String) }
+                    CardSection {
+                        AnimeSynopsis(
+                            synopsis = anime.synopsis.orEmpty(),
+                            onSynopsisOpen = {
+                                val route = Screen
+                                    .FullSynopsisScreen
+                                    .createRoute(synopsis = anime.synopsis.orEmpty())
+                                navController.navigate(route)
+                            })
+                    }
                 }
 
                 //  Character

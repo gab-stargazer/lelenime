@@ -35,19 +35,20 @@ import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.bottomSheet
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.lelestacia.lelenime.feature.explore.screen.ExplorationScreen
 import com.lelestacia.lelenime.core.common.route.Screen
+import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
 import com.lelestacia.lelenime.feature.collection.screen.CollectionScreen
 import com.lelestacia.lelenime.feature.collection.screen.CollectionScreenViewModel
-import com.lelestacia.lelenime.feature.detail.screen.DetailScreen
-import com.lelestacia.lelenime.feature.detail.screen.DetailViewModel
+import com.lelestacia.lelenime.feature.detail.screen.detailAnime.DetailScreen
+import com.lelestacia.lelenime.feature.detail.screen.detailAnime.DetailViewModel
+import com.lelestacia.lelenime.feature.detail.screen.fullSynopsis.SynopsisScreen
+import com.lelestacia.lelenime.feature.explore.screen.ExplorationScreen
 import com.lelestacia.lelenime.feature.explore.screen.ExplorationScreenViewModel
 import com.lelestacia.lelenime.feature.more.screen.about.AboutScreen
 import com.lelestacia.lelenime.feature.more.screen.more.MoreScreen
 import com.lelestacia.lelenime.feature.more.screen.settings.SettingScreen
 import com.lelestacia.lelenime.feature.more.screen.settings.SettingViewModel
 import com.lelestacia.lelenime.ui.component.LeleNimeBottomBar
-import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -62,7 +63,8 @@ class MainActivity : ComponentActivity() {
             val scope: CoroutineScope = rememberCoroutineScope()
             val uiController = rememberSystemUiController()
             val bottomSheetNavigator: BottomSheetNavigator = rememberBottomSheetNavigator()
-            val navController: NavHostController = rememberAnimatedNavController(bottomSheetNavigator)
+            val navController: NavHostController =
+                rememberAnimatedNavController(bottomSheetNavigator)
             val activityVM by viewModels<ActivityViewModel>()
             val theme by activityVM.darkModePreferences.collectAsStateWithLifecycle()
             val darkIcons =
@@ -342,7 +344,7 @@ class MainActivity : ComponentActivity() {
                                         animationSpec = tween(500)
                                     )
                                 }
-                            ) {navBackstack ->
+                            ) { navBackstack ->
                                 val animeID = navBackstack.arguments?.getInt("mal_id") ?: 0
                                 val viewModel = hiltViewModel<DetailViewModel>()
 
@@ -373,8 +375,26 @@ class MainActivity : ComponentActivity() {
                                 Surface(
                                     modifier = Modifier.fillMaxSize()
                                 ) {
-                                    Text(text = "Character ID is $characterID", style = MaterialTheme.typography.titleLarge)
+                                    Text(
+                                        text = "Character ID is $characterID",
+                                        style = MaterialTheme.typography.titleLarge
+                                    )
                                 }
+                            }
+
+                            bottomSheet(
+                                route = Screen.FullSynopsisScreen.route,
+                                arguments = listOf(
+                                    navArgument(
+                                        name = "synopsis"
+                                    ) {
+                                        type = NavType.StringType
+                                    }
+                                )
+                            ) { navBackstack ->
+                                val synopsis: String =
+                                    navBackstack.arguments?.getString("synopsis").orEmpty()
+                                SynopsisScreen(synopsis)
                             }
                         }
                     }
