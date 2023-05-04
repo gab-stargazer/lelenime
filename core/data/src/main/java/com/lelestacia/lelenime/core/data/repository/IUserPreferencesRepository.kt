@@ -45,4 +45,6 @@ interface IUserPreferencesRepository {
      * @param dynamicPreferences a boolean representing the new dynamic theme preference of the user.
      */
     suspend fun updateUserPreferenceOnDynamicTheme(dynamicPreferences: Boolean)
+    suspend fun isAnimeCharactersFetchedBefore(animeID: Int): Flow<Boolean>
+    suspend fun updateAnimeCharactersFetchedBefore(animeID: Int)
 }

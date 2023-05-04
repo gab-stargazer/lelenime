@@ -1,5 +1,6 @@
 package com.lelestacia.lelenime
 
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,16 +12,24 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -35,12 +44,17 @@ import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.bottomSheet
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.lelestacia.lelenime.core.common.Resource
 import com.lelestacia.lelenime.core.common.route.Screen
 import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
+import com.lelestacia.lelenime.core.model.Anime
+import com.lelestacia.lelenime.core.model.character.CharacterDetail
 import com.lelestacia.lelenime.feature.collection.screen.CollectionScreen
 import com.lelestacia.lelenime.feature.collection.screen.CollectionScreenViewModel
 import com.lelestacia.lelenime.feature.detail.screen.detailAnime.DetailScreen
 import com.lelestacia.lelenime.feature.detail.screen.detailAnime.DetailViewModel
+import com.lelestacia.lelenime.feature.detail.screen.detailCharacter.DetailCharacterScreen
+import com.lelestacia.lelenime.feature.detail.screen.detailCharacter.DetailCharacterViewModel
 import com.lelestacia.lelenime.feature.detail.screen.fullSynopsis.SynopsisScreen
 import com.lelestacia.lelenime.feature.explore.screen.ExplorationScreen
 import com.lelestacia.lelenime.feature.explore.screen.ExplorationScreenViewModel
@@ -52,6 +66,7 @@ import com.lelestacia.lelenime.ui.component.LeleNimeBottomBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterialNavigationApi::class)
 @AndroidEntryPoint
@@ -348,17 +363,28 @@ class MainActivity : ComponentActivity() {
                                 val animeID = navBackstack.arguments?.getInt("mal_id") ?: 0
                                 val viewModel = hiltViewModel<DetailViewModel>()
 
+                                LaunchedEffect(key1 = Unit) {
+                                    viewModel.initiateView(animeID)
+                                }
+
                                 val animeResource by viewModel.anime.collectAsStateWithLifecycle()
                                 val characterResource by viewModel.characters.collectAsStateWithLifecycle()
 
-                                DetailScreen(
-                                    navController = navController,
-                                    animeID = animeID,
-                                    animeResource = animeResource,
-                                    charactersResource = characterResource,
-                                    initiateView = viewModel::initiateView,
-                                    updateAnimeByAnimeID = viewModel::updateAnimeByAnimeID
-                                )
+                                Surface(
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+                                    when(animeResource) {
+                                        is Resource.Success -> DetailScreen(
+                                            navController = navController,
+                                            animeID = animeID,
+                                            anime = animeResource.data as Anime,
+                                            charactersResource = characterResource,
+                                            getCharactersByAnimeID = viewModel::getCharactersByAnimeID,
+                                            updateFavoriteByAnimeID = viewModel::updateAnimeByAnimeID
+                                        )
+                                        else -> Unit
+                                    }
+                                }
                             }
 
                             bottomSheet(
@@ -371,14 +397,39 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             ) { navBackstack ->
+                                val configuration: Configuration = LocalConfiguration.current
+                                val screenHeight: Dp = configuration.screenHeightDp.dp
+                                val oneThirdHeight: Dp = screenHeight / 3
+
                                 val characterID = navBackstack.arguments?.getInt("mal_id") ?: 0
+                                val vm: DetailCharacterViewModel = hiltViewModel()
+                                LaunchedEffect(key1 = Unit, block = {
+                                    Timber.d("Fetching Character with MAL ID $characterID")
+                                    vm.fetchDetailCharacter(characterID = characterID)
+                                })
+
+                                val characterResource by vm.characterResource.collectAsStateWithLifecycle()
                                 Surface(
-                                    modifier = Modifier.fillMaxSize()
+
                                 ) {
-                                    Text(
-                                        text = "Character ID is $characterID",
-                                        style = MaterialTheme.typography.titleLarge
-                                    )
+                                    when (characterResource) {
+                                        is Resource.Error -> {}
+                                        Resource.Loading -> {
+                                            Box(
+                                                modifier = Modifier
+                                                    .height(oneThirdHeight)
+                                                    .fillMaxWidth(),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                CircularProgressIndicator()
+                                            }
+                                        }
+
+                                        Resource.None -> Unit
+                                        is Resource.Success -> DetailCharacterScreen(
+                                            characterResource.data as CharacterDetail
+                                        )
+                                    }
                                 }
                             }
 

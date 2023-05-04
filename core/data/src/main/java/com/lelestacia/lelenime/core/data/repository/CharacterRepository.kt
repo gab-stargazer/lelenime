@@ -3,17 +3,23 @@ package com.lelestacia.lelenime.core.data.repository
 import com.lelestacia.lelenime.core.common.Resource
 import com.lelestacia.lelenime.core.data.JikanErrorParserUtil
 import com.lelestacia.lelenime.core.data.mapper.asCharacter
+import com.lelestacia.lelenime.core.data.mapper.asCharacterDetail
 import com.lelestacia.lelenime.core.data.mapper.asCharacterWithVoiceActorEntities
 import com.lelestacia.lelenime.core.data.mapper.asNewEntity
 import com.lelestacia.lelenime.core.data.mapper.asNewVoiceActor
 import com.lelestacia.lelenime.core.database.animeStuff.entity.anime.AnimeCharacterReferenceEntity
 import com.lelestacia.lelenime.core.database.animeStuff.entity.character.CharacterEntity
+import com.lelestacia.lelenime.core.database.animeStuff.entity.character.CharacterInformationEntity
+import com.lelestacia.lelenime.core.database.animeStuff.entity.character.CharacterProfile
 import com.lelestacia.lelenime.core.database.animeStuff.entity.character.CharacterVoiceActorCrossRefEntity
 import com.lelestacia.lelenime.core.database.animeStuff.entity.voiceActor.VoiceActorEntity
 import com.lelestacia.lelenime.core.database.animeStuff.service.ICharacterDatabaseService
 import com.lelestacia.lelenime.core.model.character.Character
+import com.lelestacia.lelenime.core.model.character.CharacterDetail
+import com.lelestacia.lelenime.core.network.model.character.CharacterDetailResponse
 import com.lelestacia.lelenime.core.network.model.character.CharacterResponse
-import com.lelestacia.lelenime.core.network.source.IAnimeNetworkService
+import com.lelestacia.lelenime.core.network.source.anime.IAnimeNetworkService
+import com.lelestacia.lelenime.core.network.source.character.ICharacterNetworkService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -29,8 +35,9 @@ import javax.inject.Inject
 
 class CharacterRepository @Inject constructor(
     private val animeNetworkService: IAnimeNetworkService,
+    private val characterNetworkService: ICharacterNetworkService,
     private val characterDatabaseService: ICharacterDatabaseService,
-    private val errorParser: JikanErrorParserUtil = JikanErrorParserUtil(),
+    private val errorParser: JikanErrorParserUtil,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ICharacterRepository {
 
@@ -135,6 +142,89 @@ class CharacterRepository @Inject constructor(
                 else -> emit(
                     Resource.Error(
                         data = null,
+                        message = "Error: ${t.message}"
+                    )
+                )
+            }
+        }.flowOn(ioDispatcher)
+
+    override fun getCharacterDetailByID(characterID: Int): Flow<Resource<CharacterDetail>> =
+        flow {
+            var localCharacter: CharacterInformationEntity? =
+                characterDatabaseService.getCharacterAdditionalInformationById(characterID)
+
+            if (localCharacter != null) {
+                val localCharacterDetail =
+                    characterDatabaseService.getCharacterFullProfile(characterID = characterID)
+                emit(Resource.Success(data = localCharacterDetail.asCharacterDetail()))
+            }
+
+            val oldestUpdate: Long =
+                if (localCharacter == null) 0
+                else {
+                    (localCharacter.updatedAt ?: localCharacter.createdAt).time
+                }
+
+            val timeDifference = Date().time - oldestUpdate
+            val isDataOutdated = {
+                val differenceInHours = TimeUnit.MILLISECONDS.toHours(timeDifference).toInt()
+                Timber.d("Difference in hours is $differenceInHours")
+                differenceInHours >= 24
+                true
+            }
+
+            val shouldFetchNetwork = localCharacter == null || isDataOutdated.invoke()
+            if (shouldFetchNetwork) {
+                emit(Resource.Loading)
+                val apiResponse: CharacterDetailResponse = characterNetworkService
+                    .getCharacterDetailByCharacterID(characterID)
+                val newEntities = apiResponse.asNewEntity()
+
+                localCharacter =
+                    localCharacter?.copy(
+                        characterNickNames = newEntities.characterNickNames,
+                        characterFavorite = newEntities.characterFavorite,
+                        characterInformation = newEntities.characterInformation,
+                        updatedAt = Date()
+                    ) ?: newEntities
+
+                characterDatabaseService.insertOrUpdateAdditionalInformation(
+                    characterInformationEntity = localCharacter
+                )
+            }
+
+            val fullInformation =
+                characterDatabaseService.getCharacterFullProfile(characterID = characterID)
+            emit(Resource.Success(data = fullInformation.asCharacterDetail()))
+        }.onStart {
+            emit(Resource.Loading)
+        }.catch { t ->
+            Timber.w("Error happened in Character Repository: $t")
+
+            val localCharacter: CharacterInformationEntity? =
+                characterDatabaseService.getCharacterAdditionalInformationById(characterID)
+
+            val localCharacterProfile: CharacterProfile? =
+                if (localCharacter == null) null
+                else characterDatabaseService.getCharacterFullProfile(characterID = characterID)
+
+            /**
+             * If a local character is null,
+             * this means exception happened during a fresh pull network request,
+             * but if it is existed,
+             * then it means the exception was happened during update network request
+             */
+
+            when (t) {
+                is HttpException -> emit(
+                    Resource.Error(
+                        data = localCharacterProfile?.asCharacterDetail(),
+                        message = errorParser(t)
+                    )
+                )
+                else -> emit(
+                    Resource.Error(
+                        data = localCharacterProfile?.asCharacterDetail(),
                         message = "Error: ${t.message}"
                     )
                 )

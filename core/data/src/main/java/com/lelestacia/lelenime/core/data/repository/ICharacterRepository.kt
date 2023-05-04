@@ -2,6 +2,7 @@ package com.lelestacia.lelenime.core.data.repository
 
 import com.lelestacia.lelenime.core.common.Resource
 import com.lelestacia.lelenime.core.model.character.Character
+import com.lelestacia.lelenime.core.model.character.CharacterDetail
 import kotlinx.coroutines.flow.Flow
 
 interface ICharacterRepository {
@@ -19,4 +20,6 @@ interface ICharacterRepository {
      * @return A flow of [Resource] objects containing a list of [Character] objects.
      */
     fun getAnimeCharactersByAnimeID(animeID: Int): Flow<Resource<List<Character>>>
+
+    fun getCharacterDetailByID(characterID: Int): Flow<Resource<CharacterDetail>>
 }

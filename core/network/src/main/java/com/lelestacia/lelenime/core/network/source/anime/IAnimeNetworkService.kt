@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.core.network.source
+package com.lelestacia.lelenime.core.network.source.anime
 
 import androidx.paging.PagingSource
 import com.lelestacia.lelenime.core.network.model.anime.AnimeResponse

@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.core.network.source
+package com.lelestacia.lelenime.core.network.source.anime
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -7,10 +7,9 @@ import com.lelestacia.lelenime.core.network.model.anime.AnimeResponse
 import kotlinx.coroutines.delay
 import timber.log.Timber
 
-class UpcomingAnimePagingSource(
+class AiringAnimePagingSource(
     private val animeAPI: AnimeAPI
 ) : PagingSource<Int, AnimeResponse>() {
-
     override fun getRefreshKey(state: PagingState<Int, AnimeResponse>): Int? {
         return state.anchorPosition
     }
@@ -18,7 +17,7 @@ class UpcomingAnimePagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeResponse> {
         return try {
             val currentPage = params.key ?: 1
-            val apiResponse = animeAPI.getUpcomingSeason(page = currentPage)
+            val apiResponse = animeAPI.getCurrentSeason(page = currentPage)
             Timber.d("Successfully fetch ${apiResponse.data.size} data")
             delay(
                 if (currentPage == 1) {
@@ -45,7 +44,7 @@ class UpcomingAnimePagingSource(
                 nextKey = nextPage
             )
         } catch (e: Exception) {
-            Timber.e(e)
+            Timber.e(e.message)
             LoadResult.Error(e)
         }
     }

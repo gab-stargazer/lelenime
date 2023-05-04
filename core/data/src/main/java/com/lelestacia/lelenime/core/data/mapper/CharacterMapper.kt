@@ -1,9 +1,13 @@
 package com.lelestacia.lelenime.core.data.mapper
 
 import com.lelestacia.lelenime.core.database.animeStuff.entity.character.CharacterEntity
+import com.lelestacia.lelenime.core.database.animeStuff.entity.character.CharacterInformationEntity
+import com.lelestacia.lelenime.core.database.animeStuff.entity.character.CharacterProfile
 import com.lelestacia.lelenime.core.database.animeStuff.entity.voiceActor.VoiceActorEntity
 import com.lelestacia.lelenime.core.network.model.character.CharacterResponse
 import com.lelestacia.lelenime.core.model.character.Character
+import com.lelestacia.lelenime.core.model.character.CharacterDetail
+import com.lelestacia.lelenime.core.network.model.character.CharacterDetailResponse
 import java.util.Date
 
 fun CharacterResponse.asNewEntity(): CharacterEntity =
@@ -52,4 +56,27 @@ fun CharacterEntity.asCharacter(): Character =
         name = name,
         role = name,
         favorites = favorite
+    )
+
+fun CharacterDetailResponse.asNewEntity(): CharacterInformationEntity =
+    CharacterInformationEntity(
+        characterID = characterMalID,
+        characterKanjiName = characterKanjiName.orEmpty(),
+        characterNickNames = characterNickNames,
+        characterFavorite = characterFavoriteCount,
+        characterInformation = characterInformation.orEmpty(),
+        createdAt = Date(),
+        updatedAt = null
+    )
+
+fun CharacterProfile.asCharacterDetail(): CharacterDetail =
+    CharacterDetail(
+        characterID = character.characterID,
+        name = character.name,
+        characterKanjiName = additionalInformation.characterKanjiName,
+        characterNickNames = additionalInformation.characterNickNames,
+        images = character.image,
+        role = character.role,
+        favoriteBy = character.favorite,
+        characterInformation = additionalInformation.characterInformation
     )

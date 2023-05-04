@@ -11,7 +11,7 @@ import com.lelestacia.lelenime.core.database.animeStuff.entity.anime.AnimeEntity
 import com.lelestacia.lelenime.core.database.animeStuff.service.IAnimeDatabaseService
 import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.core.network.model.anime.AnimeResponse
-import com.lelestacia.lelenime.core.network.source.IAnimeNetworkService
+import com.lelestacia.lelenime.core.network.source.anime.IAnimeNetworkService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

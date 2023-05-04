@@ -1,12 +1,15 @@
 package com.lelestacia.lelenime.core.domain.di
 
+import com.lelestacia.lelenime.core.data.repository.CharacterRepository
 import com.lelestacia.lelenime.core.data.repository.IAnimeRepository
 import com.lelestacia.lelenime.core.data.repository.ICharacterRepository
 import com.lelestacia.lelenime.core.data.repository.IUserPreferencesRepository
 import com.lelestacia.lelenime.core.domain.usecases.collection.CollectionUseCases
 import com.lelestacia.lelenime.core.domain.usecases.collection.ICollectionUseCases
-import com.lelestacia.lelenime.core.domain.usecases.detail.DetailUseCases
-import com.lelestacia.lelenime.core.domain.usecases.detail.IDetailUseCases
+import com.lelestacia.lelenime.core.domain.usecases.detailAnime.DetailAnimeUseCases
+import com.lelestacia.lelenime.core.domain.usecases.detailAnime.IDetailAnimeUseCases
+import com.lelestacia.lelenime.core.domain.usecases.detailCharacter.DetailCharacterUseCases
+import com.lelestacia.lelenime.core.domain.usecases.detailCharacter.IDetailCharacterUseCases
 import com.lelestacia.lelenime.core.domain.usecases.explore.ExploreUseCases
 import com.lelestacia.lelenime.core.domain.usecases.explore.IExploreUseCases
 import com.lelestacia.lelenime.core.domain.usecases.settings.IUserPreferencesUseCases
@@ -39,11 +42,13 @@ object UseCasesModule {
     @ViewModelScoped
     fun provideDetailAnimeUseCases(
         animeRepository: IAnimeRepository,
-        characterRepository: ICharacterRepository
-    ): IDetailUseCases =
-        DetailUseCases(
+        characterRepository: ICharacterRepository,
+        preferencesRepository: IUserPreferencesRepository
+    ): IDetailAnimeUseCases =
+        DetailAnimeUseCases(
             animeRepository = animeRepository,
-            characterRepository = characterRepository
+            characterRepository = characterRepository,
+            preferencesRepository = preferencesRepository
         )
 
     @Provides
@@ -54,4 +59,11 @@ object UseCasesModule {
         UserPreferencesUseCases(
             userPreferencesRepository = userPreferencesRepository
         )
+
+    @Provides
+    @ViewModelScoped
+    fun provideDetailCharacterUseCases(
+        characterRepository: CharacterRepository
+    ): IDetailCharacterUseCases =
+        DetailCharacterUseCases(characterRepository)
 }

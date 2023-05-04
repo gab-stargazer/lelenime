@@ -53,10 +53,24 @@ class UserPreferencesService(private val context: Context) : IUserPreferencesSer
         }
     }
 
+    override suspend fun isAnimeCharactersFetchedBefore(animeID: Int): Flow<Boolean> =
+        context.preferences.data.map {
+            val key = booleanPreferencesKey(ANIME_KEY + animeID)
+            it[key] ?: false
+        }
+
+    override suspend fun updateAnimeCharactersFetchedBefore(animeID: Int) {
+        context.preferences.edit {
+            val key = booleanPreferencesKey(ANIME_KEY + animeID)
+            it[key] = true
+        }
+    }
+
     companion object {
         private const val PREFERENCES_NAME = "user_pref"
         private const val THEME_PREFERENCES = "user_theme"
         private const val DISPLAY_STYLE_PREFERENCES = "user_display_style"
         private const val DYNAMIC_THEME_PREFERENCES = "user_dynamic_theme"
+        private const val ANIME_KEY = "anime"
     }
 }
