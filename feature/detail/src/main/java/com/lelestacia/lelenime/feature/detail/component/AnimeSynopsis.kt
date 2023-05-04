@@ -27,7 +27,7 @@ fun AnimeSynopsis(
         text = stringResource(R.string.synopsis),
         style = MaterialTheme.typography.titleLarge.copy(
             fontWeight = FontWeight.Bold
-        ),
+        )
     )
     Text(
         text = synopsis,
@@ -44,7 +44,7 @@ fun AnimeSynopsis(
         Text(
             text = stringResource(R.string.read_more),
             textAlign = TextAlign.Center,
-            textDecoration = TextDecoration.Underline,
+            textDecoration = TextDecoration.Underline
         )
     }
 }
@@ -80,4 +80,3 @@ fun PreviewAnimeSynopsisDarkMode() {
         }
     }
 }
-

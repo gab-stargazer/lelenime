@@ -4,10 +4,10 @@ import com.lelestacia.lelenime.core.database.animeStuff.entity.character.Charact
 import com.lelestacia.lelenime.core.database.animeStuff.entity.character.CharacterInformationEntity
 import com.lelestacia.lelenime.core.database.animeStuff.entity.character.CharacterProfile
 import com.lelestacia.lelenime.core.database.animeStuff.entity.voiceActor.VoiceActorEntity
-import com.lelestacia.lelenime.core.network.model.character.CharacterResponse
 import com.lelestacia.lelenime.core.model.character.Character
 import com.lelestacia.lelenime.core.model.character.CharacterDetail
 import com.lelestacia.lelenime.core.network.model.character.CharacterDetailResponse
+import com.lelestacia.lelenime.core.network.model.character.CharacterResponse
 import java.util.Date
 
 fun CharacterResponse.asNewEntity(): CharacterEntity =

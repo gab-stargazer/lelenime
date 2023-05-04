@@ -116,7 +116,8 @@ fun PreviewDisplayStyleSettings() {
                 isOpened = false,
                 selectedStyle = DisplayStyle.CARD,
                 onEvent = {},
-                onStateChanged = {})
+                onStateChanged = {}
+            )
         }
     }
 }
@@ -133,7 +134,8 @@ fun PreviewDisplayStyleSettingsDarkMode() {
                 isOpened = false,
                 selectedStyle = DisplayStyle.CARD,
                 onEvent = {},
-                onStateChanged = {})
+                onStateChanged = {}
+            )
         }
     }
 }

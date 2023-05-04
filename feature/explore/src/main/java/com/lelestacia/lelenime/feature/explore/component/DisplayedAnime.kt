@@ -22,7 +22,7 @@ import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState
 @Composable
 fun DashboardDisplayTypeHeader(
     state: ExploreScreenState,
-    onEvent: (ExploreScreenEvent) -> Unit,
+    onEvent: (ExploreScreenEvent) -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),

@@ -45,6 +45,6 @@ fun MoreScreenButton(
                 )
             }
             Divider()
-        },
+        }
     )
 }

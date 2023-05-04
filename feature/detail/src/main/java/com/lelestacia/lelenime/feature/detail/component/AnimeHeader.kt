@@ -39,7 +39,7 @@ import com.lelestacia.lelenime.core.common.theme.spacing
 fun AnimeHeader(
     malID: Int,
     coverImages: String,
-    title:String,
+    title: String,
     titleJapanese: String?,
     rank: Int,
     score: Double?,

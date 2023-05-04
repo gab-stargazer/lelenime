@@ -57,7 +57,6 @@ class CharacterRepository @Inject constructor(
             Timber.d("Database Responded with ${animeCharactersCrossRef.size} character references for Anime ID $animeID")
 
             if (animeCharactersCrossRef.isEmpty()) {
-
                 val apiResponse: List<CharacterResponse> =
                     animeNetworkService.getAnimeCharactersByAnimeID(animeID = animeID)
                 Timber.d("API Responded with ${apiResponse.size} characters  for Anime ID $animeID")
@@ -160,8 +159,9 @@ class CharacterRepository @Inject constructor(
             }
 
             val oldestUpdate: Long =
-                if (localCharacter == null) 0
-                else {
+                if (localCharacter == null) {
+                    0
+                } else {
                     (localCharacter.updatedAt ?: localCharacter.createdAt).time
                 }
 
@@ -205,8 +205,11 @@ class CharacterRepository @Inject constructor(
                 characterDatabaseService.getCharacterAdditionalInformationById(characterID)
 
             val localCharacterProfile: CharacterProfile? =
-                if (localCharacter == null) null
-                else characterDatabaseService.getCharacterFullProfile(characterID = characterID)
+                if (localCharacter == null) {
+                    null
+                } else {
+                    characterDatabaseService.getCharacterFullProfile(characterID = characterID)
+                }
 
             /**
              * If a local character is null,

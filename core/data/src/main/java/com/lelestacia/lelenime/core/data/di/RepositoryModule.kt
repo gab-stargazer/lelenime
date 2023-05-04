@@ -60,7 +60,7 @@ object RepositoryModule {
         characterDatabaseService: ICharacterDatabaseService,
         errorParserUtil: JikanErrorParserUtil,
         ioDispatcher: CoroutineDispatcher
-    ):ICharacterRepository =
+    ): ICharacterRepository =
         CharacterRepository(
             characterNetworkService = characterNetworkService,
             animeNetworkService = animeNetworkService,

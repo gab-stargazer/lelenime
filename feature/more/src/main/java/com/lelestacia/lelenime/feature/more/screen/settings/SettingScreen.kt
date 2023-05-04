@@ -66,8 +66,10 @@ fun SettingScreen(
                 .fillMaxSize()
                 .padding(paddingValue)
         ) {
-            Spacer(modifier = Modifier.height(
-                height = MaterialTheme.spacing.medium)
+            Spacer(
+                modifier = Modifier.height(
+                    height = MaterialTheme.spacing.medium
+                )
             )
             DisplayStyleSettings(
                 isOpened = state.isDisplayStylePreferencesMenuOpened,
@@ -111,7 +113,7 @@ fun PreviewSettingScreen() {
 @Preview(
     showBackground = true,
     name = "Setting Screen Dark Mode",
-    group = "Setting Screen",
+    group = "Setting Screen"
 )
 @Composable
 fun PreviewSettingScreenDarkMode() {

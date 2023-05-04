@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.core.network.model.voice_actor
+package com.lelestacia.lelenime.core.network.model.voiceActor
 
 import com.google.gson.annotations.SerializedName
 
@@ -31,7 +31,7 @@ data class VoiceActorResponse(
         val image: VoiceActorImageResponse,
 
         @SerializedName("name")
-        val name: String,
+        val name: String
     ) {
 
         /**

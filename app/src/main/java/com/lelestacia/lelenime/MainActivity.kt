@@ -373,7 +373,7 @@ class MainActivity : ComponentActivity() {
                                 Surface(
                                     modifier = Modifier.fillMaxSize()
                                 ) {
-                                    when(animeResource) {
+                                    when (animeResource) {
                                         is Resource.Success -> DetailScreen(
                                             navController = navController,
                                             animeID = animeID,
@@ -409,9 +409,7 @@ class MainActivity : ComponentActivity() {
                                 })
 
                                 val characterResource by vm.characterResource.collectAsStateWithLifecycle()
-                                Surface(
-
-                                ) {
+                                Surface() {
                                     when (characterResource) {
                                         is Resource.Error -> {}
                                         Resource.Loading -> {

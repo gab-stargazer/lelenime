@@ -1,7 +1,7 @@
 package com.lelestacia.lelenime.core.network.model.character
 
 import com.google.gson.annotations.SerializedName
-import com.lelestacia.lelenime.core.network.model.voice_actor.VoiceActorResponse
+import com.lelestacia.lelenime.core.network.model.voiceActor.VoiceActorResponse
 
 /**
  * Data class representing a response containing information about a character.

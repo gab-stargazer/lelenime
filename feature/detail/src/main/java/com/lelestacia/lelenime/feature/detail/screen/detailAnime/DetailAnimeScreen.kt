@@ -94,7 +94,7 @@ fun DetailScreen(
                     containerColor = MaterialTheme.colorScheme.background,
                     scrolledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                     titleContentColor = MaterialTheme.colorScheme.onBackground,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onBackground,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onBackground
                 ),
                 scrollBehavior = scrollBehavior,
                 actions = {
@@ -147,7 +147,7 @@ fun DetailScreen(
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.large),
+                    .padding(horizontal = MaterialTheme.spacing.large)
             ) {
                 Icon(
                     imageVector =
@@ -188,7 +188,8 @@ fun DetailScreen(
                                 .FullSynopsisScreen
                                 .createRoute(synopsis = anime.synopsis.orEmpty())
                             navController.navigate(route)
-                        })
+                        }
+                    )
                 }
             }
 
@@ -240,7 +241,7 @@ fun DetailScreen(
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = MaterialTheme.spacing.large),
+                            .padding(horizontal = MaterialTheme.spacing.large)
                     ) {
                         Text(
                             text = "Get Characters from this Anime",
@@ -284,7 +285,6 @@ fun DetailScreen(
                                                 navController.navigate(
                                                     Screen.DetailCharacterScreen.createRoute(it)
                                                 ) {
-
                                                 }
                                             }
                                         )
