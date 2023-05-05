@@ -29,6 +29,7 @@ import com.lelestacia.lelenime.core.common.displayStyle.DisplayStyle
 import com.lelestacia.lelenime.core.common.displayStyle.DisplayStyleMenu
 import com.lelestacia.lelenime.core.common.lazyAnime.LazyGridAnime
 import com.lelestacia.lelenime.core.common.lazyAnime.LazyListAnime
+import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.feature.collection.stateAndEvent.CollectionScreenEvent
 import com.lelestacia.lelenime.feature.collection.stateAndEvent.CollectionScreenState
@@ -51,7 +52,8 @@ fun CollectionScreen(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall)
                 ) {
                     Text(
                         text = "Collection",
@@ -71,7 +73,13 @@ fun CollectionScreen(
                         DisplayStyleMenu(
                             currentStyle = screenState.displayStyle,
                             isExpanded = screenState.isDisplayStyleOptionOpened,
-                            onStyleChanged = { onEvent(CollectionScreenEvent.OnDisplayStyleChanged(it)) },
+                            onStyleChanged = {
+                                onEvent(
+                                    CollectionScreenEvent.OnDisplayStyleChanged(
+                                        it
+                                    )
+                                )
+                            },
                             onDismiss = { onEvent(CollectionScreenEvent.OnDisplayStyleOptionMenuChangedState) }
                         )
                     }

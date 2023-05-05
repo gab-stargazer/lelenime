@@ -59,6 +59,12 @@ dependencies {
 
     // Junit
     testImplementation(libs.junit)
+
+    //  Mockk
+    testImplementation(libs.mockk)
+
+    //  Coroutine
+    testImplementation(libs.coroutine.test)
 }
 
 kapt {
