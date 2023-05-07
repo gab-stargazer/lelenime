@@ -68,6 +68,7 @@ compose-junit = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose-version" }
+compose-window-size = { module = "androidx.compose.material3:material3-window-size-class" }
 #   Coil
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose-version" }
 #   Coroutine
@@ -137,7 +138,8 @@ compose-toolkit = [
     "compose-ui-graphic",
     "compose-ui-preview",
     "compose-icons",
-    "compose-material-design"]
+    "compose-material-design",
+    "compose-window-size"]
 #   Compose Manifest + Tools
 compose-tooling-and-manifest = ["compose-tooling", "compose-manifest"]
 #   Retrofit - GSON
