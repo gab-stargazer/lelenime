@@ -186,7 +186,7 @@ fun DetailScreen(
                         onSynopsisOpen = {
                             val route = Screen
                                 .FullSynopsisScreen
-                                .createRoute(synopsis = anime.synopsis.orEmpty())
+                                .createRoute(malID = animeID)
                             navController.navigate(route)
                         }
                     )
@@ -282,10 +282,10 @@ fun DetailScreen(
                                         CharacterImage(
                                             character = character,
                                             onCharacterClicked = {
-                                                navController.navigate(
-                                                    Screen.DetailCharacterScreen.createRoute(it)
-                                                ) {
-                                                }
+                                                val route = Screen
+                                                    .DetailCharacterScreen
+                                                    .createRoute(it)
+                                                navController.navigate(route)
                                             }
                                         )
                                     }

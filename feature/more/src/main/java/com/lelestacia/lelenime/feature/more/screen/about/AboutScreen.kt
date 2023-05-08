@@ -37,8 +37,7 @@ import com.lelestacia.lelenime.feature.more.component.DeveloperCard
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(
-    navController: NavHostController,
-    isDarkMode: Boolean
+    navController: NavHostController
 ) {
     Scaffold(
         topBar = {
@@ -77,7 +76,7 @@ fun AboutScreen(
                     .padding(top = 24.dp)
             )
             Text(
-                text = "Version 1.0.0-beta",
+                text = "Version 1.1.0-beta",
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(top = 16.dp)
             )
@@ -109,8 +108,7 @@ fun AboutScreen(
                 nickName = "Kamil-Malik",
                 imageURL = LELESTACIA_PICTURE,
                 githubURL = GITHUB_LELESTACIA,
-                facebookURL = FB_LELESTACIA,
-                isDarkMode = isDarkMode
+                facebookURL = FB_LELESTACIA
             )
 
             DeveloperCard(
@@ -118,8 +116,7 @@ fun AboutScreen(
                 nickName = "Kao chan",
                 imageURL = KAORI_PICTURE,
                 githubURL = null,
-                facebookURL = FB_KAORI,
-                isDarkMode = isDarkMode
+                facebookURL = FB_KAORI
             )
 
             DeveloperCard(
@@ -127,8 +124,7 @@ fun AboutScreen(
                 nickName = "GPT3",
                 imageURL = CHAT_GPT,
                 githubURL = null,
-                facebookURL = null,
-                isDarkMode = isDarkMode
+                facebookURL = null
             )
         }
     }
@@ -138,7 +134,6 @@ fun AboutScreen(
 @Composable
 fun PreviewMoreScreen() {
     AboutScreen(
-        navController = rememberNavController(),
-        isDarkMode = false
+        navController = rememberNavController()
     )
 }
