@@ -21,11 +21,10 @@ fun SynopsisScreen(synopsis: String) {
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
+            .padding(MaterialTheme.spacing.large)
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
-            modifier = Modifier
-                .padding(MaterialTheme.spacing.large)
         ) {
             Text(
                 text = "Synopsis",

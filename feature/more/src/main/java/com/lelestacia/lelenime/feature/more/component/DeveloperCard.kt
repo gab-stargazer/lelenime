@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.lelestacia.lelenime.core.common.R
+import com.lelestacia.lelenime.core.common.theme.spacing
 
 @Composable
 fun DeveloperCard(
@@ -41,7 +42,6 @@ fun DeveloperCard(
     imageURL: String,
     githubURL: String?,
     facebookURL: String?,
-    isDarkMode: Boolean
 ) {
     val context = LocalContext.current
     Row(
@@ -79,7 +79,11 @@ fun DeveloperCard(
                 text = nickName,
                 style = MaterialTheme.typography.titleSmall
             )
-            Row {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(
+                    space = MaterialTheme.spacing.small
+                )
+            ) {
                 githubURL?.let {
                     Button(
                         onClick = {
@@ -89,19 +93,16 @@ fun DeveloperCard(
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.Transparent,
-                            contentColor =
-                            if (isDarkMode) {
-                                Color.White
-                            } else {
-                                Color.Black
-                            }
+                            contentColor = MaterialTheme.colorScheme.onBackground
                         ),
                         contentPadding = PaddingValues(horizontal = 4.dp),
                         shape = RoundedCornerShape(4.dp)
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            horizontalArrangement = Arrangement.spacedBy(
+                                space = MaterialTheme.spacing.extraSmall
+                            )
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.github),
@@ -124,19 +125,14 @@ fun DeveloperCard(
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.Transparent,
-                            contentColor =
-                            if (isDarkMode) {
-                                Color.White
-                            } else {
-                                Color.Black
-                            }
+                            contentColor = MaterialTheme.colorScheme.onBackground
                         ),
                         contentPadding = PaddingValues(horizontal = 4.dp),
                         shape = RoundedCornerShape(4.dp)
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            horizontalArrangement = Arrangement.spacedBy(2.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.Facebook,

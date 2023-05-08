@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -110,7 +109,7 @@ fun AnimeCard(
                     fontWeight = FontWeight.SemiBold,
                     color = Color.White,
                     modifier = Modifier
-                        .widthIn(max = 140.dp)
+                        .width(200.dp)
                         .padding(horizontal = MaterialTheme.spacing.extraSmall)
                         .padding(bottom = MaterialTheme.spacing.extraSmall)
                 )
@@ -124,7 +123,7 @@ fun AnimeCard(
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
-                    .widthIn(max = 140.dp)
+                    .width(200.dp)
                     .padding(horizontal = MaterialTheme.spacing.extraSmall)
             )
         }

@@ -18,7 +18,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailViewModel @Inject constructor(
+class DetailAnimeViewModel @Inject constructor(
     private val useCases: IDetailAnimeUseCases
 ) : ViewModel() {
 
