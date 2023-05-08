@@ -41,7 +41,7 @@ fun DeveloperCard(
     nickName: String,
     imageURL: String,
     githubURL: String?,
-    facebookURL: String?
+    facebookURL: String?,
 ) {
     val context = LocalContext.current
     Row(

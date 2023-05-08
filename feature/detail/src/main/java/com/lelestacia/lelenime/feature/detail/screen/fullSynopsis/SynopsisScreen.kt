@@ -24,7 +24,7 @@ fun SynopsisScreen(synopsis: String) {
             .padding(MaterialTheme.spacing.large)
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
         ) {
             Text(
                 text = "Synopsis",

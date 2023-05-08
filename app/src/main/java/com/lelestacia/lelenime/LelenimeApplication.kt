@@ -49,8 +49,8 @@ import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.core.model.character.CharacterDetail
 import com.lelestacia.lelenime.feature.collection.screen.CollectionScreen
 import com.lelestacia.lelenime.feature.collection.screen.CollectionScreenViewModel
-import com.lelestacia.lelenime.feature.detail.screen.detailAnime.DetailAnimeViewModel
 import com.lelestacia.lelenime.feature.detail.screen.detailAnime.DetailScreen
+import com.lelestacia.lelenime.feature.detail.screen.detailAnime.DetailAnimeViewModel
 import com.lelestacia.lelenime.feature.detail.screen.detailCharacter.DetailCharacterScreen
 import com.lelestacia.lelenime.feature.detail.screen.detailCharacter.DetailCharacterViewModel
 import com.lelestacia.lelenime.feature.detail.screen.fullSynopsis.SynopsisScreen
@@ -95,6 +95,7 @@ fun LelenimeApplication(
         }
         Scaffold(
             bottomBar = {
+
                 if (windowSize.widthSizeClass == WindowWidthSizeClass.Compact) {
                     LeleNimeBottomBar(navController = navController)
                 }
@@ -317,7 +318,7 @@ fun LelenimeApplication(
                         )
 
                         AboutScreen(
-                            navController = navController
+                            navController = navController,
                         )
                     }
 

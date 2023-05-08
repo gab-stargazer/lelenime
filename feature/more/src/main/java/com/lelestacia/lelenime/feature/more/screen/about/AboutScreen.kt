@@ -108,7 +108,7 @@ fun AboutScreen(
                 nickName = "Kamil-Malik",
                 imageURL = LELESTACIA_PICTURE,
                 githubURL = GITHUB_LELESTACIA,
-                facebookURL = FB_LELESTACIA
+                facebookURL = FB_LELESTACIA,
             )
 
             DeveloperCard(
@@ -116,7 +116,7 @@ fun AboutScreen(
                 nickName = "Kao chan",
                 imageURL = KAORI_PICTURE,
                 githubURL = null,
-                facebookURL = FB_KAORI
+                facebookURL = FB_KAORI,
             )
 
             DeveloperCard(
@@ -124,7 +124,7 @@ fun AboutScreen(
                 nickName = "GPT3",
                 imageURL = CHAT_GPT,
                 githubURL = null,
-                facebookURL = null
+                facebookURL = null,
             )
         }
     }
@@ -134,6 +134,6 @@ fun AboutScreen(
 @Composable
 fun PreviewMoreScreen() {
     AboutScreen(
-        navController = rememberNavController()
+        navController = rememberNavController(),
     )
 }
