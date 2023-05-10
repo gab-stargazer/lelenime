@@ -15,4 +15,5 @@ interface IExploreUseCases {
         status: String? = null,
         rating: String? = null
     ): Flow<PagingData<Anime>>
+    fun parseThrowable(t: Throwable): String
 }

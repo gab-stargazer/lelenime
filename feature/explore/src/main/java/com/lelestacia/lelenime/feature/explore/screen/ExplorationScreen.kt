@@ -56,6 +56,7 @@ fun ExplorationScreen(
     screenState: ExploreScreenState,
     onEvent: (ExploreScreenEvent) -> Unit,
     onAnimeClicked: (Anime) -> Unit,
+    onErrorParsingRequest: (Throwable) -> String,
     modifier: Modifier = Modifier
 ) {
     val pagingAnime: LazyPagingItems<Anime> = screenState.anime.collectAsLazyPagingItems()
@@ -110,7 +111,7 @@ fun ExplorationScreen(
                     ),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = refreshing.error.message ?: stringResource(id = com.lelestacia.lelenime.core.common.R.string.unknown_error))
+                    Text(text = onErrorParsingRequest(refreshing.error))
                     Button(
                         onClick = { pagingAnime.retry() },
                         shape = RoundedCornerShape(4.dp)
@@ -192,6 +193,7 @@ fun PreviewExplorationScreen() {
         windowSize = calculateWindowSizeClass(activity = Activity()),
         screenState = ExploreScreenState(),
         onEvent = {},
-        onAnimeClicked = {}
+        onAnimeClicked = {},
+        onErrorParsingRequest = { return@ExplorationScreen "" }
     )
 }

@@ -4,6 +4,8 @@ import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import com.lelestacia.lelenime.core.network.model.ErrorResponse
 import retrofit2.HttpException
+import java.lang.NullPointerException
+import java.net.SocketTimeoutException
 
 class JikanErrorParserUtil {
 
@@ -24,13 +26,22 @@ class JikanErrorParserUtil {
         if (t is HttpException) {
             val errorResponse = t.response()?.errorBody()
             val gson = Gson()
-            val errorAdapter: TypeAdapter<ErrorResponse> = gson.getAdapter(ErrorResponse::class.java)
+            val errorAdapter: TypeAdapter<ErrorResponse> =
+                gson.getAdapter(ErrorResponse::class.java)
             return try {
                 val error = errorAdapter.fromJson(errorResponse?.string())
                 "Error ${error.status}: ${error.message}"
             } catch (e: Exception) {
                 "Response failed to parse"
             }
+        }
+
+        if (t is NullPointerException) {
+            return "Server didn't give the proper responses"
+        }
+
+        if (t is SocketTimeoutException) {
+            return "The server has timeout your connection. Please check your connectivity and try again later"
         }
 
         return "Error: ${t.message}"

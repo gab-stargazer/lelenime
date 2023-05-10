@@ -63,4 +63,6 @@ interface IAnimeRepository {
      * @param animeID the ID of the anime to retrieve
      */
     fun getAnimeFromLocalDatabaseByAnimeID(animeID: Int): Flow<Resource<Anime>>
+
+    fun parseThrowable(t: Throwable): String
 }

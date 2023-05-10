@@ -150,6 +150,9 @@ class ExplorationScreenViewModel @Inject constructor(
         }
     }
 
+    fun errorParsingRequest(t: Throwable): String =
+        useCases.parseThrowable(t)
+
     fun insertOrUpdateAnimeHistory(anime: Anime) = viewModelScope.launch {
         useCases.insertOrUpdateAnimeHistory(anime = anime)
     }

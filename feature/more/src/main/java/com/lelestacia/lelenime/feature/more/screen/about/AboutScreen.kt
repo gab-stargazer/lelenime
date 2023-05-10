@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -66,6 +68,7 @@ fun AboutScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValue)
+                .verticalScroll(rememberScrollState())
         ) {
             Image(
                 painter = painterResource(id = com.lelestacia.lelenime.core.common.R.drawable.lelenime),
@@ -76,7 +79,7 @@ fun AboutScreen(
                     .padding(top = 24.dp)
             )
             Text(
-                text = "Version 1.1.0-beta",
+                text = "Version 2.0",
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(top = 16.dp)
             )
@@ -108,7 +111,7 @@ fun AboutScreen(
                 nickName = "Kamil-Malik",
                 imageURL = LELESTACIA_PICTURE,
                 githubURL = GITHUB_LELESTACIA,
-                facebookURL = FB_LELESTACIA,
+                facebookURL = FB_LELESTACIA
             )
 
             DeveloperCard(
@@ -116,7 +119,7 @@ fun AboutScreen(
                 nickName = "Kao chan",
                 imageURL = KAORI_PICTURE,
                 githubURL = null,
-                facebookURL = FB_KAORI,
+                facebookURL = FB_KAORI
             )
 
             DeveloperCard(
@@ -124,7 +127,7 @@ fun AboutScreen(
                 nickName = "GPT3",
                 imageURL = CHAT_GPT,
                 githubURL = null,
-                facebookURL = null,
+                facebookURL = null
             )
         }
     }
@@ -134,6 +137,6 @@ fun AboutScreen(
 @Composable
 fun PreviewMoreScreen() {
     AboutScreen(
-        navController = rememberNavController(),
+        navController = rememberNavController()
     )
 }
