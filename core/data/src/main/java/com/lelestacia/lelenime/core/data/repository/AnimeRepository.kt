@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.lelestacia.lelenime.core.common.Resource
+import com.lelestacia.lelenime.core.data.JikanErrorParserUtil
 import com.lelestacia.lelenime.core.data.mapper.asAnime
 import com.lelestacia.lelenime.core.data.mapper.asNewEntity
 import com.lelestacia.lelenime.core.database.animeStuff.entity.anime.AnimeEntity
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class AnimeRepository @Inject constructor(
     private val animeNetworkService: IAnimeNetworkService,
     private val animeDatabaseService: IAnimeDatabaseService,
+    private val errorParserUtil: JikanErrorParserUtil,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : IAnimeRepository {
 
@@ -151,6 +153,10 @@ class AnimeRepository @Inject constructor(
             .map { animeEntity ->
                 Resource.Success(data = animeEntity.asAnime())
             }
+    }
+
+    override fun parseThrowable(t: Throwable): String {
+        return errorParserUtil(t)
     }
 
     private fun getAnimePager(number: Int): Pager<Int, AnimeResponse> {

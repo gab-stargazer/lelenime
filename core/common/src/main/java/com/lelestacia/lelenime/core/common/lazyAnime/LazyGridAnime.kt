@@ -41,12 +41,11 @@ fun LazyGridAnime(
     onAnimeClicked: (Anime) -> Unit
 ) {
     val itemsInOneRow: Int =
-        when(windowSize.widthSizeClass) {
+        when (windowSize.widthSizeClass) {
             WindowWidthSizeClass.Compact -> 3
             WindowWidthSizeClass.Medium -> 4
             else -> 5
         }
-
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(itemsInOneRow),

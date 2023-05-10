@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
@@ -42,6 +43,7 @@ fun CharacterImage(
                 .width(width = 100.dp)
                 .aspectRatio(ratio = 3f / 4f)
                 .clip(shape = RoundedCornerShape(size = 8.dp))
+                .testTag(character.name)
         )
     }
 }

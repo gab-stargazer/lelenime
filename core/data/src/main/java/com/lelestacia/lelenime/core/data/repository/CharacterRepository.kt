@@ -27,7 +27,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onStart
-import retrofit2.HttpException
 import timber.log.Timber
 import java.util.Date
 import java.util.concurrent.TimeUnit
@@ -130,21 +129,12 @@ class CharacterRepository @Inject constructor(
         }.onStart {
             emit(Resource.Loading)
         }.catch { t ->
-            when (t) {
-                is HttpException -> emit(
-                    Resource.Error(
-                        data = null,
-                        message = errorParser(t)
-                    )
+            emit(
+                Resource.Error(
+                    data = null,
+                    message = errorParser(t)
                 )
-
-                else -> emit(
-                    Resource.Error(
-                        data = null,
-                        message = "Error: ${t.message}"
-                    )
-                )
-            }
+            )
         }.flowOn(ioDispatcher)
 
     override fun getCharacterDetailByID(characterID: Int): Flow<Resource<CharacterDetail>> =
@@ -218,19 +208,11 @@ class CharacterRepository @Inject constructor(
              * then it means the exception was happened during update network request
              */
 
-            when (t) {
-                is HttpException -> emit(
-                    Resource.Error(
-                        data = localCharacterProfile?.asCharacterDetail(),
-                        message = errorParser(t)
-                    )
+            emit(
+                Resource.Error(
+                    data = null,
+                    message = errorParser(t)
                 )
-                else -> emit(
-                    Resource.Error(
-                        data = localCharacterProfile?.asCharacterDetail(),
-                        message = "Error: ${t.message}"
-                    )
-                )
-            }
+            )
         }.flowOn(ioDispatcher)
 }

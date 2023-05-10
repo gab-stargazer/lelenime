@@ -36,11 +36,15 @@ object RepositoryModule {
     @Singleton
     fun provideAnimeRepository(
         animeNetworkService: IAnimeNetworkService,
-        animeDatabaseService: IAnimeDatabaseService
+        animeDatabaseService: IAnimeDatabaseService,
+        errorParserUtil: JikanErrorParserUtil,
+        ioDispatcher: CoroutineDispatcher
     ): IAnimeRepository =
         AnimeRepository(
             animeNetworkService = animeNetworkService,
-            animeDatabaseService = animeDatabaseService
+            animeDatabaseService = animeDatabaseService,
+            errorParserUtil = errorParserUtil,
+            ioDispatcher = ioDispatcher
         )
 
     @Singleton
