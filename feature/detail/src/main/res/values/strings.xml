@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="information">Information</string>
+    <string name="synopsis">Synopsis</string>
+    <string name="read_more">Read More</string>
+    <string name="characters">Characters</string>
+</resources>

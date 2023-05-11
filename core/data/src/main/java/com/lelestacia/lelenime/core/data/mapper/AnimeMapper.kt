@@ -10,7 +10,7 @@ fun AnimeResponse.asAnime(): Anime =
         malID = malId,
         coverImages = coverImages.webp.largeImageUrl,
         trailer = Anime.Trailer(
-            youtubeId = trailer?.youtubeId,
+            youtubeId = trailer?.youtubeID,
             url = trailer?.url,
             images = trailer?.images?.maximumImageUrl
         ),

@@ -16,8 +16,8 @@ android {
         applicationId = "com.lelestacia.lelenime"
         minSdk = 26
         targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -83,9 +83,6 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose.toolkit)
     implementation(libs.compose.navigation)
-    implementation(libs.firebase.crashlytics.ktx)
-    implementation(libs.firebase.analytics.ktx)
-    implementation(libs.firebase.perf.ktx)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.compose.junit)
     debugImplementation(libs.bundles.compose.tooling.and.manifest)
@@ -119,9 +116,15 @@ dependencies {
     //  Accompanist
     implementation(libs.accompanist.system.ui.controller)
     implementation(libs.accompanist.animation.navigation)
+    implementation(libs.accompanist.bottomsheet.navigation)
 
     //  Profiler
     implementation(libs.baseline.profiler)
+
+    //  Firebase
+    implementation(libs.firebase.crashlytics.ktx)
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.perf.ktx)
 }
 
 kapt {

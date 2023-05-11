@@ -33,4 +33,11 @@ class UserPreferencesRepository @Inject constructor(
             dynamicPreferences = dynamicPreferences
         )
     }
+
+    override suspend fun isAnimeCharactersFetchedBefore(animeID: Int): Flow<Boolean> =
+        userPreferencesService.isAnimeCharactersFetchedBefore(animeID = animeID)
+
+    override suspend fun updateAnimeCharactersFetchedBefore(animeID: Int) {
+        userPreferencesService.updateAnimeCharactersFetchedBefore(animeID = animeID)
+    }
 }

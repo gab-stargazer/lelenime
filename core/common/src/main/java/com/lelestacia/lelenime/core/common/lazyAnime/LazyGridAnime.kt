@@ -16,6 +16,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,14 +33,22 @@ import com.lelestacia.lelenime.core.model.Anime
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LazyGridAnime(
+    windowSize: WindowSizeClass,
     lazyGridState: LazyGridState,
     pagingAnime: LazyPagingItems<Anime>,
     displayStyle: DisplayStyle,
     modifier: Modifier = Modifier,
     onAnimeClicked: (Anime) -> Unit
 ) {
+    val itemsInOneRow: Int =
+        when (windowSize.widthSizeClass) {
+            WindowWidthSizeClass.Compact -> 3
+            WindowWidthSizeClass.Medium -> 4
+            else -> 5
+        }
+
     LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
+        columns = GridCells.Fixed(itemsInOneRow),
         state = lazyGridState,
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),

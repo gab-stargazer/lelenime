@@ -9,4 +9,6 @@ interface IUserPreferencesService {
     suspend fun updateUserTheme(themePreferences: Int)
     suspend fun getUserPreferenceOnDynamicTheme(): Flow<Boolean>
     suspend fun updateUserPreferenceOnDynamicTheme(dynamicPreferences: Boolean)
+    suspend fun isAnimeCharactersFetchedBefore(animeID: Int): Flow<Boolean>
+    suspend fun updateAnimeCharactersFetchedBefore(animeID: Int)
 }

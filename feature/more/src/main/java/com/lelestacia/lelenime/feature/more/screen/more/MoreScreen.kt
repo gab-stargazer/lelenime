@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -16,6 +17,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.lelestacia.lelenime.core.common.Constant
 import com.lelestacia.lelenime.core.common.route.Screen
+import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
 import com.lelestacia.lelenime.feature.more.component.MoreScreenButton
 
 @Composable
@@ -57,8 +59,28 @@ fun MoreScreen(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PreviewMoreScreen() {
-    MoreScreen(navController = rememberNavController())
+    LelenimeTheme(
+        darkTheme = false,
+        dynamicColor = false
+    ) {
+        Surface {
+            MoreScreen(navController = rememberNavController())
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewMoreScreenDarkMode() {
+    LelenimeTheme(
+        darkTheme = true,
+        dynamicColor = false
+    ) {
+        Surface {
+            MoreScreen(navController = rememberNavController())
+        }
+    }
 }

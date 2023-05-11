@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntSize
@@ -37,6 +38,7 @@ import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.lelestacia.lelenime.core.common.displayStyle.DisplayStyle
+import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.core.model.Anime
 
 @Composable
@@ -55,7 +57,12 @@ fun AnimeCard(
 
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = modifier.animateContentSize()
+        modifier = modifier
+            .animateContentSize()
+            .testTag("anime:${anime.title}")
+            .clickable {
+                onAnimeClicked(anime)
+            }
     ) {
         Box(
             contentAlignment = Alignment.BottomCenter
@@ -80,12 +87,9 @@ fun AnimeCard(
                 ),
                 filterQuality = FilterQuality.Low,
                 modifier = Modifier
-                    .widthIn(min = 100.dp, max = 150.dp)
+                    .width(200.dp)
                     .aspectRatio(3f / 4f)
                     .clip(RoundedCornerShape(4.dp))
-                    .clickable {
-                        onAnimeClicked(anime)
-                    }
                     .onGloballyPositioned {
                         sizeImage = it.size
                     }
@@ -96,9 +100,6 @@ fun AnimeCard(
                         .matchParentSize()
                         .clip(RoundedCornerShape(4.dp))
                         .background(gradient)
-                        .clickable {
-                            onAnimeClicked(anime)
-                        }
                 )
                 Text(
                     text = anime.title,
@@ -108,9 +109,9 @@ fun AnimeCard(
                     fontWeight = FontWeight.SemiBold,
                     color = Color.White,
                     modifier = Modifier
-                        .widthIn(max = 140.dp)
-                        .padding(horizontal = 5.dp)
-                        .padding(bottom = 4.dp)
+                        .width(200.dp)
+                        .padding(horizontal = MaterialTheme.spacing.extraSmall)
+                        .padding(bottom = MaterialTheme.spacing.extraSmall)
                 )
             }
         }
@@ -122,8 +123,8 @@ fun AnimeCard(
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
-                    .widthIn(max = 140.dp)
-                    .padding(horizontal = 5.dp)
+                    .width(200.dp)
+                    .padding(horizontal = MaterialTheme.spacing.extraSmall)
             )
         }
     }

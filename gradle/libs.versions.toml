@@ -1,14 +1,13 @@
 [versions]
 accompanist-version = "0.30.0"
-activity-compose-version = "1.7.0"
-android-version = "8.1.0-alpha11"
+activity-compose-version = "1.7.1"
+android-version = "8.1.0-beta02"
 android-junit-version = "1.1.5"
-compose-bom-version = "2023.04.00"
+compose-bom-version = "2023.05.00"
 datastore-pref-version = "1.0.0"
 espresso-version = "3.5.1"
-firebase-crashlytics-gradle = "2.9.5"
-google-services = "4.3.15"
-gradle = "3.4.3"
+google-services-version = "4.3.15"
+gradle-version = "8.1.0-beta02"
 junit-version = "4.13.2"
 kotlin-android-version = "1.8.10"
 kotlin-kapt-version = "1.7.20"
@@ -21,40 +20,42 @@ dagger-hilt-compose-version = "1.0.0"
 ksp-version = "1.8.10-1.0.9"
 lifecycle-runtime-version = "2.6.1"
 logging-interceptor-version = "5.0.0-alpha.6"
+mockk-version = "1.13.5"
 navigation-compose-version = "2.5.3"
 paging-version = "3.1.1"
 paging-compose-version = "1.0.0-alpha18"
-perf-plugin = "1.4.2"
 profiler-version = "1.3.0"
 shimmer-version = "1.0.4"
 retrofit-version = "2.9.0"
 room-version = "2.5.1"
 system-ui-controller-version = "0.27.0"
 timber-version = "5.0.1"
-
-#   ETC
 compose-compiler-version = "1.4.3"
-com-android-test = "8.1.0-alpha11"
+com-android-test = "8.1.0-beta02"
 uiautomator = "2.2.0"
 benchmark-macro-junit4 = "1.1.1"
-firebase-crashlytics-ktx = "18.3.6"
+firebase-crashlytics-ktx = "18.3.7"
+firebase-crashlytics-gradle = "2.9.5"
 firebase-analytics-ktx = "21.2.2"
-firebase-perf-ktx = "20.3.1"
+firebase-perf-ktx = "20.3.2"
+firebase-perf-gradle = "1.4.2"
 
 
 [libraries]
 #   Accomanist
 accompanist-animation-navigation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist-version" }
 accompanist-bottomsheet-navigation = { module = "com.google.accompanist:accompanist-navigation-material", version.ref = "accompanist-version" }
+accompanist-flow-layout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist-version" }
 accompanist-system-ui-controller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist-version" }
 #   Compose Activity
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose-version" }
 #   Baseline Profiler
 baseline-profiler = { module = "androidx.profileinstaller:profileinstaller", version.ref = "profiler-version" }
+#   Gradle
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle-version" }
+#   GMS
+google-services = { module = "com.google.gms:google-services", version.ref = "google-services-version" }
 #   Kotlin KTX
-firebase-crashlytics-gradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebase-crashlytics-gradle" }
-google-services = { module = "com.google.gms:google-services", version.ref = "google-services" }
-gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 kotlin-ktx = { module = "androidx.core:core-ktx", version.ref = "kotlin-ktx-version" }
 #   Jetpack Compose
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom-version" }
@@ -67,6 +68,7 @@ compose-junit = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose-version" }
+compose-window-size = { module = "androidx.compose.material3:material3-window-size-class" }
 #   Coil
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose-version" }
 #   Coroutine
@@ -81,17 +83,18 @@ dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref
 datastore-pref = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-pref-version" }
 #   Linter
 ktlint-gradle-linter = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint-gradle-version" }
-#   LiveData
+#   Lifecycle Compose
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-runtime-version" }
 #   Logging Interceptor
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "logging-interceptor-version" }
+#   Mockk
+mockk = { module = "io.mockk:mockk", version.ref = "mockk-version" }
 #   Navigation Compose
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose-version" }
 #   Paging
 paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging-version" }
 paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging-compose-version" }
 #   Retrofit - GSON
-perf-plugin = { module = "com.google.firebase:perf-plugin", version.ref = "perf-plugin" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit-version" }
 retrofit-gson-deserializer = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit-version" }
 #   Room
@@ -107,11 +110,16 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber-versi
 junit = { module = "junit:junit", version.ref = "junit-version" }
 android-junit = { module = "androidx.test.ext:junit", version.ref = "android-junit-version" }
 espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-version" }
+#   UI Automator
 uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
+#   JUnit Benchmark
 benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmark-macro-junit4" }
+#   Firebase
 firebase-crashlytics-ktx = { group = "com.google.firebase", name = "firebase-crashlytics-ktx", version.ref = "firebase-crashlytics-ktx" }
+firebase-crashlytics-gradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebase-crashlytics-gradle" }
 firebase-analytics-ktx = { group = "com.google.firebase", name = "firebase-analytics-ktx", version.ref = "firebase-analytics-ktx" }
 firebase-perf-ktx = { group = "com.google.firebase", name = "firebase-perf-ktx", version.ref = "firebase-perf-ktx" }
+firebase-perf-gradle = { module = "com.google.firebase:perf-plugin", version.ref = "firebase-perf-gradle" }
 
 [bundles]
 #   Coroutine Android + Core
@@ -130,7 +138,8 @@ compose-toolkit = [
     "compose-ui-graphic",
     "compose-ui-preview",
     "compose-icons",
-    "compose-material-design"]
+    "compose-material-design",
+    "compose-window-size"]
 #   Compose Manifest + Tools
 compose-tooling-and-manifest = ["compose-tooling", "compose-manifest"]
 #   Retrofit - GSON
@@ -143,9 +152,7 @@ retrofit-gson = ["retrofit", "retrofit-gson-deserializer"]
 android-application-plugin = { id = "com.android.application", version.ref = "android-version" }
 android-library-plugin = { id = "com.android.library", version.ref = "android-version" }
 kotlin-android-plugin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-android-version" }
-
 dagger-hilt-plugin = { id = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "dagger-hilt-version" }
-
 kotlin-kapt-plugin = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin-kapt-version" }
 dagger-hilt-module-plugin = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt-version" }
 com-android-test = { id = "com.android.test", version.ref = "com-android-test" }

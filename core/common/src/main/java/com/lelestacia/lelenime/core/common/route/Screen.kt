@@ -12,6 +12,22 @@ sealed class Screen(val route: String) {
             )
         }
     }
+    object FullSynopsisScreen : Screen("anime/synopsis/{mal_id}") {
+        fun createRoute(malID: Int): String {
+            return this.route.replace(
+                oldValue = "{mal_id}",
+                newValue = malID.toString()
+            )
+        }
+    }
+    object DetailCharacterScreen : Screen("anime/character/{mal_id}") {
+        fun createRoute(characterID: Int): String {
+            return this.route.replace(
+                oldValue = "{mal_id}",
+                newValue = characterID.toString()
+            )
+        }
+    }
 
     object About : Screen("about")
     object Settings : Screen("settings")

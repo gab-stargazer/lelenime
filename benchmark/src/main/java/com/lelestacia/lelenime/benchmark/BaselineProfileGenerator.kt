@@ -26,31 +26,31 @@ class BaselineProfileGenerator {
 
             //  Wait until the anime is loaded and scroll down
             device.wait(Until.hasObject(scrollAnime), 60000)
-            device.findObject(scrollAnime).scroll(Direction.DOWN, 50F)
+            device.findObject(scrollAnime).fling(Direction.DOWN)
 
             //  Switch to Airing Anime from Popular to Airing Anime, Wait for it to be loaded, then scroll
             device.findObject(By.text("AIRING")).click()
             device.wait(Until.hasObject(scrollAnime), 60000)
-            device.findObject(scrollAnime).scroll(Direction.DOWN, 50F)
+            device.findObject(scrollAnime).fling(Direction.DOWN)
 
             //  Switch to Upcoming Anime from Popular to Airing Anime, Wait for it to be loaded, then scroll
             device.findObject(By.text("UPCOMING")).click()
             device.wait(Until.hasObject(scrollAnime), 60000)
-            device.findObject(scrollAnime).scroll(Direction.DOWN, 50F)
+            device.findObject(scrollAnime).fling(Direction.DOWN)
 
             //  Change display style to Compact Card then scroll
             device.findObject(By.desc("Display Style")).click()
             device.wait(Until.hasObject(By.text("Compact Card")), 5000)
             device.findObject(By.text("Compact Card")).click()
             device.wait(Until.hasObject(scrollAnime), 5000)
-            device.findObject(scrollAnime).scroll(Direction.DOWN, 50F)
+            device.findObject(scrollAnime).fling(Direction.DOWN)
 
             //  Change display style to List then scroll
             device.findObject(By.desc("Display Style")).click()
             device.wait(Until.hasObject(By.text("List")), 5000)
             device.findObject(By.text("List")).click()
             device.wait(Until.hasObject(scrollAnime), 5000)
-            device.findObject(scrollAnime).scroll(Direction.DOWN, 50F)
+            device.findObject(scrollAnime).fling(Direction.DOWN)
 
             //  Search for anime
             device.findObject(By.desc("Search Anime")).click()
@@ -59,11 +59,15 @@ class BaselineProfileGenerator {
             //  Open some Anime First
             device.findObject(By.text("POPULAR")).click()
             device.wait(Until.hasObject(scrollAnime), 5000)
+
+            //  FMA
             device.findObject(By.textContains("Fullmetal")).click()
-            device.wait(Until.hasObject(navigationIcon), 10000)
-            device.findObject(navigationIcon).click()
-            device.wait(Until.hasObject(scrollAnime), 5000)
-            device.findObject(By.textContains("Stein")).click()
+            device.wait(Until.hasObject(By.res("detailAnime")), 10000)
+            device.pressBack()
+
+            //  Bleach
+            device.wait(Until.hasObject(By.textContains("Bleach")), 10000)
+            device.findObject(By.textContains("Bleach")).click()
             device.wait(Until.hasObject(navigationIcon), 10000)
             device.findObject(navigationIcon).click()
             device.wait(Until.hasObject(By.text("Collection")), 10000)
@@ -80,8 +84,10 @@ class BaselineProfileGenerator {
             //  Open some Anime First
             device.findObject(By.textContains("Fullmetal")).click()
             device.wait(Until.hasObject(navigationIcon), 10000)
-            device.findObject(navigationIcon).click()
-            device.findObject(By.textContains("Stein")).click()
+            device.pressBack()
+
+            device.wait(Until.hasObject(By.textContains("Bleach")), 10000)
+            device.findObject(By.textContains("Bleach")).click()
             device.wait(Until.hasObject(navigationIcon), 10000)
             device.findObject(navigationIcon).click()
             device.wait(Until.hasObject(By.text("More")), 10000)

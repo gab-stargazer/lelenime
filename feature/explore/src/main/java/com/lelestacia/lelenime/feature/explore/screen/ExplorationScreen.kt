@@ -1,5 +1,6 @@
-package com.lelestacia.explore.screen
+package com.lelestacia.lelenime.feature.explore.screen
 
+import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -38,7 +42,6 @@ import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.feature.explore.R
 import com.lelestacia.lelenime.feature.explore.component.DashboardDisplayTypeHeader
 import com.lelestacia.lelenime.feature.explore.component.DashboardSearchHeader
-import com.lelestacia.lelenime.feature.explore.screen.DisplayType
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState
 import timber.log.Timber
@@ -49,10 +52,11 @@ import timber.log.Timber
 )
 @Composable
 fun ExplorationScreen(
+    windowSize: WindowSizeClass,
     screenState: ExploreScreenState,
-    isDarkMode: Boolean,
     onEvent: (ExploreScreenEvent) -> Unit,
     onAnimeClicked: (Anime) -> Unit,
+    onErrorParsingRequest: (Throwable) -> String,
     modifier: Modifier = Modifier
 ) {
     val pagingAnime: LazyPagingItems<Anime> = screenState.anime.collectAsLazyPagingItems()
@@ -84,9 +88,7 @@ fun ExplorationScreen(
                 )
                 DashboardDisplayTypeHeader(
                     state = screenState,
-                    isDarkMode = isDarkMode,
-                    onEvent = onEvent,
-                    modifier = Modifier.padding(start = 12.dp)
+                    onEvent = onEvent
                 )
                 Divider()
             }
@@ -109,7 +111,7 @@ fun ExplorationScreen(
                     ),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = refreshing.error.message ?: stringResource(id = com.lelestacia.lelenime.core.common.R.string.unknown_error))
+                    Text(text = onErrorParsingRequest(refreshing.error))
                     Button(
                         onClick = { pagingAnime.retry() },
                         shape = RoundedCornerShape(4.dp)
@@ -168,6 +170,7 @@ fun ExplorationScreen(
                     )
                 } else {
                     LazyGridAnime(
+                        windowSize = windowSize,
                         lazyGridState = lazyGridState,
                         pagingAnime = pagingAnime,
                         displayStyle = screenState.displayStyle,
@@ -182,13 +185,15 @@ fun ExplorationScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Preview
 @Composable
 fun PreviewExplorationScreen() {
     ExplorationScreen(
+        windowSize = calculateWindowSizeClass(activity = Activity()),
         screenState = ExploreScreenState(),
-        isDarkMode = false,
         onEvent = {},
-        onAnimeClicked = {}
+        onAnimeClicked = {},
+        onErrorParsingRequest = { return@ExplorationScreen "" }
     )
 }

@@ -39,4 +39,8 @@ class ExploreUseCases @Inject constructor(
             rating = rating
         )
     }
+
+    override fun parseThrowable(t: Throwable): String {
+        return repository.parseThrowable(t)
+    }
 }

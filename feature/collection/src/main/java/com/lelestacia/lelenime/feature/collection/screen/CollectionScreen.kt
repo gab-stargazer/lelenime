@@ -17,6 +17,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +30,7 @@ import com.lelestacia.lelenime.core.common.displayStyle.DisplayStyle
 import com.lelestacia.lelenime.core.common.displayStyle.DisplayStyleMenu
 import com.lelestacia.lelenime.core.common.lazyAnime.LazyGridAnime
 import com.lelestacia.lelenime.core.common.lazyAnime.LazyListAnime
+import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.feature.collection.stateAndEvent.CollectionScreenEvent
 import com.lelestacia.lelenime.feature.collection.stateAndEvent.CollectionScreenState
@@ -36,6 +38,7 @@ import com.lelestacia.lelenime.feature.collection.stateAndEvent.CollectionScreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CollectionScreen(
+    windowSize: WindowSizeClass,
     screenState: CollectionScreenState,
     onEvent: (CollectionScreenEvent) -> Unit,
     onAnimeClicked: (Anime) -> Unit,
@@ -51,7 +54,8 @@ fun CollectionScreen(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall)
                 ) {
                     Text(
                         text = "Collection",
@@ -71,7 +75,13 @@ fun CollectionScreen(
                         DisplayStyleMenu(
                             currentStyle = screenState.displayStyle,
                             isExpanded = screenState.isDisplayStyleOptionOpened,
-                            onStyleChanged = { onEvent(CollectionScreenEvent.OnDisplayStyleChanged(it)) },
+                            onStyleChanged = {
+                                onEvent(
+                                    CollectionScreenEvent.OnDisplayStyleChanged(
+                                        it
+                                    )
+                                )
+                            },
                             onDismiss = { onEvent(CollectionScreenEvent.OnDisplayStyleOptionMenuChangedState) }
                         )
                     }
@@ -110,6 +120,7 @@ fun CollectionScreen(
                     )
                 } else {
                     LazyGridAnime(
+                        windowSize = windowSize,
                         lazyGridState = lazyGridState,
                         pagingAnime = pagingAnime,
                         displayStyle = screenState.displayStyle,

@@ -1,5 +1,9 @@
 package com.lelestacia.lelenime.ui.component
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -16,7 +20,19 @@ import com.lelestacia.lelenime.util.rootDestinations
 fun LeleNimeBottomBar(navController: NavHostController) {
     val navBackStackEntry: NavBackStackEntry? by navController.currentBackStackEntryAsState()
     val currentRoute: String? = navBackStackEntry?.destination?.route
-    if (rootDestinations.contains(currentRoute)) {
+    val shouldBeVisible = rootDestinations.contains(currentRoute)
+
+    AnimatedVisibility(
+        visible = shouldBeVisible,
+        enter = slideInVertically(
+            initialOffsetY = { fullHeight -> fullHeight },
+            animationSpec = tween(durationMillis = 250)
+        ),
+        exit = slideOutVertically(
+            targetOffsetY = { fullHeight -> fullHeight },
+            animationSpec = tween(durationMillis = 250)
+        )
+    ) {
         NavigationBar {
             navItem.map { navItem ->
                 NavigationBarItem(

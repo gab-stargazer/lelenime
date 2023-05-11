@@ -74,6 +74,12 @@ dependencies {
 
     //  Desugaring
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+
+    //  Accompanist
+    implementation(libs.accompanist.flow.layout)
+
+    //  Timber
+    implementation(libs.timber)
 }
 
 kapt {

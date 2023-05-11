@@ -1,6 +1,7 @@
 package com.lelestacia.lelenime.core.network.di
 
 import com.lelestacia.lelenime.core.network.endpoint.AnimeAPI
+import com.lelestacia.lelenime.core.network.endpoint.CharacterAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,6 +45,12 @@ object ApiModule {
     fun provideAnimeAPI(
         retrofit: Retrofit
     ): AnimeAPI = retrofit.create(AnimeAPI::class.java)
+
+    @Provides
+    @Singleton
+    fun provideCharacterAPI(
+        retrofit: Retrofit
+    ): CharacterAPI = retrofit.create(CharacterAPI::class.java)
 
     private const val HOSTNAME = "api.jikan.moe"
     private const val BASE_URL = "https://api.jikan.moe/v4/"
