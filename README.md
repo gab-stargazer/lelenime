@@ -1,5 +1,10 @@
 <div align="center">
   <img src="https://github.com/Kamil-Malik/lelenime/blob/master/core/common/src/main/res/drawable/lelenime.png" width="480" alt="Centered Image">
+  
+  ![AUR license](https://img.shields.io/aur/license/android-studio?style=for-the-badge)
+  ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Kamil-Malik/lelenime?style=for-the-badge)
+  ![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/Kamil-Malik/lelenime?style=for-the-badge)
+  ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/Kamil-Malik/lelenime?style=for-the-badge)
 </div>
 
 Lelenime is a mobile app that serves as an Anime Index, providing anime information and details to anime fans. It utilizes the [Jikan API](https://github.com/jikan-me/jikan), which is a community API for anime fans that retrieves data from [MyAnimeList](https://myanimelist.net/).

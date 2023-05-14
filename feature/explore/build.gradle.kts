@@ -1,8 +1,9 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.dagger.hilt.android)
 }
 
 android {
@@ -47,10 +48,11 @@ dependencies {
     implementation(project(":core:model"))
 
     //  Compose Toolkit
-    implementation(platform(libs.compose.bom))
+    val composeBOM = platform(libs.compose.bom)
+    implementation(composeBOM)
     implementation(libs.bundles.compose.toolkit)
     implementation(libs.compose.navigation)
-    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(composeBOM)
     androidTestImplementation(libs.compose.junit)
     debugImplementation(libs.bundles.compose.tooling.and.manifest)
 

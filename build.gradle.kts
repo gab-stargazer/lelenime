@@ -5,22 +5,16 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath(libs.ktlint.gradle.linter)
         classpath(libs.gradle)
-        classpath(libs.google.services)
-        classpath(libs.firebase.crashlytics.gradle)
-        classpath(libs.firebase.perf.gradle)
     }
 }
 
 plugins {
-    alias(libs.plugins.android.application.plugin) apply false
-    alias(libs.plugins.android.library.plugin) apply false
-    alias(libs.plugins.kotlin.android.plugin) apply false
-    alias(libs.plugins.dagger.hilt.module.plugin) apply false
-    alias(libs.plugins.com.android.test) apply false
-}
-
-allprojects {
-    apply(plugin = ("org.jlleitschuh.gradle.ktlint"))
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.android.test) apply false
+    alias(libs.plugins.dagger.hilt.android) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
+    alias(libs.plugins.ktlint) apply false
 }

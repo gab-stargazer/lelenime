@@ -1,11 +1,12 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
-    id("com.google.firebase.firebase-perf")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.dagger.hilt.android)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytic)
+    alias(libs.plugins.firebase.performance.monitoring)
 }
 
 android {
@@ -16,8 +17,8 @@ android {
         applicationId = "com.lelestacia.lelenime"
         minSdk = 26
         targetSdk = 33
-        versionCode = 2
-        versionName = "2.0"
+        versionCode = 3
+        versionName = "2.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -80,10 +81,12 @@ dependencies {
     implementation(project(":feature:more"))
 
     //  Compose Toolkit
-    implementation(platform(libs.compose.bom))
+    val composeBOM = platform(libs.compose.bom)
+    implementation(composeBOM)
+    implementation(libs.compose.activity)
     implementation(libs.bundles.compose.toolkit)
     implementation(libs.compose.navigation)
-    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(composeBOM)
     androidTestImplementation(libs.compose.junit)
     debugImplementation(libs.bundles.compose.tooling.and.manifest)
 
@@ -92,9 +95,6 @@ dependencies {
 
     // Lifecycle
     implementation(libs.lifecycle.runtime)
-
-    //  Activity Compose
-    implementation(libs.activity.compose)
 
     // Android JUnit
     androidTestImplementation(libs.android.junit)
@@ -115,8 +115,8 @@ dependencies {
 
     //  Accompanist
     implementation(libs.accompanist.system.ui.controller)
-    implementation(libs.accompanist.animation.navigation)
-    implementation(libs.accompanist.bottomsheet.navigation)
+    implementation(libs.accompanist.navigation.animation)
+    implementation(libs.accompanist.navigation.bottomsheet)
 
     //  Profiler
     implementation(libs.baseline.profiler)

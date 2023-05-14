@@ -50,14 +50,23 @@ class ExplorationScreenViewModel @Inject constructor(
     private val searchedAnime: Flow<PagingData<Anime>> = currentSearchQuery
         .debounce(0)
         .distinctUntilChanged()
-        .flatMapLatest { useCases.getAnimeSearch(searchQuery = it) }
+        .flatMapLatest { useCases.getAnimeSearch(searchQuery = it).cachedIn(viewModelScope) }
+
+    private val popularAnime: Flow<PagingData<Anime>> =
+        useCases.getPopularAnime().cachedIn(viewModelScope)
+
+    private val airingAnime: Flow<PagingData<Anime>> =
+        useCases.getAiringAnime().cachedIn(viewModelScope)
+
+    private val upcomingAnime: Flow<PagingData<Anime>> =
+        useCases.getUpcomingAnime().cachedIn(viewModelScope)
 
     private val anime: Flow<PagingData<Anime>> = displayedAnimeType.flatMapLatest { type ->
         when (type) {
-            DisplayType.POPULAR -> useCases.getPopularAnime().cachedIn(viewModelScope)
-            DisplayType.AIRING -> useCases.getAiringAnime().cachedIn(viewModelScope)
-            DisplayType.UPCOMING -> useCases.getUpcomingAnime().cachedIn(viewModelScope)
-            DisplayType.SEARCH -> searchedAnime.cachedIn(viewModelScope)
+            DisplayType.POPULAR -> popularAnime
+            DisplayType.AIRING -> airingAnime
+            DisplayType.UPCOMING -> upcomingAnime
+            DisplayType.SEARCH -> searchedAnime
         }
     }
 
