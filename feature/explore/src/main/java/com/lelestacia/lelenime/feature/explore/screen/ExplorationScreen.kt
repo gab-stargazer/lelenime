@@ -1,6 +1,13 @@
 package com.lelestacia.lelenime.feature.explore.screen
 
 import android.app.Activity
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,22 +45,24 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.lelestacia.lelenime.core.common.displayStyle.DisplayStyle
 import com.lelestacia.lelenime.core.common.lazyAnime.LazyGridAnime
 import com.lelestacia.lelenime.core.common.lazyAnime.LazyListAnime
+import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.feature.explore.R
 import com.lelestacia.lelenime.feature.explore.component.DashboardDisplayTypeHeader
 import com.lelestacia.lelenime.feature.explore.component.DashboardSearchHeader
+import com.lelestacia.lelenime.feature.explore.component.filter.PopularAnimeFilterSection
+import com.lelestacia.lelenime.feature.explore.component.filter.UpcomingAnimeFilterSection
+import com.lelestacia.lelenime.feature.explore.stateAndEvent.AnimeFilter
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState
 import timber.log.Timber
 
-@OptIn(
-    ExperimentalMaterial3Api::class,
-    ExperimentalComposeUiApi::class
-)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ExplorationScreen(
     windowSize: WindowSizeClass,
     screenState: ExploreScreenState,
+    animeFilter: AnimeFilter,
     onEvent: (ExploreScreenEvent) -> Unit,
     onAnimeClicked: (Anime) -> Unit,
     onErrorParsingRequest: (Throwable) -> String,
@@ -77,10 +86,11 @@ fun ExplorationScreen(
     Scaffold(
         topBar = {
             Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
+                    .animateContentSize()
             ) {
                 DashboardSearchHeader(
                     screenState = screenState,
@@ -90,6 +100,30 @@ fun ExplorationScreen(
                     state = screenState,
                     onEvent = onEvent
                 )
+                AnimatedVisibility(
+                    visible = screenState.displayType == DisplayType.POPULAR,
+                    enter = fadeIn() + slideInVertically(tween()),
+                    exit = fadeOut() + slideOutVertically(tween())
+                ) {
+                    PopularAnimeFilterSection(
+                        popularAnimeFilter = animeFilter.popularAnimeFilter,
+                        onPopularAnimeFilterChanged = {
+                            onEvent(ExploreScreenEvent.OnPopularAnimeFilterChanged(it))
+                        }
+                    )
+                }
+                AnimatedVisibility(
+                    visible = screenState.displayType == DisplayType.UPCOMING,
+                    enter = fadeIn() + slideInVertically(tween()),
+                    exit = fadeOut() + slideOutVertically(tween())
+                ) {
+                    UpcomingAnimeFilterSection(
+                        upcomingAnimeFilter = animeFilter.upcomingAnimeFilter,
+                        onUpcomingAnimeFilterChanged = {
+                            onEvent(ExploreScreenEvent.OnUpcomingAnimeFilterChanged(it))
+                        }
+                    )
+                }
                 Divider()
             }
         },
@@ -192,6 +226,7 @@ fun PreviewExplorationScreen() {
     ExplorationScreen(
         windowSize = calculateWindowSizeClass(activity = Activity()),
         screenState = ExploreScreenState(),
+        animeFilter = AnimeFilter(),
         onEvent = {},
         onAnimeClicked = {},
         onErrorParsingRequest = { return@ExplorationScreen "" }

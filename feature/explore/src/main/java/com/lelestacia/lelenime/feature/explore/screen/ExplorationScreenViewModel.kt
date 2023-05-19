@@ -9,8 +9,11 @@ import com.lelestacia.lelenime.core.domain.usecases.explore.IExploreUseCases
 import com.lelestacia.lelenime.core.domain.usecases.settings.IUserPreferencesUseCases
 import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.feature.explore.component.header.HeaderScreenState
+import com.lelestacia.lelenime.feature.explore.stateAndEvent.AnimeFilter
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState
+import com.lelestacia.lelenime.feature.explore.stateAndEvent.PopularAnimeFilter
+import com.lelestacia.lelenime.feature.explore.stateAndEvent.UpcomingAnimeFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -51,15 +54,47 @@ class ExplorationScreenViewModel @Inject constructor(
         .debounce(0)
         .distinctUntilChanged()
         .flatMapLatest { useCases.getAnimeSearch(searchQuery = it).cachedIn(viewModelScope) }
+        .cachedIn(viewModelScope)
+
+    //  Anime Filter
+    private val popularAnimeFilter: MutableStateFlow<PopularAnimeFilter> =
+        MutableStateFlow(PopularAnimeFilter())
+
+    private val upcomingAnimeFilter: MutableStateFlow<UpcomingAnimeFilter> =
+        MutableStateFlow(UpcomingAnimeFilter())
+
+    val animeFilter: StateFlow<AnimeFilter> = combine(
+        popularAnimeFilter,
+        upcomingAnimeFilter
+    ) { popularAnimeFilter: PopularAnimeFilter, upcomingAnimeFilter: UpcomingAnimeFilter ->
+        AnimeFilter(
+            popularAnimeFilter = popularAnimeFilter,
+            upcomingAnimeFilter = upcomingAnimeFilter
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = AnimeFilter()
+    )
 
     private val popularAnime: Flow<PagingData<Anime>> =
-        useCases.getPopularAnime().cachedIn(viewModelScope)
+        popularAnimeFilter
+            .debounce(2500)
+            .distinctUntilChanged()
+            .flatMapLatest {
+                useCases.getPopularAnime(
+                    type = it.animeType?.name?.lowercase(),
+                    status = it.animeStatus?.name?.lowercase()
+                )
+            }.cachedIn(viewModelScope)
 
     private val airingAnime: Flow<PagingData<Anime>> =
         useCases.getAiringAnime().cachedIn(viewModelScope)
 
     private val upcomingAnime: Flow<PagingData<Anime>> =
-        useCases.getUpcomingAnime().cachedIn(viewModelScope)
+        upcomingAnimeFilter.flatMapLatest {
+            useCases.getUpcomingAnime()
+        }.cachedIn(viewModelScope)
 
     private val anime: Flow<PagingData<Anime>> = displayedAnimeType.flatMapLatest { type ->
         when (type) {
@@ -155,6 +190,14 @@ class ExplorationScreenViewModel @Inject constructor(
                         isSearching = false
                     )
                 }
+            }
+
+            is ExploreScreenEvent.OnPopularAnimeFilterChanged -> popularAnimeFilter.update {
+                event.popularAnimeFilter
+            }
+
+            is ExploreScreenEvent.OnUpcomingAnimeFilterChanged -> upcomingAnimeFilter.update {
+                event.upcomingAnimeFilter
             }
         }
     }

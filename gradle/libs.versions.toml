@@ -10,6 +10,8 @@ android-junit-version = "1.1.5"
 compose-bom-version = "2023.05.01"
 # Datastore Pref
 datastore-pref-version = "1.0.0"
+# Dokka
+dokka-version = "1.8.10"
 # Espresso
 espresso-version = "3.5.1"
 # Google Services
@@ -178,6 +180,8 @@ android-library = { id = "com.android.library", version.ref = "android-version" 
 android-test = { id = "com.android.test", version.ref = "android-test-version" }
 #   Dagger Hilt
 dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt-version" }
+#   Dokka
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka-version" }
 #   Firebase
 firebase-crashlytic = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics-gradle-version" }
 firebase-performance-monitoring = { id = "com.google.firebase.firebase-perf", version.ref = "firebase-perf-gradle-version" }

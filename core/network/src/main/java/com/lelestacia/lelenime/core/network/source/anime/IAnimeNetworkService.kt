@@ -25,7 +25,10 @@ interface IAnimeNetworkService {
      *
      * @return A [PagingSource] that loads pages of [AnimeResponse] objects.
      */
-    fun getPopularAnime(): PagingSource<Int, AnimeResponse>
+    fun getPopularAnime(
+        type: String? = null,
+        status: String? = null
+    ): PagingSource<Int, AnimeResponse>
 
     /**
      * Retrieves a [PagingSource] for anime search results based on the given query and filters.

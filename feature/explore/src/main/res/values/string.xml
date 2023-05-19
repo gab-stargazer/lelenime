@@ -4,4 +4,16 @@
     <string name="airing_anime">Now Airing</string>
     <string name="upcoming_anim">Upcoming</string>
     <string name="anime_not_found">Sorry, we could not find any result related to %s</string>
+
+    <!--Popular Anime Filter-->
+    <string name="anime_type">Type</string>
+    <string name="anime_status">Status</string>
+
+    <!--Talkback-->
+    <string name="popular_anime_filter_button">Filter Button for Popular Anime</string>
+
+
+
+    <string name="filter">Filter</string>
+    <string name="filter_description">Filter for displayed Anime</string>
 </resources>

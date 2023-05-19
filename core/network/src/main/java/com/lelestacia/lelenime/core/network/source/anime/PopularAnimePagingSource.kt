@@ -2,13 +2,16 @@ package com.lelestacia.lelenime.core.network.source.anime
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.lelestacia.lelenime.core.common.util.isNotNullOrEmpty
 import com.lelestacia.lelenime.core.network.endpoint.AnimeAPI
 import com.lelestacia.lelenime.core.network.model.anime.AnimeResponse
 import kotlinx.coroutines.delay
 import timber.log.Timber
 
 class PopularAnimePagingSource(
-    private val animeAPI: AnimeAPI
+    private val animeAPI: AnimeAPI,
+    private val type: String? = null,
+    private val status: String? = null
 ) : PagingSource<Int, AnimeResponse>() {
 
     override fun getRefreshKey(state: PagingState<Int, AnimeResponse>): Int? {
@@ -18,8 +21,26 @@ class PopularAnimePagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeResponse> {
         return try {
             val currentPage = params.key ?: 1
-            val apiResponse = animeAPI.getPopularAnime(page = currentPage)
-            Timber.d("Successfully fetch ${apiResponse.data.size} data")
+            val apiResponse =
+                if (type.isNotNullOrEmpty() && status.isNotNullOrEmpty()) {
+                    animeAPI.getPopularAnime(
+                        page = currentPage,
+                        type = type as String,
+                        filter = status as String
+                    )
+                } else if (type.isNotNullOrEmpty()) {
+                    animeAPI.getPopularAnime(
+                        page = currentPage,
+                        type = type as String
+                    )
+                } else if (status.isNotNullOrEmpty()) {
+                    animeAPI.getPopularAnime(
+                        page = currentPage,
+                        type = status as String
+                    )
+                } else {
+                    animeAPI.getPopularAnime(page = currentPage)
+                }
             delay(
                 if (currentPage == 1) {
                     0

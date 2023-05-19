@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -19,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
 import com.lelestacia.lelenime.feature.explore.screen.DisplayType
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DisplayTypeButton(
     isActive: Boolean,
@@ -27,64 +25,64 @@ fun DisplayTypeButton(
     icon: ImageVector,
     onClicked: (DisplayType) -> Unit
 ) {
-    AssistChip(
-        onClick = {
-            if (isActive) return@AssistChip
-            onClicked(displayType)
-        },
-        label = {
-            Text(
-                text = displayType.name
-            )
-        },
-        leadingIcon = {
-            Icon(
-                imageVector = icon,
-                contentDescription = null
-            )
-        },
-        colors = AssistChipDefaults.assistChipColors(
-            containerColor =
-            if (isActive) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                Color.Transparent
+    Surface {
+        AssistChip(
+            onClick = {
+                if (isActive) return@AssistChip
+                onClicked(displayType)
             },
-            leadingIconContentColor =
-            if (isActive) {
-                MaterialTheme.colorScheme.onPrimary
-            } else {
-                MaterialTheme.colorScheme.onBackground
+            label = {
+                Text(
+                    text = displayType.name
+                )
             },
-            labelColor =
-            if (isActive) {
-                MaterialTheme.colorScheme.onPrimary
-            } else {
-                MaterialTheme.colorScheme.onBackground
-            }
-        ),
-        border = AssistChipDefaults.assistChipBorder(
-            borderColor =
-            if (isActive) {
-                Color.Transparent
-            } else {
-                MaterialTheme.colorScheme.outlineVariant
-            }
+            leadingIcon = {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null
+                )
+            },
+            colors = AssistChipDefaults.assistChipColors(
+                containerColor =
+                if (isActive) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    Color.Transparent
+                },
+                leadingIconContentColor =
+                if (isActive) {
+                    MaterialTheme.colorScheme.onPrimary
+                } else {
+                    MaterialTheme.colorScheme.onBackground
+                },
+                labelColor =
+                if (isActive) {
+                    MaterialTheme.colorScheme.onPrimary
+                } else {
+                    MaterialTheme.colorScheme.onBackground
+                }
+            ),
+            border = AssistChipDefaults.assistChipBorder(
+                borderColor =
+                if (isActive) {
+                    Color.Transparent
+                } else {
+                    MaterialTheme.colorScheme.outlineVariant
+                }
+            )
         )
-    )
+    }
 }
 
 @Preview(uiMode = UI_MODE_NIGHT_NO or UI_MODE_TYPE_NORMAL)
 @Composable
 fun PreviewDisplayTypeButtonActive() {
     LelenimeTheme {
-        Surface {
-            DisplayTypeButton(
-                isActive = true,
-                displayType = DisplayType.POPULAR,
-                icon = Icons.Filled.Favorite
-            ) {}
-        }
+        DisplayTypeButton(
+            isActive = true,
+            displayType = DisplayType.POPULAR,
+            icon = Icons.Filled.Favorite
+        ) {}
     }
 }
 
@@ -92,13 +90,11 @@ fun PreviewDisplayTypeButtonActive() {
 @Composable
 fun PreviewDisplayTypeButtonActiveDarkMode() {
     LelenimeTheme {
-        Surface {
-            DisplayTypeButton(
-                isActive = true,
-                displayType = DisplayType.POPULAR,
-                icon = Icons.Filled.Favorite
-            ) {}
-        }
+        DisplayTypeButton(
+            isActive = true,
+            displayType = DisplayType.POPULAR,
+            icon = Icons.Filled.Favorite
+        ) {}
     }
 }
 
@@ -106,13 +102,11 @@ fun PreviewDisplayTypeButtonActiveDarkMode() {
 @Composable
 fun PreviewDisplayTypeButtonInactive() {
     LelenimeTheme {
-        Surface {
-            DisplayTypeButton(
-                isActive = false,
-                displayType = DisplayType.POPULAR,
-                icon = Icons.Filled.Favorite
-            ) {}
-        }
+        DisplayTypeButton(
+            isActive = false,
+            displayType = DisplayType.POPULAR,
+            icon = Icons.Filled.Favorite
+        ) {}
     }
 }
 
@@ -120,12 +114,10 @@ fun PreviewDisplayTypeButtonInactive() {
 @Composable
 fun PreviewDisplayTypeButtonInactiveDarkMode() {
     LelenimeTheme {
-        Surface {
-            DisplayTypeButton(
-                isActive = false,
-                displayType = DisplayType.POPULAR,
-                icon = Icons.Filled.Favorite
-            ) {}
-        }
+        DisplayTypeButton(
+            isActive = false,
+            displayType = DisplayType.POPULAR,
+            icon = Icons.Filled.Favorite
+        ) {}
     }
 }

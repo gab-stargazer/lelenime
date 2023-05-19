@@ -12,4 +12,11 @@ sealed class ExploreScreenEvent {
     object OnStartSearching : ExploreScreenEvent()
     object OnSearch : ExploreScreenEvent()
     object OnStopSearching : ExploreScreenEvent()
+    data class OnPopularAnimeFilterChanged(
+        val popularAnimeFilter: PopularAnimeFilter
+    ) : ExploreScreenEvent()
+
+    data class OnUpcomingAnimeFilterChanged(
+        val upcomingAnimeFilter: UpcomingAnimeFilter
+    ) : ExploreScreenEvent()
 }
