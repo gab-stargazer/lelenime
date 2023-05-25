@@ -13,6 +13,7 @@ import com.lelestacia.lelenime.feature.explore.stateAndEvent.AnimeFilter
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.PopularAnimeFilter
+import com.lelestacia.lelenime.feature.explore.stateAndEvent.SearchAnimeFilter
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.UpcomingAnimeFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -37,10 +38,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ExplorationScreenViewModel @Inject constructor(
     private val useCases: IExploreUseCases,
-    private val useCasesPreferences: IUserPreferencesUseCases
+    private val useCasesPreferences: IUserPreferencesUseCases,
 ) : ViewModel() {
 
-    private val currentSearchQuery: MutableStateFlow<String> = MutableStateFlow("")
 
     private val headerState: MutableStateFlow<HeaderScreenState> =
         MutableStateFlow(HeaderScreenState())
@@ -51,27 +51,41 @@ class ExplorationScreenViewModel @Inject constructor(
     private val displayedAnimeType: MutableStateFlow<DisplayType> =
         MutableStateFlow(DisplayType.POPULAR)
 
-    private val searchedAnime: Flow<PagingData<Anime>> = currentSearchQuery
-        .debounce(0)
-        .distinctUntilChanged()
-        .flatMapLatest { useCases.getAnimeSearch(searchQuery = it).cachedIn(viewModelScope) }
-        .cachedIn(viewModelScope)
 
     //  Anime Filter
-
     private val popularAnimeFilter: MutableStateFlow<PopularAnimeFilter> =
         MutableStateFlow(PopularAnimeFilter())
 
     private val upcomingAnimeFilter: MutableStateFlow<UpcomingAnimeFilter> =
         MutableStateFlow(UpcomingAnimeFilter())
 
+    private val searchQuery: MutableStateFlow<String> = MutableStateFlow("")
+    private val searchedAnimeFilter: MutableStateFlow<SearchAnimeFilter> =
+        MutableStateFlow(SearchAnimeFilter())
+    private val searchAnimeQueryAndFilter: StateFlow<Pair<String, SearchAnimeFilter>> =
+        combine(
+            searchQuery,
+            searchedAnimeFilter
+        ) { searchQuery, searchAnimeFilter ->
+            Pair(
+                first = searchQuery,
+                second = searchAnimeFilter
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = Pair("", SearchAnimeFilter())
+        )
+
     val appliedAnimeFilter: StateFlow<AnimeFilter> = combine(
         popularAnimeFilter,
-        upcomingAnimeFilter
-    ) { popularAnimeFilter, upcomingAnimeFilter ->
+        upcomingAnimeFilter,
+        searchedAnimeFilter
+    ) { popularAnimeFilter, upcomingAnimeFilter, searchAnimeFilter ->
         AnimeFilter(
             popularAnimeFilter = popularAnimeFilter,
-            upcomingAnimeFilter = upcomingAnimeFilter
+            upcomingAnimeFilter = upcomingAnimeFilter,
+            searchAnimeFilter = searchAnimeFilter
         )
     }.stateIn(
         scope = viewModelScope,
@@ -104,6 +118,20 @@ class ExplorationScreenViewModel @Inject constructor(
             )
         }.cachedIn(viewModelScope)
     }
+
+    private val searchedAnime: Flow<PagingData<Anime>> = searchAnimeQueryAndFilter
+        .debounce(0)
+        .distinctUntilChanged()
+        .flatMapLatest {
+            val filter: SearchAnimeFilter = it.second
+            useCases.getAnimeSearch(
+                searchQuery = it.first,
+                type = filter.animeType?.name?.lowercase(),
+                status = filter.animeStatus?.name?.lowercase(),
+                rating = filter.animeRating?.query
+            )
+        }
+        .cachedIn(viewModelScope)
 
     private val anime: Flow<PagingData<Anime>> =
         displayedAnimeType.flatMapLatest { type ->
@@ -148,7 +176,7 @@ class ExplorationScreenViewModel @Inject constructor(
                         isSearching = false
                     )
                 }
-                currentSearchQuery.update { "" }
+                searchQuery.update { "" }
             }
 
             is ExploreScreenEvent.OnDisplayStyleChanged -> displayedStyle.update {
@@ -188,7 +216,7 @@ class ExplorationScreenViewModel @Inject constructor(
                         searchedAnimeTitle = it.searchQuery
                     )
                 }
-                currentSearchQuery.update {
+                searchQuery.update {
                     headerState.value.searchQuery
                 }
             }
@@ -223,6 +251,10 @@ class ExplorationScreenViewModel @Inject constructor(
 
                 upcomingAnimeFilter.update {
                     currentAnimeFilter.value.upcomingAnimeFilter
+                }
+
+                searchedAnimeFilter.update {
+                    currentAnimeFilter.value.searchAnimeFilter
                 }
             }
         }

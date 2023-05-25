@@ -10,7 +10,8 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -34,18 +35,20 @@ import com.lelestacia.lelenime.core.common.component.LelenimeFilterChip
 import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.feature.explore.R
 import com.lelestacia.lelenime.feature.explore.component.filter.PopularAnimeFilterMenuItem
+import com.lelestacia.lelenime.feature.explore.component.filter.SearchAnimeFilterMenuItem
 import com.lelestacia.lelenime.feature.explore.component.filter.UpcomingAnimeFilterMenuItem
 import com.lelestacia.lelenime.feature.explore.screen.DisplayType
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.AnimeFilter
 import java.util.Locale
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AnimeFilterSection(
     displayType: DisplayType,
     appliedAnimeFilter: AnimeFilter,
     currentAnimeFilter: AnimeFilter,
     onAnimeFilterChanged: (AnimeFilter) -> Unit,
-    onFilterApplied: () -> Unit
+    onFilterApplied: () -> Unit,
 ) {
     var isMenuOpened by remember {
         mutableStateOf(false)
@@ -54,6 +57,9 @@ fun AnimeFilterSection(
         mutableStateOf(false)
     }
     var isAnimeStatusMenuOpened by remember {
+        mutableStateOf(false)
+    }
+    var isAnimeRatingMenuOpened by remember {
         mutableStateOf(false)
     }
     val isActive =
@@ -73,20 +79,20 @@ fun AnimeFilterSection(
         exit = fadeOut() + slideOutVertically(tween())
     ) {
         Surface {
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = MaterialTheme.spacing.medium)
-                    .animateContentSize(),
+            FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(
                     space = MaterialTheme.spacing.small
-                )
+                ),
+                modifier = Modifier
+                    .padding(horizontal = MaterialTheme.spacing.medium)
+                    .animateContentSize()
             ) {
                 AnimatedVisibility(
                     visible = when (displayType) {
                         DisplayType.POPULAR -> appliedAnimeFilter.popularAnimeFilter != currentAnimeFilter.popularAnimeFilter
                         DisplayType.AIRING -> false
                         DisplayType.UPCOMING -> appliedAnimeFilter.upcomingAnimeFilter != currentAnimeFilter.upcomingAnimeFilter
-                        DisplayType.SEARCH -> false
+                        DisplayType.SEARCH -> appliedAnimeFilter.searchAnimeFilter != currentAnimeFilter.searchAnimeFilter
                     },
                     enter = fadeIn(tween()) + slideInHorizontally(tween()),
                     exit = fadeOut(tween()) + slideOutHorizontally(tween())
@@ -158,7 +164,28 @@ fun AnimeFilterSection(
                             }
                         )
 
-                        DisplayType.SEARCH -> Unit
+                        DisplayType.SEARCH -> SearchAnimeFilterMenuItem(
+                            searchAnimeFilter = currentAnimeFilter.searchAnimeFilter,
+                            onSearchAnimeFilterChanged = {
+                                onAnimeFilterChanged(
+                                    currentAnimeFilter.copy(
+                                        searchAnimeFilter = it
+                                    )
+                                )
+                            },
+                            isAnimeTypeMenuOpened = isAnimeTypeMenuOpened,
+                            onAnimeTypeMenuStateChanged = {
+                                isAnimeTypeMenuOpened = it
+                            },
+                            isAnimeStatusMenuOpened = isAnimeStatusMenuOpened,
+                            onAnimeStatusMenuStateChanged = {
+                                isAnimeStatusMenuOpened = it
+                            },
+                            isAnimeRatingMenuOpened = isAnimeRatingMenuOpened,
+                            onAnimeRatingMenuStateChanged = {
+                                isAnimeRatingMenuOpened = it
+                            }
+                        )
                     }
                 }
 
@@ -279,7 +306,110 @@ fun AnimeFilterSection(
                         }
                     }
 
-                    DisplayType.SEARCH -> Unit
+                    DisplayType.SEARCH -> {
+                        currentAnimeFilter.searchAnimeFilter.animeType?.let {
+                            LelenimeFilterChip(
+                                isActive = true,
+                                label = {
+                                    Text(
+                                        text = it.name
+                                            .lowercase()
+                                            .replaceFirstChar {
+                                                if (it.isLowerCase()) {
+                                                    it.titlecase(Locale.ROOT)
+                                                } else {
+                                                    it.toString()
+                                                }
+                                            }
+                                    )
+                                },
+                                leadingIcon = {},
+                                trailingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                },
+                                onClicked = {
+                                    onAnimeFilterChanged(
+                                        currentAnimeFilter.copy(
+                                            searchAnimeFilter = currentAnimeFilter
+                                                .searchAnimeFilter.copy(
+                                                    animeType = null
+                                                )
+                                        )
+                                    )
+                                }
+                            )
+                        }
+
+                        currentAnimeFilter.searchAnimeFilter.animeStatus?.let {
+                            LelenimeFilterChip(
+                                isActive = true,
+                                label = {
+                                    Text(
+                                        text = it.name
+                                            .lowercase()
+                                            .replaceFirstChar {
+                                                if (it.isLowerCase()) {
+                                                    it.titlecase(Locale.ROOT)
+                                                } else {
+                                                    it.toString()
+                                                }
+                                            }
+                                    )
+                                },
+                                leadingIcon = {},
+                                trailingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                },
+                                onClicked = {
+                                    onAnimeFilterChanged(
+                                        currentAnimeFilter.copy(
+                                            searchAnimeFilter = currentAnimeFilter
+                                                .searchAnimeFilter.copy(
+                                                    animeStatus = null
+                                                )
+                                        )
+                                    )
+                                }
+                            )
+                        }
+
+                        currentAnimeFilter.searchAnimeFilter.animeRating?.let {
+                            LelenimeFilterChip(
+                                isActive = true,
+                                label = {
+                                    Text(
+                                        text = it.title
+                                    )
+                                },
+                                leadingIcon = {},
+                                trailingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                },
+                                onClicked = {
+                                    onAnimeFilterChanged(
+                                        currentAnimeFilter.copy(
+                                            searchAnimeFilter = currentAnimeFilter
+                                                .searchAnimeFilter.copy(
+                                                    animeRating = null
+                                                )
+                                        )
+                                    )
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }

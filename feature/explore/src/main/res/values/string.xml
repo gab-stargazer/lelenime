@@ -8,6 +8,7 @@
     <!--Popular Anime Filter-->
     <string name="anime_type">Type</string>
     <string name="anime_status">Status</string>
+    <string name="anime_rating">Rating</string>
 
     <!--Talkback-->
     <string name="popular_anime_filter_button">Filter Button for Popular Anime</string>
