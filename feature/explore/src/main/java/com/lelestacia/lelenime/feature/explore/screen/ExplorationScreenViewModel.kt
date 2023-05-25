@@ -53,20 +53,20 @@ class ExplorationScreenViewModel @Inject constructor(
 
 
     //  Anime Filter
-    private val popularAnimeFilter: MutableStateFlow<PopularAnimeFilter> =
+    private val _popularAnimeFilter: MutableStateFlow<PopularAnimeFilter> =
         MutableStateFlow(PopularAnimeFilter())
 
-    private val upcomingAnimeFilter: MutableStateFlow<UpcomingAnimeFilter> =
+    private val _upcomingAnimeFilter: MutableStateFlow<UpcomingAnimeFilter> =
         MutableStateFlow(UpcomingAnimeFilter())
 
-    private val searchQuery: MutableStateFlow<String> = MutableStateFlow("")
-    private val searchedAnimeFilter: MutableStateFlow<SearchAnimeFilter> =
+    private val _searchQuery: MutableStateFlow<String> = MutableStateFlow("")
+    private val _searchedAnimeFilter: MutableStateFlow<SearchAnimeFilter> =
         MutableStateFlow(SearchAnimeFilter())
     private val searchAnimeQueryAndFilter: StateFlow<Pair<String, SearchAnimeFilter>> =
         combine(
-            searchQuery,
-            searchedAnimeFilter
-        ) { searchQuery, searchAnimeFilter ->
+            _searchQuery,
+            _searchedAnimeFilter
+        ) { searchQuery: String, searchAnimeFilter: SearchAnimeFilter ->
             Pair(
                 first = searchQuery,
                 second = searchAnimeFilter
@@ -78,9 +78,9 @@ class ExplorationScreenViewModel @Inject constructor(
         )
 
     val appliedAnimeFilter: StateFlow<AnimeFilter> = combine(
-        popularAnimeFilter,
-        upcomingAnimeFilter,
-        searchedAnimeFilter
+        _popularAnimeFilter,
+        _upcomingAnimeFilter,
+        _searchedAnimeFilter
     ) { popularAnimeFilter, upcomingAnimeFilter, searchAnimeFilter ->
         AnimeFilter(
             popularAnimeFilter = popularAnimeFilter,
@@ -97,8 +97,8 @@ class ExplorationScreenViewModel @Inject constructor(
     val currentAnimeFilter: StateFlow<AnimeFilter> = _currentAnimeFilter.asStateFlow()
 
     private val popularAnime: Flow<PagingData<Anime>> by lazy {
-        popularAnimeFilter
-            .debounce(2500)
+        _popularAnimeFilter
+            .debounce(0)
             .distinctUntilChanged()
             .flatMapLatest { filter ->
                 useCases.getPopularAnime(
@@ -112,9 +112,9 @@ class ExplorationScreenViewModel @Inject constructor(
         useCases.getAiringAnime().cachedIn(viewModelScope)
 
     private val upcomingAnime: Flow<PagingData<Anime>> by lazy {
-        upcomingAnimeFilter.flatMapLatest {
+        _upcomingAnimeFilter.flatMapLatest { filter ->
             useCases.getUpcomingAnime(
-                type = it.animeType?.name?.lowercase()
+                type = filter.animeType?.name?.lowercase()
             )
         }.cachedIn(viewModelScope)
     }
@@ -176,7 +176,7 @@ class ExplorationScreenViewModel @Inject constructor(
                         isSearching = false
                     )
                 }
-                searchQuery.update { "" }
+                _searchQuery.update { "" }
             }
 
             is ExploreScreenEvent.OnDisplayStyleChanged -> displayedStyle.update {
@@ -216,7 +216,7 @@ class ExplorationScreenViewModel @Inject constructor(
                         searchedAnimeTitle = it.searchQuery
                     )
                 }
-                searchQuery.update {
+                _searchQuery.update {
                     headerState.value.searchQuery
                 }
             }
@@ -230,11 +230,11 @@ class ExplorationScreenViewModel @Inject constructor(
                 }
             }
 
-            is ExploreScreenEvent.OnPopularAnimeFilterChanged -> popularAnimeFilter.update {
+            is ExploreScreenEvent.OnPopularAnimeFilterChanged -> _popularAnimeFilter.update {
                 event.popularAnimeFilter
             }
 
-            is ExploreScreenEvent.OnUpcomingAnimeFilterChanged -> upcomingAnimeFilter.update {
+            is ExploreScreenEvent.OnUpcomingAnimeFilterChanged -> _upcomingAnimeFilter.update {
                 event.upcomingAnimeFilter
             }
 
@@ -245,15 +245,15 @@ class ExplorationScreenViewModel @Inject constructor(
             }
 
             ExploreScreenEvent.OnAnimeFilterApplied -> {
-                popularAnimeFilter.update {
+                _popularAnimeFilter.update {
                     currentAnimeFilter.value.popularAnimeFilter
                 }
 
-                upcomingAnimeFilter.update {
+                _upcomingAnimeFilter.update {
                     currentAnimeFilter.value.upcomingAnimeFilter
                 }
 
-                searchedAnimeFilter.update {
+                _searchedAnimeFilter.update {
                     currentAnimeFilter.value.searchAnimeFilter
                 }
             }
