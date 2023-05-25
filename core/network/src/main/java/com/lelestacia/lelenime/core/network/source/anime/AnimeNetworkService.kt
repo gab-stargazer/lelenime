@@ -16,9 +16,10 @@ class AnimeNetworkService @Inject constructor(
         )
     }
 
-    override fun getUpcomingAnime(): PagingSource<Int, AnimeResponse> {
+    override fun getUpcomingAnime(type: String?): PagingSource<Int, AnimeResponse> {
         return UpcomingAnimePagingSource(
-            animeAPI = animeAPI
+            animeAPI = animeAPI,
+            type = type
         )
     }
 

@@ -41,6 +41,24 @@ interface AnimeAPI {
     ): GenericPaginationResponse<AnimeResponse>
 
     /**
+     * Retrieves upcoming season's anime data based on the provided page number and filter.
+     *
+     * @param page The page number for pagination.
+     * @param filter The filter to apply to the upcoming season's anime results.
+     * @return A GenericPaginationResponse containing the upcoming season's anime response for the given page and filter.
+     * @throws IOException if there is an issue with the network connection or with reading/writing data.
+     * @throws HttpException if an HTTP response with a status code outside the range of 200-299 is received.
+     * @throws UnknownHostException if the host specified in the URL cannot be resolved or if there is no internet connection.
+     * @throws SocketTimeoutException if the connection timeout or read timeout expires before the operation completes.
+     */
+
+    @GET("seasons/upcoming")
+    suspend fun getUpcomingSeason(
+        @Query("page") page: Int,
+        @Query("filter") type: String
+    ): GenericPaginationResponse<AnimeResponse>
+
+    /**
      * Retrieves the popular anime data from the server.
      *
      * @param page The page number for pagination.

@@ -19,4 +19,10 @@ sealed class ExploreScreenEvent {
     data class OnUpcomingAnimeFilterChanged(
         val upcomingAnimeFilter: UpcomingAnimeFilter
     ) : ExploreScreenEvent()
+
+    data class OnAnimeFilterChanged(
+        val animeFilter: AnimeFilter
+    ) : ExploreScreenEvent()
+
+    object OnAnimeFilterApplied : ExploreScreenEvent()
 }

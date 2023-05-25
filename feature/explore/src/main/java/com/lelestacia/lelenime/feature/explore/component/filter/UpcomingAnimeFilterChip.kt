@@ -44,7 +44,8 @@ fun UpcomingAnimeFilterChip(
                     )
                 )
             },
-            onClick = {
+            trailingIcon = {},
+            onClicked = {
                 isMenuOpened = true
             }
         )

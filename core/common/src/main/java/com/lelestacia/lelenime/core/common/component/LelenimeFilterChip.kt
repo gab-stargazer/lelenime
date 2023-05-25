@@ -13,16 +13,20 @@ fun LelenimeFilterChip(
     isActive: Boolean,
     label: @Composable () -> Unit,
     leadingIcon: @Composable () -> Unit,
-    onClick: () -> Unit
+    trailingIcon: @Composable () -> Unit,
+    onClicked: () -> Unit
 ) {
     FilterChip(
         selected = isActive,
-        onClick = { onClick.invoke() },
+        onClick = { onClicked.invoke() },
         label = {
             label()
         },
         leadingIcon = {
             leadingIcon()
+        },
+        trailingIcon = {
+            trailingIcon()
         },
         colors = FilterChipDefaults.filterChipColors(
             containerColor =

@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
@@ -57,16 +58,17 @@ class ExplorationScreenViewModel @Inject constructor(
         .cachedIn(viewModelScope)
 
     //  Anime Filter
+
     private val popularAnimeFilter: MutableStateFlow<PopularAnimeFilter> =
         MutableStateFlow(PopularAnimeFilter())
 
     private val upcomingAnimeFilter: MutableStateFlow<UpcomingAnimeFilter> =
         MutableStateFlow(UpcomingAnimeFilter())
 
-    val animeFilter: StateFlow<AnimeFilter> = combine(
+    val appliedAnimeFilter: StateFlow<AnimeFilter> = combine(
         popularAnimeFilter,
         upcomingAnimeFilter
-    ) { popularAnimeFilter: PopularAnimeFilter, upcomingAnimeFilter: UpcomingAnimeFilter ->
+    ) { popularAnimeFilter, upcomingAnimeFilter ->
         AnimeFilter(
             popularAnimeFilter = popularAnimeFilter,
             upcomingAnimeFilter = upcomingAnimeFilter
@@ -77,33 +79,41 @@ class ExplorationScreenViewModel @Inject constructor(
         initialValue = AnimeFilter()
     )
 
-    private val popularAnime: Flow<PagingData<Anime>> =
+    private val _currentAnimeFilter: MutableStateFlow<AnimeFilter> = MutableStateFlow(AnimeFilter())
+    val currentAnimeFilter: StateFlow<AnimeFilter> = _currentAnimeFilter.asStateFlow()
+
+    private val popularAnime: Flow<PagingData<Anime>> by lazy {
         popularAnimeFilter
             .debounce(2500)
             .distinctUntilChanged()
-            .flatMapLatest {
+            .flatMapLatest { filter ->
                 useCases.getPopularAnime(
-                    type = it.animeType?.name?.lowercase(),
-                    status = it.animeStatus?.name?.lowercase()
+                    type = filter.animeType?.name?.lowercase(),
+                    status = filter.animeStatus?.name?.lowercase()
                 )
             }.cachedIn(viewModelScope)
+    }
 
     private val airingAnime: Flow<PagingData<Anime>> =
         useCases.getAiringAnime().cachedIn(viewModelScope)
 
-    private val upcomingAnime: Flow<PagingData<Anime>> =
+    private val upcomingAnime: Flow<PagingData<Anime>> by lazy {
         upcomingAnimeFilter.flatMapLatest {
-            useCases.getUpcomingAnime()
+            useCases.getUpcomingAnime(
+                type = it.animeType?.name?.lowercase()
+            )
         }.cachedIn(viewModelScope)
-
-    private val anime: Flow<PagingData<Anime>> = displayedAnimeType.flatMapLatest { type ->
-        when (type) {
-            DisplayType.POPULAR -> popularAnime
-            DisplayType.AIRING -> airingAnime
-            DisplayType.UPCOMING -> upcomingAnime
-            DisplayType.SEARCH -> searchedAnime
-        }
     }
+
+    private val anime: Flow<PagingData<Anime>> =
+        displayedAnimeType.flatMapLatest { type ->
+            when (type) {
+                DisplayType.POPULAR -> popularAnime
+                DisplayType.AIRING -> airingAnime
+                DisplayType.UPCOMING -> upcomingAnime
+                DisplayType.SEARCH -> searchedAnime
+            }
+        }
 
     val explorationScreenState: StateFlow<ExploreScreenState> =
         combine(
@@ -198,6 +208,22 @@ class ExplorationScreenViewModel @Inject constructor(
 
             is ExploreScreenEvent.OnUpcomingAnimeFilterChanged -> upcomingAnimeFilter.update {
                 event.upcomingAnimeFilter
+            }
+
+            is ExploreScreenEvent.OnAnimeFilterChanged -> {
+                _currentAnimeFilter.update {
+                    event.animeFilter
+                }
+            }
+
+            ExploreScreenEvent.OnAnimeFilterApplied -> {
+                popularAnimeFilter.update {
+                    currentAnimeFilter.value.popularAnimeFilter
+                }
+
+                upcomingAnimeFilter.update {
+                    currentAnimeFilter.value.upcomingAnimeFilter
+                }
             }
         }
     }

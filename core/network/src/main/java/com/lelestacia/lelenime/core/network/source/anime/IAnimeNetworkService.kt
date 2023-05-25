@@ -18,7 +18,9 @@ interface IAnimeNetworkService {
      *
      * @return A [PagingSource] that loads pages of [AnimeResponse] objects.
      */
-    fun getUpcomingAnime(): PagingSource<Int, AnimeResponse>
+    fun getUpcomingAnime(
+        type: String? = null
+    ): PagingSource<Int, AnimeResponse>
 
     /**
      * Retrieves a [PagingSource] for popular anime.
