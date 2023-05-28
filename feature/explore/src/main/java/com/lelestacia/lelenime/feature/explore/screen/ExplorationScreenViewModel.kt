@@ -38,9 +38,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ExplorationScreenViewModel @Inject constructor(
     private val useCases: IExploreUseCases,
-    private val useCasesPreferences: IUserPreferencesUseCases,
+    private val useCasesPreferences: IUserPreferencesUseCases
 ) : ViewModel() {
-
 
     private val headerState: MutableStateFlow<HeaderScreenState> =
         MutableStateFlow(HeaderScreenState())
@@ -50,7 +49,6 @@ class ExplorationScreenViewModel @Inject constructor(
 
     private val displayedAnimeType: MutableStateFlow<DisplayType> =
         MutableStateFlow(DisplayType.POPULAR)
-
 
     //  Anime Filter
     private val _popularAnimeFilter: MutableStateFlow<PopularAnimeFilter> =

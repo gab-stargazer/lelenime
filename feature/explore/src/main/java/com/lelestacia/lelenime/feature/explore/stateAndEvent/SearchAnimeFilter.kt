@@ -7,5 +7,5 @@ import com.lelestacia.lelenime.core.common.requestParam.AnimeType
 data class SearchAnimeFilter(
     val animeType: AnimeType? = null,
     val animeStatus: AnimeStatus? = null,
-    val animeRating: AnimeRating?=null,
+    val animeRating: AnimeRating? = null
 )

@@ -80,7 +80,7 @@ fun SearchAnimeFilterMenuItem(
         selectedAnimeRating = searchAnimeFilter.animeRating,
         isAnimeRatingMenuOpened = isAnimeRatingMenuOpened,
         onDismiss = {
-                    onAnimeRatingMenuStateChanged(it)
+            onAnimeRatingMenuStateChanged(it)
         },
         onAnimeRatingSelected = { selectedAnimeRating ->
             onSearchAnimeFilterChanged(

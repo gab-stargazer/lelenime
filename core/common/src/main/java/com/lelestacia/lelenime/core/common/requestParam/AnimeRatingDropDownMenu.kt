@@ -14,7 +14,7 @@ fun AnimeRatingDropDownMenu(
     selectedAnimeRating: AnimeRating?,
     isAnimeRatingMenuOpened: Boolean,
     onDismiss: (Boolean) -> Unit,
-    onAnimeRatingSelected: (AnimeRating?) -> Unit,
+    onAnimeRatingSelected: (AnimeRating?) -> Unit
 ) {
     DropdownMenu(
         expanded = isAnimeRatingMenuOpened,

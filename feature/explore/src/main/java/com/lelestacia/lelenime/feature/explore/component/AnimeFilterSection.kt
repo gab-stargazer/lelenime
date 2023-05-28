@@ -28,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.lelestacia.lelenime.core.common.component.LelenimeAssistiveChip
@@ -48,7 +49,7 @@ fun AnimeFilterSection(
     appliedAnimeFilter: AnimeFilter,
     currentAnimeFilter: AnimeFilter,
     onAnimeFilterChanged: (AnimeFilter) -> Unit,
-    onFilterApplied: () -> Unit,
+    onFilterApplied: () -> Unit
 ) {
     var isMenuOpened by remember {
         mutableStateOf(false)
@@ -121,7 +122,9 @@ fun AnimeFilterSection(
                     trailingIcon = {},
                     onClicked = {
                         isMenuOpened = true
-                    }
+                    },
+                    modifier = Modifier
+                        .testTag("explore:filter")
                 )
 
                 DropdownMenu(

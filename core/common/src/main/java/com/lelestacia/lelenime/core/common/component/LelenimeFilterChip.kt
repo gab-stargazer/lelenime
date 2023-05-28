@@ -5,6 +5,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -14,7 +15,8 @@ fun LelenimeFilterChip(
     label: @Composable () -> Unit,
     leadingIcon: @Composable () -> Unit,
     trailingIcon: @Composable () -> Unit,
-    onClicked: () -> Unit
+    onClicked: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     FilterChip(
         selected = isActive,
@@ -55,6 +57,7 @@ fun LelenimeFilterChip(
             } else {
                 MaterialTheme.colorScheme.outlineVariant
             }
-        )
+        ),
+        modifier = modifier
     )
 }
