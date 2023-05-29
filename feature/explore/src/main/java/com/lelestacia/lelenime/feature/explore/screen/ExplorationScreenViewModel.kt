@@ -9,8 +9,12 @@ import com.lelestacia.lelenime.core.domain.usecases.explore.IExploreUseCases
 import com.lelestacia.lelenime.core.domain.usecases.settings.IUserPreferencesUseCases
 import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.feature.explore.component.header.HeaderScreenState
+import com.lelestacia.lelenime.feature.explore.stateAndEvent.AnimeFilter
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState
+import com.lelestacia.lelenime.feature.explore.stateAndEvent.PopularAnimeFilter
+import com.lelestacia.lelenime.feature.explore.stateAndEvent.SearchAnimeFilter
+import com.lelestacia.lelenime.feature.explore.stateAndEvent.UpcomingAnimeFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -18,6 +22,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
@@ -36,8 +41,6 @@ class ExplorationScreenViewModel @Inject constructor(
     private val useCasesPreferences: IUserPreferencesUseCases
 ) : ViewModel() {
 
-    private val currentSearchQuery: MutableStateFlow<String> = MutableStateFlow("")
-
     private val headerState: MutableStateFlow<HeaderScreenState> =
         MutableStateFlow(HeaderScreenState())
 
@@ -47,28 +50,96 @@ class ExplorationScreenViewModel @Inject constructor(
     private val displayedAnimeType: MutableStateFlow<DisplayType> =
         MutableStateFlow(DisplayType.POPULAR)
 
-    private val searchedAnime: Flow<PagingData<Anime>> = currentSearchQuery
-        .debounce(0)
-        .distinctUntilChanged()
-        .flatMapLatest { useCases.getAnimeSearch(searchQuery = it).cachedIn(viewModelScope) }
+    //  Anime Filter
+    private val _popularAnimeFilter: MutableStateFlow<PopularAnimeFilter> =
+        MutableStateFlow(PopularAnimeFilter())
 
-    private val popularAnime: Flow<PagingData<Anime>> =
-        useCases.getPopularAnime().cachedIn(viewModelScope)
+    private val _upcomingAnimeFilter: MutableStateFlow<UpcomingAnimeFilter> =
+        MutableStateFlow(UpcomingAnimeFilter())
+
+    private val _searchQuery: MutableStateFlow<String> = MutableStateFlow("")
+    private val _searchedAnimeFilter: MutableStateFlow<SearchAnimeFilter> =
+        MutableStateFlow(SearchAnimeFilter())
+    private val searchAnimeQueryAndFilter: StateFlow<Pair<String, SearchAnimeFilter>> =
+        combine(
+            _searchQuery,
+            _searchedAnimeFilter
+        ) { searchQuery: String, searchAnimeFilter: SearchAnimeFilter ->
+            Pair(
+                first = searchQuery,
+                second = searchAnimeFilter
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = Pair("", SearchAnimeFilter())
+        )
+
+    val appliedAnimeFilter: StateFlow<AnimeFilter> = combine(
+        _popularAnimeFilter,
+        _upcomingAnimeFilter,
+        _searchedAnimeFilter
+    ) { popularAnimeFilter, upcomingAnimeFilter, searchAnimeFilter ->
+        AnimeFilter(
+            popularAnimeFilter = popularAnimeFilter,
+            upcomingAnimeFilter = upcomingAnimeFilter,
+            searchAnimeFilter = searchAnimeFilter
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = AnimeFilter()
+    )
+
+    private val _currentAnimeFilter: MutableStateFlow<AnimeFilter> = MutableStateFlow(AnimeFilter())
+    val currentAnimeFilter: StateFlow<AnimeFilter> = _currentAnimeFilter.asStateFlow()
+
+    private val popularAnime: Flow<PagingData<Anime>> by lazy {
+        _popularAnimeFilter
+            .debounce(0)
+            .distinctUntilChanged()
+            .flatMapLatest { filter ->
+                useCases.getPopularAnime(
+                    type = filter.animeType?.name?.lowercase(),
+                    status = filter.animeStatus?.name?.lowercase()
+                )
+            }.cachedIn(viewModelScope)
+    }
 
     private val airingAnime: Flow<PagingData<Anime>> =
         useCases.getAiringAnime().cachedIn(viewModelScope)
 
-    private val upcomingAnime: Flow<PagingData<Anime>> =
-        useCases.getUpcomingAnime().cachedIn(viewModelScope)
-
-    private val anime: Flow<PagingData<Anime>> = displayedAnimeType.flatMapLatest { type ->
-        when (type) {
-            DisplayType.POPULAR -> popularAnime
-            DisplayType.AIRING -> airingAnime
-            DisplayType.UPCOMING -> upcomingAnime
-            DisplayType.SEARCH -> searchedAnime
-        }
+    private val upcomingAnime: Flow<PagingData<Anime>> by lazy {
+        _upcomingAnimeFilter.flatMapLatest { filter ->
+            useCases.getUpcomingAnime(
+                type = filter.animeType?.name?.lowercase()
+            )
+        }.cachedIn(viewModelScope)
     }
+
+    private val searchedAnime: Flow<PagingData<Anime>> = searchAnimeQueryAndFilter
+        .debounce(0)
+        .distinctUntilChanged()
+        .flatMapLatest {
+            val filter: SearchAnimeFilter = it.second
+            useCases.getAnimeSearch(
+                searchQuery = it.first,
+                type = filter.animeType?.name?.lowercase(),
+                status = filter.animeStatus?.name?.lowercase(),
+                rating = filter.animeRating?.query
+            )
+        }
+        .cachedIn(viewModelScope)
+
+    private val anime: Flow<PagingData<Anime>> =
+        displayedAnimeType.flatMapLatest { type ->
+            when (type) {
+                DisplayType.POPULAR -> popularAnime
+                DisplayType.AIRING -> airingAnime
+                DisplayType.UPCOMING -> upcomingAnime
+                DisplayType.SEARCH -> searchedAnime
+            }
+        }
 
     val explorationScreenState: StateFlow<ExploreScreenState> =
         combine(
@@ -103,7 +174,7 @@ class ExplorationScreenViewModel @Inject constructor(
                         isSearching = false
                     )
                 }
-                currentSearchQuery.update { "" }
+                _searchQuery.update { "" }
             }
 
             is ExploreScreenEvent.OnDisplayStyleChanged -> displayedStyle.update {
@@ -143,7 +214,7 @@ class ExplorationScreenViewModel @Inject constructor(
                         searchedAnimeTitle = it.searchQuery
                     )
                 }
-                currentSearchQuery.update {
+                _searchQuery.update {
                     headerState.value.searchQuery
                 }
             }
@@ -154,6 +225,34 @@ class ExplorationScreenViewModel @Inject constructor(
                         searchQuery = "",
                         isSearching = false
                     )
+                }
+            }
+
+            is ExploreScreenEvent.OnPopularAnimeFilterChanged -> _popularAnimeFilter.update {
+                event.popularAnimeFilter
+            }
+
+            is ExploreScreenEvent.OnUpcomingAnimeFilterChanged -> _upcomingAnimeFilter.update {
+                event.upcomingAnimeFilter
+            }
+
+            is ExploreScreenEvent.OnAnimeFilterChanged -> {
+                _currentAnimeFilter.update {
+                    event.animeFilter
+                }
+            }
+
+            ExploreScreenEvent.OnAnimeFilterApplied -> {
+                _popularAnimeFilter.update {
+                    currentAnimeFilter.value.popularAnimeFilter
+                }
+
+                _upcomingAnimeFilter.update {
+                    currentAnimeFilter.value.upcomingAnimeFilter
+                }
+
+                _searchedAnimeFilter.update {
+                    currentAnimeFilter.value.searchAnimeFilter
                 }
             }
         }

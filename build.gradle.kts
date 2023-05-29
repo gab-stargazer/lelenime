@@ -3,6 +3,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath(libs.gradle)
@@ -17,4 +18,5 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.kapt) apply false
     alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.dokka) apply false
 }

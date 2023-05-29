@@ -20,8 +20,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,7 +35,7 @@ import com.lelestacia.lelenime.feature.explore.component.header.HeaderScreenStat
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun DashboardSearchHeader(
     screenState: ExploreScreenState,
@@ -40,7 +44,11 @@ fun DashboardSearchHeader(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.animateContentSize()
+        modifier = modifier
+            .semantics {
+                testTagsAsResourceId = true
+            }
+            .animateContentSize()
     ) {
         if (screenState.headerScreenState.isSearching) {
             IconButton(onClick = { onEvent(ExploreScreenEvent.OnStopSearching) }) {
@@ -55,7 +63,7 @@ fun DashboardSearchHeader(
                 label = {
                     Text(text = "Insert Anime Title")
                 },
-                colors = TextFieldDefaults.textFieldColors(
+                colors = TextFieldDefaults.colors(
                     unfocusedIndicatorColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent
                 ),
@@ -69,6 +77,7 @@ fun DashboardSearchHeader(
                 modifier = Modifier
                     .weight(1f)
                     .padding(8.dp)
+                    .testTag("explore:search")
             )
         } else {
             Spacer(modifier = Modifier.weight(1f))

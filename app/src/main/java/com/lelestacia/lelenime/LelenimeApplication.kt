@@ -152,6 +152,8 @@ fun LelenimeApplication(
                     ) {
                         val viewModel = hiltViewModel<ExplorationScreenViewModel>()
                         val uiState by viewModel.explorationScreenState.collectAsStateWithLifecycle()
+                        val appliedAnimeFilter by viewModel.appliedAnimeFilter.collectAsStateWithLifecycle()
+                        val currentAnimeFilter by viewModel.currentAnimeFilter.collectAsStateWithLifecycle()
 
                         uiController.setStatusBarColor(
                             color = MaterialTheme.colorScheme.background,
@@ -161,6 +163,8 @@ fun LelenimeApplication(
                         ExplorationScreen(
                             windowSize = windowSize,
                             screenState = uiState,
+                            appliedAnimeFilter = appliedAnimeFilter,
+                            currentAnimeFilter = currentAnimeFilter,
                             onEvent = viewModel::onEvent,
                             onErrorParsingRequest = viewModel::errorParsingRequest,
                             onAnimeClicked = { anime ->

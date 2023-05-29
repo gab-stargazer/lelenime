@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.dokka)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.dagger.hilt.android)
 }
@@ -39,6 +40,9 @@ android {
 }
 
 dependencies {
+    // Common Module
+    implementation(project(":core:common"))
+
     // Retrofit + GSON
     implementation(libs.bundles.retrofit.gson)
 

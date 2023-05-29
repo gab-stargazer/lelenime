@@ -27,12 +27,17 @@ interface IAnimeRepository {
     /**
      * Returns a [Flow] of [PagingData] for upcoming anime.
      */
-    fun getUpcomingAnime(): Flow<PagingData<Anime>>
+    fun getUpcomingAnime(
+        type: String? = null
+    ): Flow<PagingData<Anime>>
 
     /**
      * Returns a [Flow] of [PagingData] for popular anime.
      */
-    fun getPopularAnime(): Flow<PagingData<Anime>>
+    fun getPopularAnime(
+        type: String? = null,
+        status: String? = null
+    ): Flow<PagingData<Anime>>
 
     /**
      * Returns a [Flow] of [PagingData] for searched anime based on the provided [searchQuery], [type], [status], and [rating].

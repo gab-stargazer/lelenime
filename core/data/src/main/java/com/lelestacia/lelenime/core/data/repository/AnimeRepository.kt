@@ -72,19 +72,57 @@ class AnimeRepository @Inject constructor(
     }
 
     override fun getAiringAnime(): Flow<PagingData<Anime>> {
-        return getAnimePager(1).flow.map { pagingData ->
+        return Pager(
+            config = PagingConfig(
+                pageSize = 25,
+                prefetchDistance = 15,
+                enablePlaceholders = false,
+                initialLoadSize = 25
+            ),
+            pagingSourceFactory = {
+                animeNetworkService.getAiringAnime()
+            }
+        ).flow.map { pagingData ->
             pagingData.map(AnimeResponse::asAnime)
         }
     }
 
-    override fun getUpcomingAnime(): Flow<PagingData<Anime>> {
-        return getAnimePager(2).flow.map { pagingData ->
+    override fun getUpcomingAnime(type: String?): Flow<PagingData<Anime>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 25,
+                prefetchDistance = 15,
+                enablePlaceholders = false,
+                initialLoadSize = 25
+            ),
+            pagingSourceFactory = {
+                animeNetworkService.getUpcomingAnime(
+                    type = type
+                )
+            }
+        ).flow.map { pagingData ->
             pagingData.map(AnimeResponse::asAnime)
         }
     }
 
-    override fun getPopularAnime(): Flow<PagingData<Anime>> {
-        return getAnimePager(3).flow.map { pagingData ->
+    override fun getPopularAnime(
+        type: String?,
+        status: String?
+    ): Flow<PagingData<Anime>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 25,
+                prefetchDistance = 15,
+                enablePlaceholders = false,
+                initialLoadSize = 25
+            ),
+            pagingSourceFactory = {
+                animeNetworkService.getPopularAnime(
+                    type = type,
+                    status = status
+                )
+            }
+        ).flow.map { pagingData ->
             pagingData.map(AnimeResponse::asAnime)
         }
     }
@@ -157,23 +195,5 @@ class AnimeRepository @Inject constructor(
 
     override fun parseThrowable(t: Throwable): String {
         return errorParserUtil(t)
-    }
-
-    private fun getAnimePager(number: Int): Pager<Int, AnimeResponse> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 25,
-                prefetchDistance = 15,
-                enablePlaceholders = false,
-                initialLoadSize = 25
-            ),
-            pagingSourceFactory = {
-                when (number) {
-                    1 -> animeNetworkService.getAiringAnime()
-                    2 -> animeNetworkService.getUpcomingAnime()
-                    else -> animeNetworkService.getPopularAnime()
-                }
-            }
-        )
     }
 }

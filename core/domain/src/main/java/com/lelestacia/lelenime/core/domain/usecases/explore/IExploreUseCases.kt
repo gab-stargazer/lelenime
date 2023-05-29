@@ -7,8 +7,13 @@ import kotlinx.coroutines.flow.Flow
 interface IExploreUseCases {
     suspend fun insertOrUpdateAnimeHistory(anime: Anime)
     fun getAiringAnime(): Flow<PagingData<Anime>>
-    fun getUpcomingAnime(): Flow<PagingData<Anime>>
-    fun getPopularAnime(): Flow<PagingData<Anime>>
+    fun getUpcomingAnime(
+        type: String? = null
+    ): Flow<PagingData<Anime>>
+    fun getPopularAnime(
+        type: String? = null,
+        status: String? = null
+    ): Flow<PagingData<Anime>>
     fun getAnimeSearch(
         searchQuery: String,
         type: String? = null,

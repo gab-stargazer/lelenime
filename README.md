@@ -21,8 +21,8 @@ Lelenime is a mobile app that serves as an Anime Index, providing anime informat
 ## Technologies Used
 
 - **Kotlin**: Lelenime is built using the Kotlin programming language.
-- **Jetpack** Compose: The app's user interface is developed using Jetpack Compose, a modern UI toolkit for Android.
-- **Dagger** Hilt: Used for dependency injection, providing a modular and maintainable codebase.
+- **Jetpack Compose**: The app's user interface is developed using Jetpack Compose, a modern UI toolkit for Android.
+- **Dagger Hilt**: Used for dependency injection, providing a modular and maintainable codebase.
 - **Room**: An Android library used for local data persistence and working with an SQLite database.
 - **Retrofit**: A popular HTTP client library used for handling network requests and communicating with the Jikan API.
 - **Coroutines**: Kotlin Coroutines are employed for handling asynchronous operations in a concise and efficient manner.
@@ -72,7 +72,7 @@ Contributions to Lelenime are welcome! If you would like to contribute, please f
 10. The project maintainers will review your pull request and provide feedback. Be prepared to make adjustments if requested and engage in the discussion around your contribution.
 11. Once your pull request is approved and merged, your changes will become a part of the main Lelenime codebase.
 
-If you are interested in helping with the documentation, feel free to contribute to the project's documentation repository. You can find the documentation repository at [link-to-documentation-repo].
+If you are interested in helping with the documentation, feel free to contribute to the project's documentation repository. 
 
 Please make sure to adhere to the project's coding style, guidelines, and best practices. It's also recommended to discuss significant changes or new features in an issue before starting to work on them, as it allows for better coordination and avoids duplication of efforts.
 

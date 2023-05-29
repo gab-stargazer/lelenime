@@ -11,12 +11,14 @@ import retrofit2.http.Query
 interface AnimeAPI {
 
     /**
-     * Get the current season of anime.
+     * Retrieves the current season's anime data from the server.
      *
-     * @param page Page number to retrieve.
-     * @return [GenericPaginationResponse] of [AnimeResponse].
-     * @throws [HttpException] if the request is not successful (e.g. server error, unauthorized).
-     * @throws [IOException] if a problem occurs while parsing the response.
+     * @param page The page number for pagination.
+     * @return A GenericPaginationResponse containing the anime response for the current season.
+     * @throws IOException if there is an issue with the network connection or with reading/writing data.
+     * @throws HttpException if an HTTP response with a status code outside the range of 200-299 is received.
+     * @throws UnknownHostException if the host specified in the URL cannot be resolved or if there is no internet connection.
+     * @throws SocketTimeoutException if the connection timeout or read timeout expires before the operation completes.
      */
     @GET("seasons/now")
     suspend fun getCurrentSeason(
@@ -24,12 +26,14 @@ interface AnimeAPI {
     ): GenericPaginationResponse<AnimeResponse>
 
     /**
-     * Get the upcoming season of anime.
+     * Retrieves the upcoming season's anime data from the server.
      *
-     * @param page Page number to retrieve.
-     * @return [GenericPaginationResponse] of [AnimeResponse].
-     * @throws [HttpException] if the request is not successful (e.g. server error, unauthorized).
-     * @throws [IOException] if a problem occurs while parsing the response.
+     * @param page The page number for pagination.
+     * @return A GenericPaginationResponse containing the anime response for the upcoming season.
+     * @throws IOException if there is an issue with the network connection or with reading/writing data.
+     * @throws HttpException if an HTTP response with a status code outside the range of 200-299 is received.
+     * @throws UnknownHostException if the host specified in the URL cannot be resolved or if there is no internet connection.
+     * @throws SocketTimeoutException if the connection timeout or read timeout expires before the operation completes.
      */
     @GET("seasons/upcoming")
     suspend fun getUpcomingSeason(
@@ -37,12 +41,32 @@ interface AnimeAPI {
     ): GenericPaginationResponse<AnimeResponse>
 
     /**
-     * Get the list of popular anime.
+     * Retrieves upcoming season's anime data based on the provided page number and filter.
      *
-     * @param page Page number to retrieve.
-     * @return [GenericPaginationResponse] of [AnimeResponse].
-     * @throws [HttpException] if the request is not successful (e.g. server error, unauthorized).
-     * @throws [IOException] if a problem occurs while parsing the response.
+     * @param page The page number for pagination.
+     * @param filter The filter to apply to the upcoming season's anime results.
+     * @return A GenericPaginationResponse containing the upcoming season's anime response for the given page and filter.
+     * @throws IOException if there is an issue with the network connection or with reading/writing data.
+     * @throws HttpException if an HTTP response with a status code outside the range of 200-299 is received.
+     * @throws UnknownHostException if the host specified in the URL cannot be resolved or if there is no internet connection.
+     * @throws SocketTimeoutException if the connection timeout or read timeout expires before the operation completes.
+     */
+
+    @GET("seasons/upcoming")
+    suspend fun getUpcomingSeason(
+        @Query("page") page: Int,
+        @Query("filter") type: String
+    ): GenericPaginationResponse<AnimeResponse>
+
+    /**
+     * Retrieves the popular anime data from the server.
+     *
+     * @param page The page number for pagination.
+     * @return A GenericPaginationResponse containing the popular anime response.
+     * @throws IOException if there is an issue with the network connection or with reading/writing data.
+     * @throws HttpException if an HTTP response with a status code outside the range of 200-299 is received.
+     * @throws UnknownHostException if the host specified in the URL cannot be resolved or if there is no internet connection.
+     * @throws SocketTimeoutException if the connection timeout or read timeout expires before the operation completes.
      */
     @GET("top/anime")
     suspend fun getPopularAnime(
@@ -50,14 +74,52 @@ interface AnimeAPI {
     ): GenericPaginationResponse<AnimeResponse>
 
     /**
-     * Search for anime based on the provided query.
+     * Retrieves popular anime data based on the provided page number and type.
      *
-     * @param q Search query.
-     * @param page Page number to retrieve.
-     * @param sfw Whether to include NSFW content or not. Default is true.
-     * @return [GenericPaginationResponse] of [AnimeResponse].
-     * @throws [HttpException] if the request is not successful (e.g. server error, unauthorized).
-     * @throws [IOException] if a problem occurs while parsing the response.
+     * @param page The page number for pagination.
+     * @param type The type of anime to retrieve (e.g., TV, Movie, OVA, etc.).
+     * @return A GenericPaginationResponse containing the popular anime response for the given page and type.
+     * @throws IOException if there is an issue with the network connection or with reading/writing data.
+     * @throws HttpException if an HTTP response with a status code outside the range of 200-299 is received.
+     * @throws UnknownHostException if the host specified in the URL cannot be resolved or if there is no internet connection.
+     * @throws SocketTimeoutException if the connection timeout or read timeout expires before the operation completes.
+     */
+    @GET("top/anime")
+    suspend fun getPopularAnime(
+        @Query("page") page: Int,
+        @Query("type") type: String
+    ): GenericPaginationResponse<AnimeResponse>
+
+    /**
+     * Retrieves popular anime data based on the provided page number, type, and filter.
+     *
+     * @param page The page number for pagination.
+     * @param type The type of anime to retrieve (e.g., TV, Movie, OVA, etc.).
+     * @param filter The filter to apply to the popular anime results.
+     * @return A GenericPaginationResponse containing the popular anime response for the given page, type, and filter.
+     * @throws IOException if there is an issue with the network connection or with reading/writing data.
+     * @throws HttpException if an HTTP response with a status code outside the range of 200-299 is received.
+     * @throws UnknownHostException if the host specified in the URL cannot be resolved or if there is no internet connection.
+     * @throws SocketTimeoutException if the connection timeout or read timeout expires before the operation completes.
+     */
+    @GET("top/anime")
+    suspend fun getPopularAnime(
+        @Query("page") page: Int,
+        @Query("type") type: String,
+        @Query("filter") filter: String
+    ): GenericPaginationResponse<AnimeResponse>
+
+    /**
+     * Retrieves anime search results from the server based on the provided query.
+     *
+     * @param q The search query string.
+     * @param page The page number for pagination.
+     * @param sfw Determines whether the search results should be Safe for Work (SFW). Default is true.
+     * @return A GenericPaginationResponse containing the search results for the provided query.
+     * @throws IOException if there is an issue with the network connection or with reading/writing data.
+     * @throws HttpException if an HTTP response with a status code outside the range of 200-299 is received.
+     * @throws UnknownHostException if the host specified in the URL cannot be resolved or if there is no internet connection.
+     * @throws SocketTimeoutException if the connection timeout or read timeout expires before the operation completes.
      */
     @GET("anime")
     suspend fun getAnimeSearch(
@@ -67,14 +129,16 @@ interface AnimeAPI {
     ): GenericPaginationResponse<AnimeResponse>
 
     /**
-     * Search for anime based on the provided query and type.
+     * Retrieves anime search results from the server based on the provided query and type.
      *
-     * @param q Search query.
-     * @param type Type of anime (TV, Movie, etc.).
-     * @param page Page number to retrieve.
-     * @return [GenericPaginationResponse] of [AnimeResponse].
-     * @throws [HttpException] if the request is not successful (e.g. server error, unauthorized).
-     * @throws [IOException] if a problem occurs while parsing the response.
+     * @param q The search query string.
+     * @param type The type of anime to search for (e.g., TV, Movie, OVA, etc.).
+     * @param page The page number for pagination.
+     * @return A GenericPaginationResponse containing the search results for the provided query and type.
+     * @throws IOException if there is an issue with the network connection or with reading/writing data.
+     * @throws HttpException if an HTTP response with a status code outside the range of 200-299 is received.
+     * @throws UnknownHostException if the host specified in the URL cannot be resolved or if there is no internet connection.
+     * @throws SocketTimeoutException if the connection timeout or read timeout expires before the operation completes.
      */
     @GET("anime")
     suspend fun getAnimeSearch(
@@ -84,15 +148,17 @@ interface AnimeAPI {
     ): GenericPaginationResponse<AnimeResponse>
 
     /**
-     * Search for anime based on the provided query, type, and status.
+     * Retrieves anime search results from the server based on the provided query, type, status, and page.
      *
-     * @param q Search query.
-     * @param type Type of anime (TV, Movie, etc.).
-     * @param status Status of the anime (Airing, Finished, etc.).
-     * @param page Page number to retrieve.
-     * @return [GenericPaginationResponse] of [AnimeResponse].
-     * @throws [HttpException] if the request is not successful (e.g. server error, unauthorized).
-     * @throws [IOException] if a problem occurs while parsing the response.
+     * @param q The search query string.
+     * @param type The type of anime to search for (e.g., TV, Movie, OVA, etc.).
+     * @param status The status of the anime (e.g., airing, completed, upcoming, etc.).
+     * @param page The page number for pagination.
+     * @return A GenericPaginationResponse containing the search results for the provided query, type, status, and page.
+     * @throws IOException if there is an issue with the network connection or with reading/writing data.
+     * @throws HttpException if an HTTP response with a status code outside the range of 200-299 is received.
+     * @throws UnknownHostException if the host specified in the URL cannot be resolved or if there is no internet connection.
+     * @throws SocketTimeoutException if the connection timeout or read timeout expires before the operation completes.
      */
     @GET("anime")
     suspend fun getAnimeSearch(
@@ -103,16 +169,18 @@ interface AnimeAPI {
     ): GenericPaginationResponse<AnimeResponse>
 
     /**
-     * Search for anime based on the provided query, type, status, and rating.
+     * Retrieves anime search results from the server based on the provided query, type, status, rating, and page.
      *
-     * @param q Search query.
-     * @param type Type of anime (TV, Movie, etc.).
-     * @param status Status of the anime (Airing, Finished, etc.).
-     * @param rating Age rating of the anime (G, PG, etc.).
-     * @param page Page number to retrieve.
-     * @return [GenericPaginationResponse] of [AnimeResponse].
-     * @throws [HttpException] if the request is not successful (e.g. server error, unauthorized).
-     * @throws [IOException] if a problem occurs while parsing the response.
+     * @param q The search query string.
+     * @param type The type of anime to search for (e.g., TV, Movie, OVA, etc.).
+     * @param status The status of the anime (e.g., airing, completed, upcoming, etc.).
+     * @param rating The rating of the anime (e.g., g, pg, pg_13, r17, r, rx, etc.).
+     * @param page The page number for pagination.
+     * @return A GenericPaginationResponse containing the search results for the provided query, type, status, rating, and page.
+     * @throws IOException if there is an issue with the network connection or with reading/writing data.
+     * @throws HttpException if an HTTP response with a status code outside the range of 200-299 is received.
+     * @throws UnknownHostException if the host specified in the URL cannot be resolved or if there is no internet connection.
+     * @throws SocketTimeoutException if the connection timeout or read timeout expires before the operation completes.
      */
     @GET("anime")
     suspend fun getAnimeSearch(
@@ -124,12 +192,14 @@ interface AnimeAPI {
     ): GenericPaginationResponse<AnimeResponse>
 
     /**
-     * Retrieves a list of characters for a specific anime by providing the anime ID.
+     * Retrieves the list of characters for a specific anime based on the provided anime ID.
      *
-     * @param id The ID of the anime to retrieve characters for.
-     * @return A [GenericResponse] object containing a list of [CharacterResponse] objects.
-     * @throws [HttpException] if the request is not successful (e.g. server error, unauthorized).
-     * @throws [IOException] if a problem occurs while parsing the response.
+     * @param id The ID of the anime.
+     * @return A GenericResponse containing a list of character responses for the given anime ID.
+     * @throws IOException if there is an issue with the network connection or with reading/writing data.
+     * @throws HttpException if an HTTP response with a status code outside the range of 200-299 is received.
+     * @throws UnknownHostException if the host specified in the URL cannot be resolved or if there is no internet connection.
+     * @throws SocketTimeoutException if the connection timeout or read timeout expires before the operation completes.
      */
     @GET("anime/{id}/characters")
     suspend fun getAnimeCharactersByAnimeID(

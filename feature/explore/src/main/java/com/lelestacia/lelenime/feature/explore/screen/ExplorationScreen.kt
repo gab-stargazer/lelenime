@@ -1,6 +1,7 @@
 package com.lelestacia.lelenime.feature.explore.screen
 
 import android.app.Activity
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -22,6 +22,7 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -38,22 +39,24 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.lelestacia.lelenime.core.common.displayStyle.DisplayStyle
 import com.lelestacia.lelenime.core.common.lazyAnime.LazyGridAnime
 import com.lelestacia.lelenime.core.common.lazyAnime.LazyListAnime
+import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.feature.explore.R
+import com.lelestacia.lelenime.feature.explore.component.AnimeFilterSection
 import com.lelestacia.lelenime.feature.explore.component.DashboardDisplayTypeHeader
 import com.lelestacia.lelenime.feature.explore.component.DashboardSearchHeader
+import com.lelestacia.lelenime.feature.explore.stateAndEvent.AnimeFilter
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState
 import timber.log.Timber
 
-@OptIn(
-    ExperimentalMaterial3Api::class,
-    ExperimentalComposeUiApi::class
-)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ExplorationScreen(
     windowSize: WindowSizeClass,
     screenState: ExploreScreenState,
+    appliedAnimeFilter: AnimeFilter,
+    currentAnimeFilter: AnimeFilter,
     onEvent: (ExploreScreenEvent) -> Unit,
     onAnimeClicked: (Anime) -> Unit,
     onErrorParsingRequest: (Throwable) -> String,
@@ -77,10 +80,11 @@ fun ExplorationScreen(
     Scaffold(
         topBar = {
             Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
+                    .animateContentSize()
             ) {
                 DashboardSearchHeader(
                     screenState = screenState,
@@ -89,6 +93,23 @@ fun ExplorationScreen(
                 DashboardDisplayTypeHeader(
                     state = screenState,
                     onEvent = onEvent
+                )
+                AnimeFilterSection(
+                    displayType = screenState.displayType,
+                    appliedAnimeFilter,
+                    currentAnimeFilter = currentAnimeFilter,
+                    onAnimeFilterChanged = { newAnimeFilter ->
+                        onEvent(
+                            ExploreScreenEvent.OnAnimeFilterChanged(
+                                newAnimeFilter
+                            )
+                        )
+                    },
+                    onFilterApplied = {
+                        onEvent(
+                            ExploreScreenEvent.OnAnimeFilterApplied
+                        )
+                    }
                 )
                 Divider()
             }
@@ -123,6 +144,18 @@ fun ExplorationScreen(
             }
 
             LoadState.Loading -> {
+                //  Reset the state position
+                LaunchedEffect(key1 = Unit, block = {
+                    listOfLazyGridState[screenState.displayType]?.scrollToItem(
+                        index = 0,
+                        scrollOffset = 0
+                    )
+                    listOfLazyListState[screenState.displayType]?.scrollToItem(
+                        index = 0,
+                        scrollOffset = 0
+                    )
+                })
+
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
@@ -192,6 +225,8 @@ fun PreviewExplorationScreen() {
     ExplorationScreen(
         windowSize = calculateWindowSizeClass(activity = Activity()),
         screenState = ExploreScreenState(),
+        appliedAnimeFilter = AnimeFilter(),
+        currentAnimeFilter = AnimeFilter(),
         onEvent = {},
         onAnimeClicked = {},
         onErrorParsingRequest = { return@ExplorationScreen "" }
