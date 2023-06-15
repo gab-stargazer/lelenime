@@ -33,7 +33,7 @@ fun AnimeRatingFilterMenu(
     onAnimeRatingSelected: (AnimeRating?) -> Unit,
 ) {
     val listOfAnimeRatings: List<AnimeRating?> = ListOfAnimeRatings
-    val allAnimeRating = stringResource(id = R.string.all_rating)
+    val allAnimeRating = stringResource(id = R.string.all_anime_rating)
     Column(
         verticalArrangement = Arrangement.spacedBy(
             MaterialTheme.spacing.extraSmall

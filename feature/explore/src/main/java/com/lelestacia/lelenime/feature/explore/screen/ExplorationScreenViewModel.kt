@@ -297,8 +297,13 @@ class ExplorationScreenViewModel @Inject constructor(
                 }
             }
 
-            is OnDisplayTypeChanged -> {}
-            is OnAnimeFilterChanged -> {}
+            is OnDisplayTypeChanged -> {
+                displayedAnimeType.update { event.displayType }
+            }
+
+            is OnAnimeFilterChanged -> {
+                _currentAnimeFilter.update { event.animeFilter }
+            }
         }
     }
 

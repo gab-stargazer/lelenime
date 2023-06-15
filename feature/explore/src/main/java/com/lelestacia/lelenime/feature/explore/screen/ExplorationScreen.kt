@@ -1,13 +1,12 @@
 package com.lelestacia.lelenime.feature.explore.screen
 
 import android.app.Activity
-import androidx.compose.foundation.background
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -55,9 +54,10 @@ import com.lelestacia.lelenime.core.common.lazyAnime.LazyGridAnime
 import com.lelestacia.lelenime.core.common.lazyAnime.LazyListAnime
 import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.feature.explore.R
-import com.lelestacia.lelenime.feature.explore.component.DisplayedAnimeMenu
+import com.lelestacia.lelenime.feature.explore.component.ExplorationBottomSheet
 import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.AnimeFilter
+import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreBottomSheetState
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.SearchBarEvent
@@ -81,7 +81,7 @@ fun ExplorationScreen(
     onAnimeClicked: (Anime) -> Unit,
     onErrorParsingRequest: (Throwable) -> String,
     modifier: Modifier = Modifier,
-    searchBarState: SearchBarState
+    searchBarState: SearchBarState,
 ) {
     val pagingAnime: LazyPagingItems<Anime> = screenState.anime.collectAsLazyPagingItems()
     val listOfLazyGridState: Map<DisplayType, LazyGridState> = mapOf(
@@ -101,33 +101,26 @@ fun ExplorationScreen(
     val viewInfo = LocalView.current
     val scope = rememberCoroutineScope()
     BottomSheetScaffold(
+        sheetContent = {
+            ExplorationBottomSheet(
+                state = ExploreBottomSheetState(
+                    screenState.displayType,
+                    currentAnimeFilter
+                ),
+                onEvent = onEvent,
+                modifier = modifier
+                    .animateContentSize()
+            )
+        },
+        sheetShape = RoundedCornerShape(
+            topStart = 8.dp,
+            topEnd = 8.dp
+        ),
+        sheetPeekHeight = 0.dp,
+        scaffoldState = sheetScaffoldState,
         modifier = modifier.semantics {
             testTagsAsResourceId = true
-        },
-        sheetContent = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(viewInfo.height.dp / 2)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(16.dp)
-                ) {
-                    Text(text = "Displayed Anime", style = MaterialTheme.typography.titleMedium)
-                    DisplayedAnimeMenu(
-                        state = screenState,
-                        onEvent = onEvent
-                    )
-                }
-            }
-        },
-        sheetShape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp),
-        sheetPeekHeight = 0.dp,
-        scaffoldState = sheetScaffoldState
-
+        }
     ) { paddingValue ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -149,7 +142,10 @@ fun ExplorationScreen(
                     onEvent(SearchBarEvent.OnStateChanged(newState))
                 },
                 leadingIcon = {
-                    Icon(imageVector = Icons.Default.Search, contentDescription = null)
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = null
+                    )
                 },
                 placeholder = {
                     Text(text = "Search Anime...")
@@ -277,7 +273,10 @@ fun ExplorationScreen(
                                 Text(text = "Filter")
                             },
                             icon = {
-                                Icon(imageVector = Icons.Default.FilterList, contentDescription = null)
+                                Icon(
+                                    imageVector = Icons.Default.FilterList,
+                                    contentDescription = null
+                                )
                             }
                         )
                     }

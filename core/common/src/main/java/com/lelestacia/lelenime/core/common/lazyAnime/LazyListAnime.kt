@@ -47,7 +47,8 @@ fun LazyListAnime(
             pagingAnime[index]?.let { anime ->
                 AnimeList(
                     anime = anime,
-                    onAnimeClicked = onAnimeClicked
+                    onAnimeClicked = onAnimeClicked,
+                    modifier = Modifier.animateItemPlacement()
                 )
                 Divider(
                     modifier = modifier
