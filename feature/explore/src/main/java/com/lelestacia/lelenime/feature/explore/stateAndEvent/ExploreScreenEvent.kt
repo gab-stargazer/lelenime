@@ -26,3 +26,13 @@ sealed class ExploreScreenEvent {
 
     object OnAnimeFilterApplied : ExploreScreenEvent()
 }
+
+sealed class SearchBarEvent : ExploreScreenEvent() {
+    data class OnSearchQueryChanged(val query: String) : SearchBarEvent()
+    data class OnStateChanged(val state: Boolean) : SearchBarEvent()
+    data class OnSearch(val query: String) : SearchBarEvent()
+}
+
+sealed class BottomSheetEvent : ExploreScreenEvent()
+data class OnDisplayTypeChanged(val displayType: DisplayType) : BottomSheetEvent()
+data class OnAnimeFilterChanged(val animeFilter: AnimeFilter) : BottomSheetEvent()

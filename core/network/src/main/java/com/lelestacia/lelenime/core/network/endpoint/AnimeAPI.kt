@@ -22,7 +22,9 @@ interface AnimeAPI {
      */
     @GET("seasons/now")
     suspend fun getCurrentSeason(
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("sfw") sfw: Boolean = true,
+        @Query("limit") limit: Int = 24
     ): GenericPaginationResponse<AnimeResponse>
 
     /**
@@ -70,7 +72,9 @@ interface AnimeAPI {
      */
     @GET("top/anime")
     suspend fun getPopularAnime(
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("sfw") sfw: Boolean = true,
+        @Query("limit") limit: Int = 24
     ): GenericPaginationResponse<AnimeResponse>
 
     /**

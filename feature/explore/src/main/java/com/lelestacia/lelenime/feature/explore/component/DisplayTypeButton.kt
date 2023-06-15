@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
 import com.lelestacia.lelenime.feature.explore.screen.DisplayType
+import java.util.Locale
 
 @Composable
 fun DisplayTypeButton(
@@ -34,6 +35,8 @@ fun DisplayTypeButton(
             label = {
                 Text(
                     text = displayType.name
+                        .lowercase()
+                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
                 )
             },
             leadingIcon = {

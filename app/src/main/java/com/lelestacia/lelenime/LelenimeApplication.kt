@@ -63,6 +63,7 @@ import com.lelestacia.lelenime.feature.more.screen.settings.SettingScreen
 import com.lelestacia.lelenime.feature.more.screen.settings.SettingViewModel
 import com.lelestacia.lelenime.ui.component.LeleNimeBottomBar
 import com.lelestacia.lelenime.ui.component.LelenimeNavigationRail
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -155,6 +156,16 @@ fun LelenimeApplication(
                         val appliedAnimeFilter by viewModel.appliedAnimeFilter.collectAsStateWithLifecycle()
                         val currentAnimeFilter by viewModel.currentAnimeFilter.collectAsStateWithLifecycle()
 
+                        val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
+                        val currentSearchQuery by viewModel.currentSearchQuery.collectAsStateWithLifecycle()
+                        val isSearching by viewModel.isSearching.collectAsStateWithLifecycle()
+
+                        val searchBarState by viewModel.searchBarState.collectAsStateWithLifecycle()
+
+                        LaunchedEffect(key1 = isSearching, block = {
+                            Timber.d("Is searching now $isSearching")
+                        })
+
                         uiController.setStatusBarColor(
                             color = MaterialTheme.colorScheme.background,
                             darkIcons = darkIcons
@@ -181,6 +192,12 @@ fun LelenimeApplication(
                                     }
                                 }
                             },
+                            isSearching = isSearching,
+                            onSearchingStateChanged = { viewModel.isSearching.value = it },
+                            searchQuery = currentSearchQuery,
+                            onSearch = { viewModel.searchQuery.update { it } },
+                            onSearchQueryChanged = { viewModel.currentSearchQuery.update { it } },
+                            searchBarState = searchBarState,
                             modifier = Modifier.padding(paddingValue)
                         )
                     }

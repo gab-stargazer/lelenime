@@ -24,7 +24,7 @@ fun SearchAnimeFilterMenuItem(
 ) {
     DropdownMenuItem(
         text = {
-            Text(text = stringResource(id = R.string.anime_type))
+            Text(text = stringResource(id = com.lelestacia.lelenime.core.common.R.string.anime_type))
         },
         onClick = {
             onAnimeTypeMenuStateChanged(true)

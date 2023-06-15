@@ -74,10 +74,10 @@ class AnimeRepository @Inject constructor(
     override fun getAiringAnime(): Flow<PagingData<Anime>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 25,
-                prefetchDistance = 15,
+                pageSize = 24,
+                prefetchDistance = 3,
                 enablePlaceholders = false,
-                initialLoadSize = 25
+                initialLoadSize = 24
             ),
             pagingSourceFactory = {
                 animeNetworkService.getAiringAnime()
@@ -90,10 +90,10 @@ class AnimeRepository @Inject constructor(
     override fun getUpcomingAnime(type: String?): Flow<PagingData<Anime>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 25,
-                prefetchDistance = 15,
+                pageSize = 24,
+                prefetchDistance = 3,
                 enablePlaceholders = false,
-                initialLoadSize = 25
+                initialLoadSize = 24
             ),
             pagingSourceFactory = {
                 animeNetworkService.getUpcomingAnime(
@@ -111,10 +111,10 @@ class AnimeRepository @Inject constructor(
     ): Flow<PagingData<Anime>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 25,
-                prefetchDistance = 15,
+                pageSize = 24,
+                prefetchDistance = 3,
                 enablePlaceholders = false,
-                initialLoadSize = 25
+                initialLoadSize = 24
             ),
             pagingSourceFactory = {
                 animeNetworkService.getPopularAnime(
@@ -135,10 +135,10 @@ class AnimeRepository @Inject constructor(
     ): Flow<PagingData<Anime>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 25,
-                prefetchDistance = 15,
+                pageSize = 24,
+                prefetchDistance = 3,
                 enablePlaceholders = false,
-                initialLoadSize = 25
+                initialLoadSize = 24
             ),
             pagingSourceFactory = {
                 animeNetworkService.getAnimeSearch(
@@ -156,10 +156,10 @@ class AnimeRepository @Inject constructor(
     override fun getAnimeHistory(): Flow<PagingData<Anime>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 25,
-                prefetchDistance = 15,
+                pageSize = 24,
+                prefetchDistance = 3,
                 enablePlaceholders = false,
-                initialLoadSize = 25
+                initialLoadSize = 24
             ),
             pagingSourceFactory = {
                 animeDatabaseService.getAnimeHistory()
@@ -172,10 +172,10 @@ class AnimeRepository @Inject constructor(
     override fun getAnimeFavorite(): Flow<PagingData<Anime>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 25,
-                prefetchDistance = 15,
+                pageSize = 24,
+                prefetchDistance = 3,
                 enablePlaceholders = false,
-                initialLoadSize = 25
+                initialLoadSize = 24
             ),
             pagingSourceFactory = {
                 animeDatabaseService.getAnimeFavorite()

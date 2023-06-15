@@ -20,7 +20,7 @@ import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState
 
 @Composable
-fun DashboardDisplayTypeHeader(
+fun DisplayedAnimeMenu(
     state: ExploreScreenState,
     onEvent: (ExploreScreenEvent) -> Unit
 ) {
@@ -57,7 +57,7 @@ fun DashboardDisplayTypeHeader(
 @Preview
 @Composable
 fun PreviewTopHeader() {
-    DashboardDisplayTypeHeader(
+    DisplayedAnimeMenu(
         state = ExploreScreenState()
     ) {}
 }

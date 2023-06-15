@@ -6,7 +6,6 @@
     <string name="anime_not_found">Sorry, we could not find any result related to %s</string>
 
     <!--Popular Anime Filter-->
-    <string name="anime_type">Type</string>
     <string name="anime_status">Status</string>
     <string name="anime_rating">Rating</string>
 

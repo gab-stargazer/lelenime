@@ -1,6 +1,5 @@
 package com.lelestacia.lelenime.core.common.lazyAnime
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,12 +24,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import com.lelestacia.lelenime.core.common.R
 import com.lelestacia.lelenime.core.common.displayStyle.DisplayStyle
 import com.lelestacia.lelenime.core.common.itemAnime.AnimeCard
 import com.lelestacia.lelenime.core.model.Anime
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LazyGridAnime(
     windowSize: WindowSizeClass,
@@ -50,15 +50,19 @@ fun LazyGridAnime(
     LazyVerticalGrid(
         columns = GridCells.Fixed(itemsInOneRow),
         state = lazyGridState,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(
+            horizontal = 16.dp,
+            vertical = 8.dp
+        ),
         modifier = modifier
             .fillMaxSize(),
         content = {
             items(
                 count = pagingAnime.itemCount,
-                key = { it }
+                key = pagingAnime.itemKey { it.malID },
+                contentType = pagingAnime.itemContentType()
             ) { index ->
                 pagingAnime[index]?.let { anime ->
                     AnimeCard(
@@ -66,8 +70,7 @@ fun LazyGridAnime(
                         displayStyle = displayStyle,
                         onAnimeClicked = { clickedAnime ->
                             onAnimeClicked(clickedAnime)
-                        },
-                        modifier = Modifier.animateItemPlacement()
+                        }
                     )
                 }
             }

@@ -17,6 +17,8 @@
     <string name="anime_status_icon">Anime airing status Icon</string>
     <string name="empty_synopsis">"No Synopsis Provided By Mal"</string>
 
+    <string name="displayed_anime">Displayed Anime</string>
 
-
+    <string name="anime_type">Anime Type</string>
+    <string name="all_anime_type">All Type</string>
 </resources>
