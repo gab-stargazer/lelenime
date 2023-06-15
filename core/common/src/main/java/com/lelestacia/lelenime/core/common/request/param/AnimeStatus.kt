@@ -6,7 +6,8 @@ enum class AnimeStatus {
     UPCOMING
 }
 
-val ListOfAnimeStatus: List<AnimeStatus> = listOf(
+val ListOfAnimeStatus: List<AnimeStatus?> = listOf(
+    null,
     AnimeStatus.AIRING,
     AnimeStatus.COMPLETE,
     AnimeStatus.UPCOMING

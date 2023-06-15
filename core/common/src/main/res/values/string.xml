@@ -23,4 +23,7 @@
     <string name="all_anime_type">All Type</string>
     <string name="anime_rating">Anime Rating</string>
     <string name="all_rating">All Rating</string>
+    <string name="sort_anime_by">Sort Anime By</string>
+    <string name="anime_status">Anime Status</string>
+    <string name="all_anime_status">All Status</string>
 </resources>
