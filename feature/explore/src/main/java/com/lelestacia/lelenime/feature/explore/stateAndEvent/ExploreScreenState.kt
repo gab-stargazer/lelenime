@@ -4,7 +4,7 @@ import androidx.paging.PagingData
 import com.lelestacia.lelenime.core.common.displayStyle.DisplayStyle
 import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.feature.explore.component.header.HeaderScreenState
-import com.lelestacia.lelenime.feature.explore.screen.DisplayType
+import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

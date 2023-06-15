@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.feature.explore.component.filter
+package com.lelestacia.lelenime.core.common.request.composable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,25 +14,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.lelestacia.lelenime.core.common.R.string.displayed_anime
+import com.lelestacia.lelenime.core.common.R
 import com.lelestacia.lelenime.core.common.component.LelenimeFilterChip
+import com.lelestacia.lelenime.core.common.request.param.AnimeRating
+import com.lelestacia.lelenime.core.common.request.param.ListOfAnimeRatings
 import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
 import com.lelestacia.lelenime.core.common.theme.spacing
-import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
-import com.lelestacia.lelenime.feature.explore.component.displayType.ExplorationDisplayType
-import java.util.Locale
 
-@Composable
 @OptIn(ExperimentalLayoutApi::class)
-fun AnimeDisplayTypeMenu(
-    selectedDisplayType: DisplayType,
-    onEvent: (DisplayType) -> Unit,
+@Composable
+fun AnimeRatingFilterMenu(
+    selectedAnimeRating: AnimeRating?,
+    onAnimeRatingSelected: (AnimeRating?) -> Unit,
 ) {
+    val listOfAnimeRatings: List<AnimeRating?> = ListOfAnimeRatings
+    val allAnimeRating = stringResource(id = R.string.all_rating)
     Column(
         verticalArrangement = Arrangement.spacedBy(
             MaterialTheme.spacing.extraSmall
@@ -42,39 +43,31 @@ fun AnimeDisplayTypeMenu(
             .padding(horizontal = MaterialTheme.spacing.large)
     ) {
         Text(
-            text = stringResource(id = displayed_anime),
+            text = stringResource(id = R.string.anime_rating),
             style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.Bold
             )
         )
-        val allExplorationDisplayType: List<DisplayType> = ExplorationDisplayType
         FlowRow(
-            modifier = Modifier
-                .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(
-                space = MaterialTheme.spacing.small
+                MaterialTheme.spacing.small
             ),
-            maxItemsInEachRow = 2
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            allExplorationDisplayType.forEach { displayType ->
-                val textToDisplay = displayType.name
-                    .lowercase()
-                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+            listOfAnimeRatings.forEach { animeRating ->
+                val textToDisplay = animeRating?.title
+                    ?: allAnimeRating
+                val isSelected = animeRating == selectedAnimeRating
                 LelenimeFilterChip(
-                    isActive = selectedDisplayType == displayType,
-                    onClicked = {
-                        onEvent(displayType)
-                    },
+                    isActive = isSelected,
                     label = {
-                        Text(
-                            text = textToDisplay,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.weight(1f)
-                        )
+                        Text(text = textToDisplay)
                     },
-                    trailingIcon = {},
                     leadingIcon = {},
-                    modifier = Modifier.weight(1f)
+                    trailingIcon = {},
+                    onClicked = {
+                        onAnimeRatingSelected(animeRating)
+                    }
                 )
             }
         }
@@ -83,18 +76,18 @@ fun AnimeDisplayTypeMenu(
 
 @Preview
 @Composable
-fun PreviewAnimeDisplayTypeMenu() {
+fun PreviewAnimeRatingFilterMenu() {
     LelenimeTheme(
         dynamicColor = false
     ) {
-        var state by remember {
-            mutableStateOf(DisplayType.POPULAR)
+        var currentRating: AnimeRating? by remember {
+            mutableStateOf(null)
         }
         Surface {
-            AnimeDisplayTypeMenu(
-                selectedDisplayType = state,
-                onEvent = {
-                    state = it
+            AnimeRatingFilterMenu(
+                selectedAnimeRating = currentRating,
+                onAnimeRatingSelected = { selectedRating ->
+                    currentRating = selectedRating
                 }
             )
         }
@@ -103,19 +96,19 @@ fun PreviewAnimeDisplayTypeMenu() {
 
 @Preview
 @Composable
-fun PreviewAnimeDisplayTypeMenuDarkMode() {
+fun PreviewAnimeRatingFilterMenuDarkMode() {
     LelenimeTheme(
         darkTheme = true,
         dynamicColor = false
     ) {
-        var state by remember {
-            mutableStateOf(DisplayType.POPULAR)
+        var currentRating: AnimeRating? by remember {
+            mutableStateOf(null)
         }
         Surface {
-            AnimeDisplayTypeMenu(
-                selectedDisplayType = state,
-                onEvent = {
-                    state = it
+            AnimeRatingFilterMenu(
+                selectedAnimeRating = currentRating,
+                onAnimeRatingSelected = { selectedRating ->
+                    currentRating = selectedRating
                 }
             )
         }

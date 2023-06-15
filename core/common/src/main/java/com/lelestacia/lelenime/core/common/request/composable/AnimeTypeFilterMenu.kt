@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.feature.explore.component.filter
+package com.lelestacia.lelenime.core.common.request.composable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,21 +17,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.lelestacia.lelenime.core.common.R
 import com.lelestacia.lelenime.core.common.component.LelenimeFilterChip
-import com.lelestacia.lelenime.core.common.requestParam.AnimeType
-import com.lelestacia.lelenime.core.common.requestParam.ListOfAnimeType
+import com.lelestacia.lelenime.core.common.request.param.AnimeType
+import com.lelestacia.lelenime.core.common.request.param.ListOfAnimeType
 import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
 import com.lelestacia.lelenime.core.common.theme.spacing
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.PopularAnimeFilter
 import java.util.Locale
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AnimeTypeFilterMenu(
     selectedAnimeType: AnimeType?,
-    onAnimeTypeChanged: (AnimeType?) -> Unit
+    onAnimeTypeChanged: (AnimeType?) -> Unit,
 ) {
     val listOfAnimeType = ListOfAnimeType
     val allAnimeType: String = stringResource(id = R.string.all_anime_type)
@@ -46,7 +46,9 @@ fun AnimeTypeFilterMenu(
     ) {
         Text(
             text = stringResource(id = R.string.anime_type),
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.Bold
+            )
         )
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(
@@ -79,14 +81,14 @@ fun AnimeTypeFilterMenu(
 @Composable
 fun PreviewAnimeTypeFilter() {
     LelenimeTheme(dynamicColor = false) {
-        var popularAnimeFilter by remember {
-            mutableStateOf(PopularAnimeFilter())
+        var animeType: AnimeType? by remember {
+            mutableStateOf(null)
         }
         Surface {
             AnimeTypeFilterMenu(
-                selectedAnimeType = popularAnimeFilter.animeType,
+                selectedAnimeType = animeType,
                 onAnimeTypeChanged = { selectedAnimeType ->
-                    popularAnimeFilter = popularAnimeFilter.copy(animeType = selectedAnimeType)
+                    animeType = selectedAnimeType
                 }
             )
         }
@@ -100,14 +102,14 @@ fun PreviewAnimeTypeFilterDarkMode() {
         darkTheme = true,
         dynamicColor = false
     ) {
-        var popularAnimeFilter by remember {
-            mutableStateOf(PopularAnimeFilter())
+        var animeType: AnimeType? by remember {
+            mutableStateOf(null)
         }
         Surface {
             AnimeTypeFilterMenu(
-                selectedAnimeType = popularAnimeFilter.animeType,
+                selectedAnimeType = animeType,
                 onAnimeTypeChanged = { selectedAnimeType ->
-                    popularAnimeFilter = popularAnimeFilter.copy(animeType = selectedAnimeType)
+                    animeType = selectedAnimeType
                 }
             )
         }

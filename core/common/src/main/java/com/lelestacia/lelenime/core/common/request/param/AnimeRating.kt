@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.core.common.requestParam
+package com.lelestacia.lelenime.core.common.request.param
 
 enum class AnimeRating(val query: String, val title: String) {
     G(query = "g", title = "G - All Ages"),
@@ -7,3 +7,12 @@ enum class AnimeRating(val query: String, val title: String) {
     R(query = "r", title = "R+ - Mild Nudity"),
     R_17(query = "r17", title = "R-17+ - Violence & profanity")
 }
+
+val ListOfAnimeRatings: List<AnimeRating?> = listOf(
+    null,
+    AnimeRating.G,
+    AnimeRating.PG,
+    AnimeRating.PG_13,
+    AnimeRating.R,
+    AnimeRating.R_17,
+)

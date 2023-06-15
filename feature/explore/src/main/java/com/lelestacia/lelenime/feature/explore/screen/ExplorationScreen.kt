@@ -56,6 +56,7 @@ import com.lelestacia.lelenime.core.common.lazyAnime.LazyListAnime
 import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.feature.explore.R
 import com.lelestacia.lelenime.feature.explore.component.DisplayedAnimeMenu
+import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.AnimeFilter
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState

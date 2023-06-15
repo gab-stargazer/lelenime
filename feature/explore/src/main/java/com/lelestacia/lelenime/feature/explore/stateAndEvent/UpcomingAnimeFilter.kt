@@ -1,7 +1,7 @@
 package com.lelestacia.lelenime.feature.explore.stateAndEvent
 
-import com.lelestacia.lelenime.core.common.requestParam.AnimeType
+import com.lelestacia.lelenime.core.common.request.param.AnimeType
 
 data class UpcomingAnimeFilter(
-    val animeType: AnimeType? = null
+    val type: AnimeType? = null
 )

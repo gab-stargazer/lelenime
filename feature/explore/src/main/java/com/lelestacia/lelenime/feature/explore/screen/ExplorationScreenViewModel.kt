@@ -8,6 +8,7 @@ import com.lelestacia.lelenime.core.common.displayStyle.DisplayStyle
 import com.lelestacia.lelenime.core.domain.usecases.explore.IExploreUseCases
 import com.lelestacia.lelenime.core.domain.usecases.settings.IUserPreferencesUseCases
 import com.lelestacia.lelenime.core.model.Anime
+import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
 import com.lelestacia.lelenime.feature.explore.component.header.HeaderScreenState
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.AnimeFilter
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
@@ -104,8 +105,8 @@ class ExplorationScreenViewModel @Inject constructor(
             .distinctUntilChanged()
             .flatMapLatest { filter ->
                 useCases.getPopularAnime(
-                    type = filter.animeType?.name?.lowercase(),
-                    status = filter.animeStatus?.name?.lowercase()
+                    type = filter.type?.name?.lowercase(),
+                    status = filter.status?.name?.lowercase()
                 )
             }.cachedIn(viewModelScope)
 
@@ -115,7 +116,7 @@ class ExplorationScreenViewModel @Inject constructor(
     private val upcomingAnime: Flow<PagingData<Anime>> =
         _upcomingAnimeFilter.flatMapLatest { filter ->
             useCases.getUpcomingAnime(
-                type = filter.animeType?.name?.lowercase()
+                type = filter.type?.name?.lowercase()
             )
         }.cachedIn(viewModelScope)
 
@@ -126,9 +127,9 @@ class ExplorationScreenViewModel @Inject constructor(
             val filter: SearchAnimeFilter = it.second
             useCases.getAnimeSearch(
                 searchQuery = it.first,
-                type = filter.animeType?.name?.lowercase(),
-                status = filter.animeStatus?.name?.lowercase(),
-                rating = filter.animeRating?.query
+                type = filter.type?.name?.lowercase(),
+                status = filter.status?.name?.lowercase(),
+                rating = filter.rating?.query
             )
         }
         .cachedIn(viewModelScope)

@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.core.common.requestParam
+package com.lelestacia.lelenime.core.common.request.param
 
 enum class AnimeType {
     TV,

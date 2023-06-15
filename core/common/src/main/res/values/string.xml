@@ -21,4 +21,6 @@
 
     <string name="anime_type">Anime Type</string>
     <string name="all_anime_type">All Type</string>
+    <string name="anime_rating">Anime Rating</string>
+    <string name="all_rating">All Rating</string>
 </resources>
