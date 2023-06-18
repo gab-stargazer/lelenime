@@ -8,5 +8,4 @@ val ExplorationDisplayType: List<DisplayType> = listOf(
     DisplayType.POPULAR,
     DisplayType.AIRING,
     DisplayType.UPCOMING,
-    DisplayType.SEARCH,
 )

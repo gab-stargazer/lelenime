@@ -264,12 +264,13 @@ class ExplorationScreenViewModel @Inject constructor(
             }
 
             is SearchBarEvent.OnSearch -> {
+                displayedAnimeType.update { DisplayType.SEARCH }
                 _searchBarState.update { currentSearchBarState ->
                     val recentlySearched = currentSearchBarState
                         .recentlySearched
                         .toMutableList()
-                        .also {
-                            it.add(0, event.query)
+                        .also { history ->
+                            history.add(0, event.query)
                         }
                         .toSet()
                         .toList()
@@ -279,6 +280,7 @@ class ExplorationScreenViewModel @Inject constructor(
                         recentlySearched = recentlySearched
                     )
                 }
+                _searchQuery.update { event.query }
             }
 
             is SearchBarEvent.OnSearchQueryChanged -> {
@@ -292,6 +294,7 @@ class ExplorationScreenViewModel @Inject constructor(
             is SearchBarEvent.OnStateChanged -> {
                 _searchBarState.update {
                     it.copy(
+                        query = _searchQuery.value,
                         isActive = event.state
                     )
                 }

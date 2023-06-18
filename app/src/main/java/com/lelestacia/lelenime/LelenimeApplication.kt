@@ -25,7 +25,10 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -78,9 +81,13 @@ fun LelenimeApplication(
     navController: NavHostController,
     bottomSheetNavigator: BottomSheetNavigator,
     uiController: SystemUiController,
-    darkIcons: Boolean
+    darkIcons: Boolean,
 ) {
     val isCompactScreen = windowSize.widthSizeClass == WindowWidthSizeClass.Compact
+    var isFocusRequested by remember {
+        mutableStateOf(false)
+    }
+
     val scope = rememberCoroutineScope()
 
     Row {
@@ -89,7 +96,7 @@ fun LelenimeApplication(
         }
         Scaffold(
             bottomBar = {
-                if (windowSize.widthSizeClass == WindowWidthSizeClass.Compact) {
+                if (windowSize.widthSizeClass == WindowWidthSizeClass.Compact && !isFocusRequested) {
                     LeleNimeBottomBar(navController = navController)
                 }
             }
@@ -198,6 +205,9 @@ fun LelenimeApplication(
                             onSearch = { viewModel.searchQuery.update { it } },
                             onSearchQueryChanged = { viewModel.currentSearchQuery.update { it } },
                             searchBarState = searchBarState,
+                            onRequestFocus = { focus ->
+                                isFocusRequested = focus
+                            },
                             modifier = Modifier.padding(paddingValue)
                         )
                     }

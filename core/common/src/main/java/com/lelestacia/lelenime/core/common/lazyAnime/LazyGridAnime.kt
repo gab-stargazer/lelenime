@@ -1,7 +1,5 @@
 package com.lelestacia.lelenime.core.common.lazyAnime
 
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,7 +31,6 @@ import com.lelestacia.lelenime.core.common.displayStyle.DisplayStyle
 import com.lelestacia.lelenime.core.common.itemAnime.AnimeCard
 import com.lelestacia.lelenime.core.model.Anime
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LazyGridAnime(
     windowSize: WindowSizeClass,
@@ -74,7 +71,7 @@ fun LazyGridAnime(
                         onAnimeClicked = { clickedAnime ->
                             onAnimeClicked(clickedAnime)
                         },
-                        modifier = Modifier.animateItemPlacement(tween())
+                        modifier = modifier
                     )
                 }
             }

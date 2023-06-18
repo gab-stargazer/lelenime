@@ -25,7 +25,6 @@ import com.lelestacia.lelenime.core.common.request.param.AnimeType
 import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
 import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
-import com.lelestacia.lelenime.feature.explore.component.filter.AnimeDisplayTypeMenu
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.AnimeFilter
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.BottomSheetEvent
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreBottomSheetState
@@ -44,18 +43,10 @@ fun ExplorationBottomSheet(
                 MaterialTheme.spacing.medium
             ),
             contentPadding = PaddingValues(
-                vertical = MaterialTheme.spacing.medium
+                top = MaterialTheme.spacing.medium,
+                bottom = MaterialTheme.spacing.extraLarge
             ),
         ) {
-            item {
-                AnimeDisplayTypeMenu(
-                    selectedDisplayType = state.displayType,
-                    onEvent = { selectedDisplayType: DisplayType ->
-                        onEvent(OnDisplayTypeChanged(selectedDisplayType))
-                    }
-                )
-            }
-
             item {
                 AnimeTypeFilterMenu(
                     selectedAnimeType = when (state.displayType) {

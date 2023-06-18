@@ -115,8 +115,8 @@ fun CollectionScreen(
                     LazyListAnime(
                         lazyListState = lazyListState,
                         pagingAnime = pagingAnime,
-                        modifier = Modifier.padding(paddingValue),
-                        onAnimeClicked = onAnimeClicked
+                        onAnimeClicked = onAnimeClicked,
+                        modifier = Modifier.padding(paddingValue)
                     )
                 } else {
                     LazyGridAnime(
