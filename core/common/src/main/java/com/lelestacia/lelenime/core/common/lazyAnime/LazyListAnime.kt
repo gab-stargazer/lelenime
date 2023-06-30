@@ -45,7 +45,7 @@ fun LazyListAnime(
             pagingAnime[index]?.let { anime ->
                 AnimeList(
                     anime = anime,
-                    onAnimeClicked = onAnimeClicked,
+                    onAnimeClicked = onAnimeClicked
                 )
                 Divider(modifier = Modifier.fillMaxWidth())
             }

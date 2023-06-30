@@ -2,7 +2,7 @@ package com.lelestacia.lelenime.core.common.request.param
 
 enum class AnimeGenre(
     val id: Int,
-    val title: String,
+    val title: String
 ) {
     ACTION(
         id = 1,
@@ -22,7 +22,7 @@ enum class AnimeGenre(
     ),
     BOYS_LOVE(
         id = 28,
-        title = "Boys Love",
+        title = "Boys Love"
     ),
     COMEDY(
         id = 4,
@@ -97,7 +97,7 @@ val ListOfAnimeGenres: List<AnimeGenre?> = listOf(
     AnimeGenre.SLICE_OF_LIFE,
     AnimeGenre.SPORTS,
     AnimeGenre.SUPERNATURAL,
-    AnimeGenre.SUSPENSE,
+    AnimeGenre.SUSPENSE
 )
 
 fun getGenreByName(genreName: String): AnimeGenre? {

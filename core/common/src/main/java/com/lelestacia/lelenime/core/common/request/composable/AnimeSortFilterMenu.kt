@@ -28,7 +28,7 @@ import com.lelestacia.lelenime.core.common.theme.spacing
 @Composable
 fun AnimeSortFilterMenu(
     selectedAnimeSort: AnimeSort,
-    onAnimeSortChanged: (AnimeSort) -> Unit,
+    onAnimeSortChanged: (AnimeSort) -> Unit
 ) {
     val listOfAnimeSort: List<AnimeSort> = ListOfAnimeSort
     Column(
@@ -81,7 +81,8 @@ fun PreviewAnimeSortFilterMenu() {
                 selectedAnimeSort = animeSort,
                 onAnimeSortChanged = { selectedAnimeSort ->
                     animeSort = selectedAnimeSort
-                })
+                }
+            )
         }
     }
 }
@@ -101,7 +102,8 @@ fun PreviewAnimeSortFilterMenuDarkmode() {
                 selectedAnimeSort = animeSort,
                 onAnimeSortChanged = { selectedAnimeSort ->
                     animeSort = selectedAnimeSort
-                })
+                }
+            )
         }
     }
 }

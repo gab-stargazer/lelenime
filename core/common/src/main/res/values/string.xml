@@ -28,4 +28,5 @@
     <string name="all_anime_status">All Status</string>
     <string name="anime_genre">Anime Genres</string>
     <string name="all_anime_genre">All Genres</string>
+    <string name="apply_anime_filter">Apply Anime Filter</string>
 </resources>

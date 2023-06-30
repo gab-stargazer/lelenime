@@ -7,5 +7,5 @@ enum class AnimeSort(val query: String, val title: String) {
 
 val ListOfAnimeSort: List<AnimeSort> = listOf(
     AnimeSort.ASC,
-    AnimeSort.DESC,
+    AnimeSort.DESC
 )

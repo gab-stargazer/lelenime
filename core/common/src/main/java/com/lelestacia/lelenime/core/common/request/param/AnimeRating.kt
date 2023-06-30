@@ -14,5 +14,5 @@ val ListOfAnimeRatings: List<AnimeRating?> = listOf(
     AnimeRating.PG,
     AnimeRating.PG_13,
     AnimeRating.R,
-    AnimeRating.R_17,
+    AnimeRating.R_17
 )

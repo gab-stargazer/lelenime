@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.feature.explore.component.filter
+package com.lelestacia.lelenime.feature.explore.component.displayType
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,15 +23,20 @@ import com.lelestacia.lelenime.core.common.R.string.displayed_anime
 import com.lelestacia.lelenime.core.common.component.LelenimeFilterChip
 import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
 import com.lelestacia.lelenime.core.common.theme.spacing
-import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
-import com.lelestacia.lelenime.feature.explore.component.displayType.ExplorationDisplayType
 import java.util.Locale
 
+/**
+ * Composable function that displays a menu for selecting the anime display type.
+ *
+ * @param selectedDisplayType The currently selected [DisplayType] in the menu.
+ * @param onEvent The callback function that will be invoked when the display type is changed.
+ *               It provides the newly selected [DisplayType] as the parameter.
+ */
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
 fun AnimeDisplayTypeMenu(
     selectedDisplayType: DisplayType,
-    onEvent: (DisplayType) -> Unit,
+    onEvent: (DisplayType) -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(

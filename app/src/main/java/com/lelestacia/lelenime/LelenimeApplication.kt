@@ -58,15 +58,13 @@ import com.lelestacia.lelenime.feature.detail.screen.detailAnime.DetailScreen
 import com.lelestacia.lelenime.feature.detail.screen.detailCharacter.DetailCharacterScreen
 import com.lelestacia.lelenime.feature.detail.screen.detailCharacter.DetailCharacterViewModel
 import com.lelestacia.lelenime.feature.detail.screen.fullSynopsis.SynopsisScreen
-import com.lelestacia.lelenime.feature.explore.screen.ExplorationScreen
-import com.lelestacia.lelenime.feature.explore.screen.ExplorationScreenViewModel
 import com.lelestacia.lelenime.feature.more.screen.about.AboutScreen
 import com.lelestacia.lelenime.feature.more.screen.more.MoreScreen
 import com.lelestacia.lelenime.feature.more.screen.settings.SettingScreen
 import com.lelestacia.lelenime.feature.more.screen.settings.SettingViewModel
 import com.lelestacia.lelenime.ui.component.LeleNimeBottomBar
 import com.lelestacia.lelenime.ui.component.LelenimeNavigationRail
-import kotlinx.coroutines.flow.update
+import com.lelestacia.lelenime.ui.screen.exploration
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -81,7 +79,7 @@ fun LelenimeApplication(
     navController: NavHostController,
     bottomSheetNavigator: BottomSheetNavigator,
     uiController: SystemUiController,
-    darkIcons: Boolean,
+    darkIcons: Boolean
 ) {
     val isCompactScreen = windowSize.widthSizeClass == WindowWidthSizeClass.Compact
     var isFocusRequested by remember {
@@ -113,104 +111,18 @@ fun LelenimeApplication(
                     navController = navController,
                     startDestination = Screen.Explore.route
                 ) {
-                    composable(
-                        route = Screen.Explore.route,
-                        enterTransition = {
-                            if (isCompactScreen) {
-                                when (initialState.destination.route) {
-                                    Screen.Collection.route -> slideIntoContainer(
-                                        towards = AnimatedContentScope.SlideDirection.Right,
-                                        animationSpec = tween(500)
-                                    ) + fadeIn(
-                                        animationSpec = tween(500)
-                                    )
-
-                                    Screen.More.route -> slideIntoContainer(
-                                        towards = AnimatedContentScope.SlideDirection.Left,
-                                        animationSpec = tween(500)
-                                    ) + fadeIn(
-                                        animationSpec = tween(500)
-                                    )
-
-                                    else -> null
-                                }
-                            } else {
-                                when (initialState.destination.route) {
-                                    Screen.Collection.route -> slideIntoContainer(
-                                        towards = AnimatedContentScope.SlideDirection.Down,
-                                        animationSpec = tween(500)
-                                    ) + fadeIn(
-                                        animationSpec = tween(500)
-                                    )
-
-                                    Screen.More.route -> slideIntoContainer(
-                                        towards = AnimatedContentScope.SlideDirection.Up,
-                                        animationSpec = tween(500)
-                                    ) + fadeIn(
-                                        animationSpec = tween(500)
-                                    )
-
-                                    else -> null
-                                }
-                            }
+                    exploration(
+                        darkIcons = darkIcons,
+                        isCompactScreen = isCompactScreen,
+                        navController = navController,
+                        onFocusRequest = { isFocus ->
+                            isFocusRequested = isFocus
                         },
-                        exitTransition = {
-                            fadeOut(animationSpec = tween(500))
-                        }
-                    ) {
-                        val viewModel = hiltViewModel<ExplorationScreenViewModel>()
-                        val uiState by viewModel.explorationScreenState.collectAsStateWithLifecycle()
-                        val appliedAnimeFilter by viewModel.appliedAnimeFilter.collectAsStateWithLifecycle()
-                        val currentAnimeFilter by viewModel.currentAnimeFilter.collectAsStateWithLifecycle()
-
-                        val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
-                        val currentSearchQuery by viewModel.currentSearchQuery.collectAsStateWithLifecycle()
-                        val isSearching by viewModel.isSearching.collectAsStateWithLifecycle()
-
-                        val searchBarState by viewModel.searchBarState.collectAsStateWithLifecycle()
-
-                        LaunchedEffect(key1 = isSearching, block = {
-                            Timber.d("Is searching now $isSearching")
-                        })
-
-                        uiController.setStatusBarColor(
-                            color = MaterialTheme.colorScheme.background,
-                            darkIcons = darkIcons
-                        )
-
-                        ExplorationScreen(
-                            windowSize = windowSize,
-                            screenState = uiState,
-                            appliedAnimeFilter = appliedAnimeFilter,
-                            currentAnimeFilter = currentAnimeFilter,
-                            onEvent = viewModel::onEvent,
-                            onErrorParsingRequest = viewModel::errorParsingRequest,
-                            onAnimeClicked = { anime ->
-                                scope.launch {
-                                    viewModel
-                                        .insertOrUpdateAnimeHistory(anime)
-                                        .join()
-                                    navController.navigate(
-                                        route = Screen
-                                            .DetailAnimeScreen
-                                            .createRoute(anime.malID)
-                                    ) {
-                                        restoreState = true
-                                    }
-                                }
-                            },
-                            isSearching = isSearching,
-                            onSearchingStateChanged = { viewModel.isSearching.value = it },
-                            searchQuery = currentSearchQuery,
-                            onSearch = { viewModel.searchQuery.update { it } },
-                            onSearchQueryChanged = { viewModel.currentSearchQuery.update { it } },
-                            searchBarState = searchBarState,
-                            onRequestFocus = { focus ->
-                                isFocusRequested = focus
-                            },
-                            modifier = Modifier.padding(paddingValue)
-                        )
-                    }
+                        paddingValue = paddingValue,
+                        scope = scope,
+                        uiController = uiController,
+                        windowSize = windowSize
+                    )
 
                     composable(
                         route = Screen.Collection.route,

@@ -37,7 +37,7 @@ fun AnimeGenreFilterMenu(
     selectedAnimeGenres: List<AnimeGenre?>,
     onAnimeGenreAdded: (AnimeGenre) -> Unit,
     onAnimeGenreRemoved: (AnimeGenre) -> Unit,
-    onAnimeGenreCleared: ()-> Unit
+    onAnimeGenreCleared: () -> Unit
 ) {
     val listOfAnimeGenre = ListOfAnimeGenres
     val allGenres = stringResource(id = R.string.all_anime_genre)
@@ -99,12 +99,16 @@ fun AnimeGenreFilterMenu(
                     },
                     onClicked = {
                         genre?.let {
-                            if (isGenreExistOnList) onAnimeGenreRemoved(it)
-                            else onAnimeGenreAdded(it)
+                            if (isGenreExistOnList) {
+                                onAnimeGenreRemoved(it)
+                            } else {
+                                onAnimeGenreAdded(it)
+                            }
                             return@LelenimeFilterChip
                         }
                         onAnimeGenreCleared()
-                    })
+                    }
+                )
             }
         }
     }

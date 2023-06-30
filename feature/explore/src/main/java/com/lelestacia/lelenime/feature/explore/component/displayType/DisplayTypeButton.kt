@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.feature.explore.component
+package com.lelestacia.lelenime.feature.explore.component.displayType
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
@@ -16,9 +16,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
-import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
 import java.util.Locale
 
+/**
+ * Composable function that represents a button for selecting a display type.
+ *
+ * @param isActive Whether the button is currently active (selected) or not.
+ * @param displayType The [DisplayType] associated with the button.
+ * @param icon The [ImageVector] representing the icon to display alongside the button.
+ * @param onClicked The callback function that will be invoked when the button is clicked.
+ *                 It takes a [DisplayType] as the parameter, indicating the selected display type.
+ */
 @Composable
 fun DisplayTypeButton(
     isActive: Boolean,

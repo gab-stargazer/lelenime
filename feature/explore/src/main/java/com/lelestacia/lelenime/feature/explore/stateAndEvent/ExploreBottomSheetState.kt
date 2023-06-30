@@ -4,5 +4,6 @@ import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
 
 data class ExploreBottomSheetState(
     val displayType: DisplayType = DisplayType.POPULAR,
-    val animeFilter: AnimeFilter = AnimeFilter()
+    val currentAnimeFilter: AnimeFilter = AnimeFilter(),
+    val appliedAnimeFilter: AnimeFilter = AnimeFilter()
 )

@@ -31,7 +31,7 @@ import java.util.Locale
 @Composable
 fun AnimeTypeFilterMenu(
     selectedAnimeType: AnimeType?,
-    onAnimeTypeChanged: (AnimeType?) -> Unit,
+    onAnimeTypeChanged: (AnimeType?) -> Unit
 ) {
     val listOfAnimeType = ListOfAnimeType
     val allAnimeType: String = stringResource(id = R.string.all_anime_type)

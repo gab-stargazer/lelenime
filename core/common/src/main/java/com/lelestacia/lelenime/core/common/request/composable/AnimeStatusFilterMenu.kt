@@ -31,7 +31,7 @@ import java.util.Locale
 @Composable
 fun AnimeStatusFilterMenu(
     selectedAnimeStatus: AnimeStatus?,
-    onAnimeStatusChanged: (AnimeStatus?) -> Unit,
+    onAnimeStatusChanged: (AnimeStatus?) -> Unit
 ) {
     val listOfAnimeStatus: List<AnimeStatus?> = ListOfAnimeStatus
     val allAnimeStatus = stringResource(R.string.all_anime_status)

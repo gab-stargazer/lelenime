@@ -16,16 +16,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
+import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayTypeButton
 import com.lelestacia.lelenime.feature.explore.component.displayType.ExplorationDisplayType
+import com.lelestacia.lelenime.feature.explore.stateAndEvent.BottomSheetEvent
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.OnDisplayTypeChanged
 
 @Composable
 fun DisplayedAnimeMenu(
     state: ExploreScreenState,
     onEvent: (ExploreScreenEvent) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     LazyRow(
         state = rememberLazyListState(),
@@ -44,7 +45,7 @@ fun DisplayedAnimeMenu(
                     DisplayType.SEARCH -> Icons.Default.Search
                 },
                 onClicked = {
-                    onEvent(OnDisplayTypeChanged(it))
+                    onEvent(BottomSheetEvent.OnDisplayTypeChanged(it))
                 }
             )
         }

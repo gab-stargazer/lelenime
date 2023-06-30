@@ -1,5 +1,7 @@
 package com.lelestacia.lelenime.feature.explore.screen
 
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -9,17 +11,16 @@ import com.lelestacia.lelenime.core.domain.usecases.explore.IExploreUseCases
 import com.lelestacia.lelenime.core.domain.usecases.settings.IUserPreferencesUseCases
 import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
-import com.lelestacia.lelenime.feature.explore.component.header.HeaderScreenState
+import com.lelestacia.lelenime.feature.explore.component.filter.PopularAnimeFilter
+import com.lelestacia.lelenime.feature.explore.component.filter.SearchAnimeFilter
+import com.lelestacia.lelenime.feature.explore.component.filter.UpcomingAnimeFilter
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.AnimeFilter
+import com.lelestacia.lelenime.feature.explore.stateAndEvent.BottomSheetEvent
+import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreBottomSheetState
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.OnAnimeFilterChanged
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.OnDisplayTypeChanged
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.PopularAnimeFilter
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.SearchAnimeFilter
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.SearchBarEvent
 import com.lelestacia.lelenime.feature.explore.stateAndEvent.SearchBarState
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.UpcomingAnimeFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -39,33 +40,127 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
+@OptIn(
+    ExperimentalCoroutinesApi::class,
+    FlowPreview::class
+)
 @HiltViewModel
 class ExplorationScreenViewModel @Inject constructor(
     private val useCases: IExploreUseCases,
     private val useCasesPreferences: IUserPreferencesUseCases
 ) : ViewModel() {
 
-    private val headerState: MutableStateFlow<HeaderScreenState> =
-        MutableStateFlow(HeaderScreenState())
-
-    private val displayedStyle: MutableStateFlow<DisplayStyle> =
+    /**
+     * Represents a [MutableStateFlow] holding the currently displayed style for anime.
+     * The style can be updated to change the appearance of anime items, such as using cards or a list view.
+     */
+    private val _currentDisplayStyle: MutableStateFlow<DisplayStyle> =
         MutableStateFlow(DisplayStyle.CARD)
 
-    private val displayedAnimeType: MutableStateFlow<DisplayType> =
+    /**
+     * Represents the currently displayed style for anime in a [StateFlow] format.
+     *
+     * The displayed style can be updated to change the appearance of anime items, such as using cards
+     * or a list view. The initial default value is [DisplayStyle.CARD].
+     *
+     * @see DisplayStyle
+     */
+    val currentDisplayStyle: StateFlow<DisplayStyle> = _currentDisplayStyle.asStateFlow()
+
+    /**
+     * Represents a [MutableStateFlow] holding the currently displayed type of anime.
+     * The display type can be updated to switch between different categories of anime, e.g., popular, airing, upcoming.
+     *
+     * @see DisplayType
+     */
+    private val _currentDisplayType: MutableStateFlow<DisplayType> =
         MutableStateFlow(DisplayType.POPULAR)
 
-    //  Anime Filter
+    /**
+     * Represents the currently displayed type of anime in a [StateFlow] format.
+     *
+     * The display type can be updated to switch between different categories of anime, such as popular, airing, or upcoming.
+     * The initial default value is [DisplayType.POPULAR].
+     *
+     * @see DisplayType
+     */
+    val currentDisplayType: StateFlow<DisplayType> = _currentDisplayType.asStateFlow()
+
+    /**
+     * Represents a private [MutableStateFlow] for holding the filter used to fetch popular anime.
+     * The popular anime filter can be updated to fetch anime based on specific criteria such as type or status.
+     *
+     * @see PopularAnimeFilter
+     */
     private val _popularAnimeFilter: MutableStateFlow<PopularAnimeFilter> =
         MutableStateFlow(PopularAnimeFilter())
 
+    /**
+     * Represents a private [MutableStateFlow] for holding the filter used to fetch upcoming anime.
+     * The upcoming anime filter can be updated to fetch anime based on specific criteria such as type or status.
+     *
+     * @see UpcomingAnimeFilter
+     */
     private val _upcomingAnimeFilter: MutableStateFlow<UpcomingAnimeFilter> =
         MutableStateFlow(UpcomingAnimeFilter())
 
-    private val _searchQuery: MutableStateFlow<String> = MutableStateFlow("")
+    /**
+     * Holds the mutable state flow of anime grid states associated with different display types.
+     */
+    private val _animeGridState: MutableStateFlow<Map<DisplayType, LazyGridState>> =
+        MutableStateFlow(
+            mapOf(
+                DisplayType.POPULAR to LazyGridState(),
+                DisplayType.AIRING to LazyGridState(),
+                DisplayType.UPCOMING to LazyGridState(),
+                DisplayType.SEARCH to LazyGridState()
+            )
+        )
+
+    /**
+     * Provides a read-only state flow of anime grid states associated with different display types.
+     * The state flow emits the current map of anime grid states whenever it is updated.
+     */
+    val animeGridState: StateFlow<Map<DisplayType, LazyGridState>> = _animeGridState.asStateFlow()
+
+    /**
+     * Holds the mutable state flow of anime list states associated with different display types.
+     */
+    private val _animeListState: MutableStateFlow<Map<DisplayType, LazyListState>> =
+        MutableStateFlow(
+            mapOf(
+                DisplayType.POPULAR to LazyListState(),
+                DisplayType.AIRING to LazyListState(),
+                DisplayType.UPCOMING to LazyListState(),
+                DisplayType.SEARCH to LazyListState()
+            )
+        )
+
+    /**
+     * Provides a read-only state flow of anime list states associated with different display types.
+     * The state flow emits the current map of anime list states whenever it is updated.
+     */
+    val animeListState: StateFlow<Map<DisplayType, LazyListState>> = _animeListState.asStateFlow()
+
+    /**
+     * Holds the search query as a mutable state flow.
+     */
+    private val _searchQuery: MutableStateFlow<String> =
+        MutableStateFlow("")
+
+    /**
+     * Holds the searched anime filter as a mutable state flow.
+     */
     private val _searchedAnimeFilter: MutableStateFlow<SearchAnimeFilter> =
         MutableStateFlow(SearchAnimeFilter())
-    private val searchAnimeQueryAndFilter: StateFlow<Pair<String, SearchAnimeFilter>> =
+
+    /**
+     * Combines the search query and searched anime filter into a state flow representing the search query and filter pair.
+     * The state flow emits the pair whenever either the search query or the searched anime filter changes.
+     *
+     * @return The state flow of the search query and searched anime filter pair.
+     */
+    private val _searchAnimeQueryAndFilter: StateFlow<Pair<String, SearchAnimeFilter>> =
         combine(
             _searchQuery,
             _searchedAnimeFilter
@@ -80,10 +175,15 @@ class ExplorationScreenViewModel @Inject constructor(
             initialValue = Pair("", SearchAnimeFilter())
         )
 
-    val appliedAnimeFilter: StateFlow<AnimeFilter> = combine(
-        _popularAnimeFilter,
-        _upcomingAnimeFilter,
-        _searchedAnimeFilter
+    /**
+     * Represents a state flow of the applied anime filter.
+     * The state flow emits the combined anime filter values from popular, upcoming, and searched anime filters.
+     * It provides a single source of truth for the currently applied anime filter.
+     */
+    private val _appliedAnimeFilter: StateFlow<AnimeFilter> = combine(
+        flow = _popularAnimeFilter,
+        flow2 = _upcomingAnimeFilter,
+        flow3 = _searchedAnimeFilter
     ) { popularAnimeFilter, upcomingAnimeFilter, searchAnimeFilter ->
         AnimeFilter(
             popularAnimeFilter = popularAnimeFilter,
@@ -96,17 +196,25 @@ class ExplorationScreenViewModel @Inject constructor(
         initialValue = AnimeFilter()
     )
 
+    /**
+     * Holds the current anime filter as a mutable state flow.
+     */
     private val _currentAnimeFilter: MutableStateFlow<AnimeFilter> = MutableStateFlow(AnimeFilter())
-    val currentAnimeFilter: StateFlow<AnimeFilter> = _currentAnimeFilter.asStateFlow()
 
+    /**
+     * Represents a flow of paging data for popular anime.
+     * The flow emits the updated paging data whenever the popular anime filter changes.
+     */
     private val popularAnime: Flow<PagingData<Anime>> =
         _popularAnimeFilter
             .debounce(0)
             .distinctUntilChanged()
             .flatMapLatest { filter ->
+                val animeType = filter.type?.name?.lowercase()
+                val animeStatus = filter.status?.name?.lowercase()
                 useCases.getPopularAnime(
-                    type = filter.type?.name?.lowercase(),
-                    status = filter.status?.name?.lowercase()
+                    type = animeType,
+                    status = animeStatus
                 )
             }.cachedIn(viewModelScope)
 
@@ -120,13 +228,18 @@ class ExplorationScreenViewModel @Inject constructor(
             )
         }.cachedIn(viewModelScope)
 
-    private val searchedAnime: Flow<PagingData<Anime>> = searchAnimeQueryAndFilter
+    /**
+     * Represents a flow of paging data for searched anime.
+     * The flow emits the updated paging data whenever the search query or filter changes.
+     */
+    private val searchedAnime: Flow<PagingData<Anime>> = _searchAnimeQueryAndFilter
         .debounce(0)
         .distinctUntilChanged()
         .flatMapLatest {
             val filter: SearchAnimeFilter = it.second
+            val searchQuery: String = it.first
             useCases.getAnimeSearch(
-                searchQuery = it.first,
+                searchQuery = searchQuery,
                 type = filter.type?.name?.lowercase(),
                 status = filter.status?.name?.lowercase(),
                 rating = filter.rating?.query
@@ -134,8 +247,12 @@ class ExplorationScreenViewModel @Inject constructor(
         }
         .cachedIn(viewModelScope)
 
+    /**
+     * Represents a flow of paging data for anime.
+     * The flow emits the corresponding paging data based on the currently displayed anime type.
+     */
     private val anime: Flow<PagingData<Anime>> =
-        displayedAnimeType.flatMapLatest { type ->
+        _currentDisplayType.flatMapLatest { type ->
             when (type) {
                 DisplayType.POPULAR -> popularAnime
                 DisplayType.AIRING -> airingAnime
@@ -146,12 +263,10 @@ class ExplorationScreenViewModel @Inject constructor(
 
     val explorationScreenState: StateFlow<ExploreScreenState> =
         combine(
-            headerState,
-            displayedStyle,
-            displayedAnimeType
-        ) { headerState: HeaderScreenState, displayedStyle: DisplayStyle, displayedType: DisplayType ->
+            _currentDisplayStyle,
+            _currentDisplayType
+        ) { displayedStyle, displayedType ->
             ExploreScreenState(
-                headerScreenState = headerState,
                 displayStyle = displayedStyle,
                 displayType = displayedType,
                 anime = anime
@@ -166,105 +281,28 @@ class ExplorationScreenViewModel @Inject constructor(
         MutableStateFlow(SearchBarState())
     val searchBarState: StateFlow<SearchBarState> = _searchBarState.asStateFlow()
 
+    val bottomSheetState = combine(
+        flow = _currentDisplayType,
+        flow2 = _currentAnimeFilter,
+        flow3 = _appliedAnimeFilter,
+        transform = ::ExploreBottomSheetState
+    ).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = ExploreBottomSheetState()
+    )
+
     fun onEvent(event: ExploreScreenEvent) {
         Timber.d("Explore Screen Event: $event")
         when (event) {
             is ExploreScreenEvent.OnDisplayTypeChanged -> {
-                displayedAnimeType.update {
+                _currentDisplayType.update {
                     event.selectedType
-                }
-
-                if (event.selectedType == DisplayType.SEARCH) return
-                headerState.update {
-                    it.copy(
-                        searchedAnimeTitle = "",
-                        isSearching = false
-                    )
-                }
-                _searchQuery.update { "" }
-            }
-
-            is ExploreScreenEvent.OnDisplayStyleChanged -> displayedStyle.update {
-                event.selectedStyle
-            }
-
-            ExploreScreenEvent.OnFilterOptionMenuChangedState -> headerState.update {
-                it.copy(
-                    isFilterOptionOpened = !it.isFilterOptionOpened
-                )
-            }
-
-            ExploreScreenEvent.OnDisplayStyleOptionMenuStateChanged -> headerState.update {
-                it.copy(
-                    isDisplayStyleOptionOpened = !it.isDisplayStyleOptionOpened
-                )
-            }
-
-            is ExploreScreenEvent.OnSearchQueryChanged -> headerState.update {
-                it.copy(
-                    searchQuery = event.newSearchQuery
-                )
-            }
-
-            ExploreScreenEvent.OnStartSearching -> headerState.update {
-                it.copy(
-                    isSearching = true
-                )
-            }
-
-            ExploreScreenEvent.OnSearch -> {
-                displayedAnimeType.update {
-                    DisplayType.SEARCH
-                }
-                headerState.update {
-                    it.copy(
-                        searchedAnimeTitle = it.searchQuery
-                    )
-                }
-                _searchQuery.update {
-                    headerState.value.searchQuery
-                }
-            }
-
-            ExploreScreenEvent.OnStopSearching -> {
-                headerState.update {
-                    it.copy(
-                        searchQuery = "",
-                        isSearching = false
-                    )
-                }
-            }
-
-            is ExploreScreenEvent.OnPopularAnimeFilterChanged -> _popularAnimeFilter.update {
-                event.popularAnimeFilter
-            }
-
-            is ExploreScreenEvent.OnUpcomingAnimeFilterChanged -> _upcomingAnimeFilter.update {
-                event.upcomingAnimeFilter
-            }
-
-            is ExploreScreenEvent.OnAnimeFilterChanged -> {
-                _currentAnimeFilter.update {
-                    event.animeFilter
-                }
-            }
-
-            ExploreScreenEvent.OnAnimeFilterApplied -> {
-                _popularAnimeFilter.update {
-                    currentAnimeFilter.value.popularAnimeFilter
-                }
-
-                _upcomingAnimeFilter.update {
-                    currentAnimeFilter.value.upcomingAnimeFilter
-                }
-
-                _searchedAnimeFilter.update {
-                    currentAnimeFilter.value.searchAnimeFilter
                 }
             }
 
             is SearchBarEvent.OnSearch -> {
-                displayedAnimeType.update { DisplayType.SEARCH }
+                _currentDisplayType.update { DisplayType.SEARCH }
                 _searchBarState.update { currentSearchBarState ->
                     val recentlySearched = currentSearchBarState
                         .recentlySearched
@@ -280,13 +318,19 @@ class ExplorationScreenViewModel @Inject constructor(
                         recentlySearched = recentlySearched
                     )
                 }
+
                 _searchQuery.update { event.query }
+
+                viewModelScope.launch {
+                    _animeGridState.value[DisplayType.SEARCH]?.scrollToItem(0, 0)
+                    _animeListState.value[DisplayType.SEARCH]?.scrollToItem(0, 0)
+                }
             }
 
             is SearchBarEvent.OnSearchQueryChanged -> {
                 _searchBarState.update {
                     it.copy(
-                        query = event.query
+                        query = event.newSearchQuery
                     )
                 }
             }
@@ -295,17 +339,29 @@ class ExplorationScreenViewModel @Inject constructor(
                 _searchBarState.update {
                     it.copy(
                         query = _searchQuery.value,
-                        isActive = event.state
+                        isActive = event.newState
                     )
                 }
             }
 
-            is OnDisplayTypeChanged -> {
-                displayedAnimeType.update { event.displayType }
+            is BottomSheetEvent.OnDisplayTypeChanged -> {
+                _currentDisplayType.update { event.displayType }
             }
 
-            is OnAnimeFilterChanged -> {
+            is BottomSheetEvent.OnAnimeFilterChanged -> {
                 _currentAnimeFilter.update { event.animeFilter }
+            }
+
+            BottomSheetEvent.OnAnimeFilterApplied -> {
+                viewModelScope.launch {
+                    _animeGridState.value[_currentDisplayType.value]?.scrollToItem(0, 0)
+                    _animeListState.value[_currentDisplayType.value]?.scrollToItem(0, 0)
+                }
+
+                val currentAnimeFilter = _currentAnimeFilter.value
+                _popularAnimeFilter.update { currentAnimeFilter.popularAnimeFilter }
+                _upcomingAnimeFilter.update { currentAnimeFilter.upcomingAnimeFilter }
+                _searchedAnimeFilter.update { currentAnimeFilter.searchAnimeFilter }
             }
         }
     }
@@ -326,7 +382,7 @@ class ExplorationScreenViewModel @Inject constructor(
                     else -> DisplayStyle.LIST
                 }
                 Timber.d("Updated Style Preferences : $displayStyle")
-                displayedStyle.update { displayStyle }
+                _currentDisplayStyle.update { displayStyle }
             }
         }
     }
