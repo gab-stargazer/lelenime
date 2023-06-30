@@ -185,6 +185,7 @@ class ExplorationScreenViewModel @Inject constructor(
         flow2 = _upcomingAnimeFilter,
         flow3 = _searchedAnimeFilter
     ) { popularAnimeFilter, upcomingAnimeFilter, searchAnimeFilter ->
+        // TODO: Implement Airing Anime Filter
         AnimeFilter(
             popularAnimeFilter = popularAnimeFilter,
             upcomingAnimeFilter = upcomingAnimeFilter,
