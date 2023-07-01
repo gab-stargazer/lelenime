@@ -27,11 +27,13 @@ import com.lelestacia.lelenime.core.common.request.composable.AnimeRatingFilterM
 import com.lelestacia.lelenime.core.common.request.composable.AnimeSortFilterMenu
 import com.lelestacia.lelenime.core.common.request.composable.AnimeStatusFilterMenu
 import com.lelestacia.lelenime.core.common.request.composable.AnimeTypeFilterMenu
+import com.lelestacia.lelenime.core.common.request.composable.PopularAnimeFilter
 import com.lelestacia.lelenime.core.common.request.param.AnimeGenre
 import com.lelestacia.lelenime.core.common.request.param.AnimeRating
 import com.lelestacia.lelenime.core.common.request.param.AnimeSort
 import com.lelestacia.lelenime.core.common.request.param.AnimeStatus
 import com.lelestacia.lelenime.core.common.request.param.AnimeType
+import com.lelestacia.lelenime.core.common.request.param.PopularAnimeFilter
 import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
 import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
@@ -87,7 +89,7 @@ fun ExplorationBottomSheet(
     state: ExploreBottomSheetState,
     onEvent: (BottomSheetEvent) -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     /**
      * Represents a lambda function to handle changes in the anime filter.
@@ -165,6 +167,27 @@ fun ExplorationBottomSheet(
                         onFilterChanged(modifierAnimeFilter)
                     }
                 )
+            }
+
+            if (state.displayType == DisplayType.POPULAR) {
+                item {
+                    PopularAnimeFilter(
+                        selectedPopularAnimeFilter = state.currentAnimeFilter.popularAnimeFilter.filter,
+                        onPopularAnimeFilterChanged = { selectedPopularAnimeFilter: PopularAnimeFilter? ->
+                            val modifiedFilter = when (state.displayType) {
+                                DisplayType.POPULAR -> state.currentAnimeFilter.copy(
+                                    popularAnimeFilter = state.currentAnimeFilter.popularAnimeFilter.copy(
+                                        filter = selectedPopularAnimeFilter
+                                    )
+                                )
+
+                                else -> null
+                            }
+
+                            modifiedFilter?.let(onFilterChanged)
+                        }
+                    )
+                }
             }
 
             if (state.displayType == DisplayType.POPULAR || state.displayType == DisplayType.SEARCH) {

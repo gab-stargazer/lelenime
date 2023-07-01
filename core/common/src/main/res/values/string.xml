@@ -1,32 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Anime Information -->
     <string name="information_value">:\t%s</string>
+    <string name="displayed_anime">Displayed Anime</string>
     <string name="card">Card</string>
     <string name="compact_card">Compact Card</string>
     <string name="list">List</string>
-    <string name="unknown_error">We encounter unknown error</string>
+
+    <!-- Error Messages -->
+    <string name="unknown_error">We encountered an unknown error</string>
     <string name="retry">Retry</string>
+
+    <!-- Buttons and Icons -->
     <string name="favorite_btn">Favorite Button</string>
-    <string name="cover_images">Cover image from Anime %s</string>
+    <string name="score_icon">Score Icon</string>
+    <string name="scoredBy_icon">Scored By People Icon</string>
+    <string name="anime_status_icon">Anime Airing Status Icon</string>
+
+    <!-- Anime Status -->
     <string name="not_yet_aired">Not yet aired</string>
     <string name="currently_airing">Currently Airing</string>
     <string name="finished_airing">Finished Airing</string>
+
+    <!-- Ranking -->
     <string name="rank">#%s</string>
-    <string name="score_icon">Score Icon</string>
-    <string name="scoredBy_icon">Scored By People Icon</string>
-    <string name="anime_status_icon">Anime airing status Icon</string>
-    <string name="empty_synopsis">"No Synopsis Provided By Mal"</string>
 
-    <string name="displayed_anime">Displayed Anime</string>
+    <!-- Synopsis -->
+    <string name="empty_synopsis">No Synopsis Provided By Mal</string>
 
+    <!-- Filter Options -->
     <string name="anime_type">Anime Type</string>
-    <string name="all_anime_type">All Type</string>
+    <string name="all_anime_type">All Types</string>
     <string name="anime_rating">Anime Rating</string>
-    <string name="all_anime_rating">All Rating</string>
+    <string name="all_anime_rating">All Ratings</string>
     <string name="sort_anime_by">Sort Anime By</string>
     <string name="anime_status">Anime Status</string>
-    <string name="all_anime_status">All Status</string>
+    <string name="all_anime_status">All Statuses</string>
     <string name="anime_genre">Anime Genres</string>
     <string name="all_anime_genre">All Genres</string>
     <string name="apply_anime_filter">Apply Anime Filter</string>
+    <string name="popular_anime_filter">Popular Anime Filter</string>
+    <string name="no_popular_anime_filter">No Filter</string>
+
+    <!-- Cover Images -->
+    <string name="cover_images">Cover image from Anime %s</string>
+
 </resources>

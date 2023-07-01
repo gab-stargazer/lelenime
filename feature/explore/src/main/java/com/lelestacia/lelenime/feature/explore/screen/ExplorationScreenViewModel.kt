@@ -11,6 +11,7 @@ import com.lelestacia.lelenime.core.domain.usecases.explore.IExploreUseCases
 import com.lelestacia.lelenime.core.domain.usecases.settings.IUserPreferencesUseCases
 import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
+import com.lelestacia.lelenime.feature.explore.component.filter.AiringAnimeFilter
 import com.lelestacia.lelenime.feature.explore.component.filter.PopularAnimeFilter
 import com.lelestacia.lelenime.feature.explore.component.filter.SearchAnimeFilter
 import com.lelestacia.lelenime.feature.explore.component.filter.UpcomingAnimeFilter
@@ -47,7 +48,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ExplorationScreenViewModel @Inject constructor(
     private val useCases: IExploreUseCases,
-    private val useCasesPreferences: IUserPreferencesUseCases
+    private val useCasesPreferences: IUserPreferencesUseCases,
 ) : ViewModel() {
 
     /**
@@ -94,6 +95,15 @@ class ExplorationScreenViewModel @Inject constructor(
      */
     private val _popularAnimeFilter: MutableStateFlow<PopularAnimeFilter> =
         MutableStateFlow(PopularAnimeFilter())
+
+    /**
+     * Represents a private [MutableStateFlow] for holding the filter used to fetch airing anime.
+     * The popular anime filter can be updated to fetch anime based on specific criteria such as type or status.
+     *
+     * @see AiringAnimeFilter
+     */
+    private val _airingAnimeFilter: MutableStateFlow<AiringAnimeFilter> =
+        MutableStateFlow(AiringAnimeFilter())
 
     /**
      * Represents a private [MutableStateFlow] for holding the filter used to fetch upcoming anime.
@@ -182,16 +192,11 @@ class ExplorationScreenViewModel @Inject constructor(
      */
     private val _appliedAnimeFilter: StateFlow<AnimeFilter> = combine(
         flow = _popularAnimeFilter,
-        flow2 = _upcomingAnimeFilter,
-        flow3 = _searchedAnimeFilter
-    ) { popularAnimeFilter, upcomingAnimeFilter, searchAnimeFilter ->
-        // TODO: Implement Airing Anime Filter
-        AnimeFilter(
-            popularAnimeFilter = popularAnimeFilter,
-            upcomingAnimeFilter = upcomingAnimeFilter,
-            searchAnimeFilter = searchAnimeFilter
-        )
-    }.stateIn(
+        flow2 = _airingAnimeFilter,
+        flow3 = _upcomingAnimeFilter,
+        flow4 = _searchedAnimeFilter,
+        transform = ::AnimeFilter
+    ).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
         initialValue = AnimeFilter()
@@ -212,10 +217,8 @@ class ExplorationScreenViewModel @Inject constructor(
             .distinctUntilChanged()
             .flatMapLatest { filter ->
                 val animeType = filter.type?.name?.lowercase()
-                val animeStatus = filter.status?.name?.lowercase()
                 useCases.getPopularAnime(
                     type = animeType,
-                    status = animeStatus
                 )
             }.cachedIn(viewModelScope)
 
@@ -361,6 +364,7 @@ class ExplorationScreenViewModel @Inject constructor(
 
                 val currentAnimeFilter = _currentAnimeFilter.value
                 _popularAnimeFilter.update { currentAnimeFilter.popularAnimeFilter }
+                _airingAnimeFilter.update { currentAnimeFilter.airingAnimeFilter }
                 _upcomingAnimeFilter.update { currentAnimeFilter.upcomingAnimeFilter }
                 _searchedAnimeFilter.update { currentAnimeFilter.searchAnimeFilter }
             }
@@ -387,8 +391,4 @@ class ExplorationScreenViewModel @Inject constructor(
             }
         }
     }
-
-    val searchQuery: MutableStateFlow<String> = MutableStateFlow("")
-    val currentSearchQuery: MutableStateFlow<String> = MutableStateFlow("")
-    val isSearching = MutableStateFlow(false)
 }

@@ -88,8 +88,6 @@ fun NavGraphBuilder.exploration(
         val animeGridState by viewModel.animeGridState.collectAsStateWithLifecycle()
         val animeListState by viewModel.animeListState.collectAsStateWithLifecycle()
 
-        val isSearching by viewModel.isSearching.collectAsStateWithLifecycle()
-
         val searchBarState by viewModel.searchBarState.collectAsStateWithLifecycle()
         val bottomSheetState by viewModel.bottomSheetState.collectAsStateWithLifecycle()
 
