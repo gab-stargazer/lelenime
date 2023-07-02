@@ -43,8 +43,9 @@ fun AnimeList(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .clip(RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp))
             .clickable { onAnimeClicked(anime) }
-            .padding(8.dp)
     ) {
         AsyncImage(
             model = ImageRequest.Builder(context = LocalContext.current)

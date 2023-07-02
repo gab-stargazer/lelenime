@@ -1,6 +1,5 @@
 package com.lelestacia.lelenime.core.common.lazyAnime
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,12 +19,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import com.lelestacia.lelenime.core.common.R
 import com.lelestacia.lelenime.core.common.itemAnime.AnimeList
 import com.lelestacia.lelenime.core.model.Anime
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LazyListAnime(
     lazyListState: LazyListState,
@@ -34,18 +33,21 @@ fun LazyListAnime(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        contentPadding = PaddingValues(8.dp),
         state = lazyListState,
+        contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = modifier
     ) {
-        items(items = pagingAnime) { pagingAnime ->
-            pagingAnime?.let { anime ->
+        items(
+            count = pagingAnime.itemCount,
+            key = pagingAnime.itemKey { anime -> anime.malID },
+            contentType = pagingAnime.itemContentType()
+        ) { index ->
+            pagingAnime[index]?.let { anime ->
                 AnimeList(
                     anime = anime,
-                    onAnimeClicked = onAnimeClicked,
-                    modifier = Modifier.animateItemPlacement()
+                    onAnimeClicked = onAnimeClicked
                 )
-                Divider()
+                Divider(modifier = Modifier.fillMaxWidth())
             }
         }
 

@@ -1,6 +1,7 @@
 package com.lelestacia.lelenime.core.network.di
 
 import android.content.Context
+import com.lelestacia.lelenime.core.network.BuildConfig
 import com.lelestacia.lelenime.core.network.util.ConnectivityChecker
 import dagger.Module
 import dagger.Provides
@@ -22,7 +23,11 @@ object HttpModule {
     @Provides
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor =
-        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS)
+        } else {
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)
+        }
 
     @Provides
     @Singleton

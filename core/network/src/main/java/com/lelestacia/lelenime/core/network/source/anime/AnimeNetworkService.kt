@@ -10,9 +10,10 @@ class AnimeNetworkService @Inject constructor(
     private val animeAPI: AnimeAPI
 ) : IAnimeNetworkService {
 
-    override fun getAiringAnime(): PagingSource<Int, AnimeResponse> {
+    override fun getAiringAnime(type: String?): PagingSource<Int, AnimeResponse> {
         return AiringAnimePagingSource(
-            animeAPI = animeAPI
+            animeAPI = animeAPI,
+            type = type
         )
     }
 
@@ -25,27 +26,33 @@ class AnimeNetworkService @Inject constructor(
 
     override fun getPopularAnime(
         type: String?,
-        status: String?
+        filter: String?,
+        rating: String?
     ): PagingSource<Int, AnimeResponse> {
         return PopularAnimePagingSource(
             animeAPI = animeAPI,
             type = type,
-            status = status
+            filter = filter,
+            rating = rating
         )
     }
 
     override fun getAnimeSearch(
         searchQuery: String,
         type: String?,
+        rating: String?,
         status: String?,
-        rating: String?
+        sort: String?,
+        genres: String?
     ): PagingSource<Int, AnimeResponse> {
         return SearchAnimePagingSource(
             animeAPI = animeAPI,
             searchQuery = searchQuery,
             type = type,
+            rating = rating,
             status = status,
-            rating = rating
+            sort = sort,
+            genres = genres
         )
     }
 

@@ -20,7 +20,7 @@ fun LelenimeFilterChip(
 ) {
     FilterChip(
         selected = isActive,
-        onClick = { onClicked.invoke() },
+        onClick = onClicked::invoke,
         label = {
             label()
         },

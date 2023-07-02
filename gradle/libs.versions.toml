@@ -7,7 +7,7 @@ activity-compose-version = "1.7.2"
 android-version = "8.1.0-beta02"
 android-junit-version = "1.1.5"
 # Compose
-compose-bom-version = "2023.05.01"
+compose-bom-version = "2023.06.00"
 # Datastore Pref
 datastore-pref-version = "1.0.0"
 # Dokka
@@ -27,11 +27,11 @@ kotlin-ktx-version = "1.10.1"
 # Ktlint Gradle
 ktlint-gradle-version = "11.3.1"
 # Coil Compose
-coil-compose-version = "2.3.0"
+coil-compose-version = "2.4.0"
 # Coroutine
-coroutine-version = "1.7.0"
+coroutine-version = "1.7.1"
 # Dagger Hilt
-dagger-hilt-version = "2.45"
+dagger-hilt-version = "2.46.1"
 dagger-hilt-compose-version = "1.0.0"
 # KSP
 ksp-version = "1.8.10-1.0.9"
@@ -42,10 +42,10 @@ logging-interceptor-version = "5.0.0-alpha.6"
 # Mockk
 mockk-version = "1.13.5"
 # Navigation Compose
-navigation-compose-version = "2.5.3"
+navigation-compose-version = "2.6.0"
 # Paging
 paging-version = "3.1.1"
-paging-compose-version = "1.0.0-alpha20"
+paging-compose-version = "3.2.0-beta01"
 # Profiler
 profiler-version = "1.3.1"
 # Shimmer

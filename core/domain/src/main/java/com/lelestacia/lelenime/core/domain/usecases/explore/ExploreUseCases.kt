@@ -14,8 +14,8 @@ class ExploreUseCases @Inject constructor(
         repository.insertOrUpdateAnimeHistory(anime = anime)
     }
 
-    override fun getAiringAnime(): Flow<PagingData<Anime>> {
-        return repository.getAiringAnime()
+    override fun getAiringAnime(type: String?): Flow<PagingData<Anime>> {
+        return repository.getAiringAnime(type = type)
     }
 
     override fun getUpcomingAnime(type: String?): Flow<PagingData<Anime>> {
@@ -24,25 +24,31 @@ class ExploreUseCases @Inject constructor(
 
     override fun getPopularAnime(
         type: String?,
-        status: String?
+        filter: String?,
+        rating: String?
     ): Flow<PagingData<Anime>> {
         return repository.getPopularAnime(
             type = type,
-            status = status
+            filter = filter,
+            rating = rating
         )
     }
 
     override fun getAnimeSearch(
         searchQuery: String,
         type: String?,
+        rating: String?,
         status: String?,
-        rating: String?
+        sort: String?,
+        genres: String?
     ): Flow<PagingData<Anime>> {
         return repository.getAnimeSearch(
             searchQuery = searchQuery,
             type = type,
+            rating = rating,
             status = status,
-            rating = rating
+            sort = sort,
+            genres = genres
         )
     }
 
