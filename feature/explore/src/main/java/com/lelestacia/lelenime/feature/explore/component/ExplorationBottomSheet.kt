@@ -37,8 +37,8 @@ import com.lelestacia.lelenime.core.common.request.param.PopularAnimeFilter
 import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
 import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
-import com.lelestacia.lelenime.feature.explore.state.AnimeFilterState
 import com.lelestacia.lelenime.feature.explore.event.BottomSheetEvent
+import com.lelestacia.lelenime.feature.explore.state.AnimeFilterState
 import com.lelestacia.lelenime.feature.explore.state.ExploreBottomSheetState
 
 /**
@@ -89,7 +89,7 @@ fun ExploreBottomSheet(
     state: ExploreBottomSheetState,
     onEvent: (BottomSheetEvent) -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     /**
      * Represents a lambda function to handle changes in the anime filter.

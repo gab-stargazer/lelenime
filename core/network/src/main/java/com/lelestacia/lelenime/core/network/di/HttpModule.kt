@@ -23,7 +23,7 @@ object HttpModule {
     @Provides
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor =
-        if(BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS)
         } else {
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)

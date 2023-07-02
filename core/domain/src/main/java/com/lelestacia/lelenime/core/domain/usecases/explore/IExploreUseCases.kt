@@ -62,8 +62,8 @@ interface IExploreUseCases {
      */
     fun getPopularAnime(
         type: String? = null,
-        filter:String? = null,
-        rating: String? = null,
+        filter: String? = null,
+        rating: String? = null
     ): Flow<PagingData<Anime>>
 
     /**
@@ -92,7 +92,7 @@ interface IExploreUseCases {
         rating: String? = null,
         status: String? = null,
         sort: String? = null,
-        genres: String? = null,
+        genres: String? = null
     ): Flow<PagingData<Anime>>
 
     /**

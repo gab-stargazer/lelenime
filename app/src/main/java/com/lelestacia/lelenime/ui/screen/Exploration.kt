@@ -32,7 +32,7 @@ fun NavGraphBuilder.exploration(
     paddingValue: PaddingValues,
     scope: CoroutineScope,
     uiController: SystemUiController,
-    windowSize: WindowSizeClass,
+    windowSize: WindowSizeClass
 ) {
     composable(
         route = Screen.Explore.route,

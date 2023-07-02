@@ -33,7 +33,7 @@ class SearchAnimePagingSource(
     private val rating: String? = null,
     private val status: String? = null,
     private val sort: String? = null,
-    private val genres: String? = null,
+    private val genres: String? = null
 ) : PagingSource<Int, AnimeResponse>() {
 
     /**

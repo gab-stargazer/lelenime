@@ -17,5 +17,5 @@ import com.lelestacia.lelenime.core.common.request.param.PopularAnimeFilter
 data class PopularAnimeFilter(
     val type: AnimeType? = null,
     val filter: PopularAnimeFilter? = null,
-    val rating: AnimeRating? = null,
+    val rating: AnimeRating? = null
 )

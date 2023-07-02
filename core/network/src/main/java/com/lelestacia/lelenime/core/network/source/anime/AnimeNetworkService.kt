@@ -7,7 +7,7 @@ import com.lelestacia.lelenime.core.network.model.character.CharacterResponse
 import javax.inject.Inject
 
 class AnimeNetworkService @Inject constructor(
-    private val animeAPI: AnimeAPI,
+    private val animeAPI: AnimeAPI
 ) : IAnimeNetworkService {
 
     override fun getAiringAnime(type: String?): PagingSource<Int, AnimeResponse> {

@@ -16,12 +16,12 @@ import com.lelestacia.lelenime.feature.explore.component.filter.AiringAnimeFilte
 import com.lelestacia.lelenime.feature.explore.component.filter.PopularAnimeFilter
 import com.lelestacia.lelenime.feature.explore.component.filter.SearchAnimeFilter
 import com.lelestacia.lelenime.feature.explore.component.filter.UpcomingAnimeFilter
-import com.lelestacia.lelenime.feature.explore.state.AnimeFilterState
 import com.lelestacia.lelenime.feature.explore.event.BottomSheetEvent
-import com.lelestacia.lelenime.feature.explore.state.ExploreBottomSheetState
 import com.lelestacia.lelenime.feature.explore.event.ExploreScreenEvent
-import com.lelestacia.lelenime.feature.explore.state.ExploreScreenState
 import com.lelestacia.lelenime.feature.explore.event.SearchBarEvent
+import com.lelestacia.lelenime.feature.explore.state.AnimeFilterState
+import com.lelestacia.lelenime.feature.explore.state.ExploreBottomSheetState
+import com.lelestacia.lelenime.feature.explore.state.ExploreScreenState
 import com.lelestacia.lelenime.feature.explore.state.SearchBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -49,7 +49,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ExplorationScreenViewModel @Inject constructor(
     private val useCases: IExploreUseCases,
-    private val useCasesPreferences: IUserPreferencesUseCases,
+    private val useCasesPreferences: IUserPreferencesUseCases
 ) : ViewModel() {
 
     /**

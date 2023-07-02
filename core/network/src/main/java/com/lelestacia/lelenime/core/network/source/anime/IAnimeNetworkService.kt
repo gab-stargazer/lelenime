@@ -50,8 +50,8 @@ interface IAnimeNetworkService {
      */
     fun getPopularAnime(
         type: String? = null,
-        filter:String? = null,
-        rating: String? = null,
+        filter: String? = null,
+        rating: String? = null
     ): PagingSource<Int, AnimeResponse>
 
     /**
@@ -79,7 +79,7 @@ interface IAnimeNetworkService {
         rating: String? = null,
         status: String? = null,
         sort: String? = null,
-        genres: String? = null,
+        genres: String? = null
     ): PagingSource<Int, AnimeResponse>
 
     /**

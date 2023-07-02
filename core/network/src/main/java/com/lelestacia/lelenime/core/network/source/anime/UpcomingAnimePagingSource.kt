@@ -20,7 +20,7 @@ import timber.log.Timber
  */
 class UpcomingAnimePagingSource(
     private val animeAPI: AnimeAPI,
-    private val type: String? = null,
+    private val type: String? = null
 ) : PagingSource<Int, AnimeResponse>() {
 
     /**

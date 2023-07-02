@@ -62,10 +62,10 @@ import com.lelestacia.lelenime.feature.explore.R
 import com.lelestacia.lelenime.feature.explore.component.DisplayedAnimeMenu
 import com.lelestacia.lelenime.feature.explore.component.ExploreBottomSheet
 import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
-import com.lelestacia.lelenime.feature.explore.state.ExploreBottomSheetState
 import com.lelestacia.lelenime.feature.explore.event.ExploreScreenEvent
-import com.lelestacia.lelenime.feature.explore.state.ExploreScreenState
 import com.lelestacia.lelenime.feature.explore.event.SearchBarEvent
+import com.lelestacia.lelenime.feature.explore.state.ExploreBottomSheetState
+import com.lelestacia.lelenime.feature.explore.state.ExploreScreenState
 import com.lelestacia.lelenime.feature.explore.state.SearchBarState
 import timber.log.Timber
 
@@ -259,7 +259,11 @@ fun ExplorationScreen(
                                 Text(
                                     text = stringResource(
                                         id = R.string.anime_not_found,
-                                        ""
+                                        if (searchBarState.recentlySearched.isEmpty()) {
+                                            ""
+                                        } else {
+                                            searchBarState.recentlySearched.first()
+                                        }
                                     ),
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier.padding(horizontal = 24.dp)

@@ -25,8 +25,8 @@ import timber.log.Timber
 class PopularAnimePagingSource(
     private val animeAPI: AnimeAPI,
     private val type: String? = null,
-    private val filter:String? = null,
-    private val rating: String? = null,
+    private val filter: String? = null,
+    private val rating: String? = null
 ) : PagingSource<Int, AnimeResponse>() {
 
     /**
@@ -58,7 +58,7 @@ class PopularAnimePagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeResponse> {
         return try {
             val currentPage = params.key ?: 1
-            val apiResponse =  animeAPI.getPopularAnime(
+            val apiResponse = animeAPI.getPopularAnime(
                 type = type,
                 filter = filter,
                 rating = rating,

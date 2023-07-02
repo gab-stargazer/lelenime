@@ -34,7 +34,7 @@ interface AnimeAPI {
         @Query("filter") type: String?,
         @Query("page") page: Int,
         @Query("sfw") sfw: Boolean = true,
-        @Query("limit") limit: Int = 24,
+        @Query("limit") limit: Int = 24
     ): GenericPaginationResponse<AnimeResponse>
 
     /**
@@ -57,7 +57,7 @@ interface AnimeAPI {
         @Query("filter") type: String? = null,
         @Query("page") page: Int,
         @Query("sfw") sfw: Boolean = true,
-        @Query("limit") limit: Int = 24,
+        @Query("limit") limit: Int = 24
     ): GenericPaginationResponse<AnimeResponse>
 
     /**
@@ -86,7 +86,7 @@ interface AnimeAPI {
         @Query("rating") rating: String?,
         @Query("page") page: Int,
         @Query("sfw") sfw: Boolean = true,
-        @Query("limit") limit: Int = 24,
+        @Query("limit") limit: Int = 24
     ): GenericPaginationResponse<AnimeResponse>
 
     /**
@@ -123,7 +123,7 @@ interface AnimeAPI {
         @Query("genres") genre: String?,
         @Query("page") page: Int,
         @Query("sfw") sfw: Boolean = true,
-        @Query("limit") limit: Int = 24,
+        @Query("limit") limit: Int = 24
     ): GenericPaginationResponse<AnimeResponse>
 
     /**
@@ -138,6 +138,6 @@ interface AnimeAPI {
      */
     @GET("anime/{id}/characters")
     suspend fun getAnimeCharactersByAnimeID(
-        @Path("id") id: Int,
+        @Path("id") id: Int
     ): GenericResponse<List<CharacterResponse>>
 }
