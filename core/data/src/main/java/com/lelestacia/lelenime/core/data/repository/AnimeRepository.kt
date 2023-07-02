@@ -71,7 +71,7 @@ class AnimeRepository @Inject constructor(
         }
     }
 
-    override fun getAiringAnime(): Flow<PagingData<Anime>> {
+    override fun getAiringAnime(type: String?): Flow<PagingData<Anime>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 24,
@@ -80,7 +80,9 @@ class AnimeRepository @Inject constructor(
                 initialLoadSize = 24
             ),
             pagingSourceFactory = {
-                animeNetworkService.getAiringAnime()
+                animeNetworkService.getAiringAnime(
+                    type = type
+                )
             }
         ).flow.map { pagingData ->
             pagingData.map(AnimeResponse::asAnime)
@@ -107,7 +109,8 @@ class AnimeRepository @Inject constructor(
 
     override fun getPopularAnime(
         type: String?,
-        status: String?
+        filter: String?,
+        rating: String?
     ): Flow<PagingData<Anime>> {
         return Pager(
             config = PagingConfig(
@@ -119,7 +122,8 @@ class AnimeRepository @Inject constructor(
             pagingSourceFactory = {
                 animeNetworkService.getPopularAnime(
                     type = type,
-                    status = status
+                    filter = filter,
+                    rating = rating
                 )
             }
         ).flow.map { pagingData ->
@@ -130,8 +134,10 @@ class AnimeRepository @Inject constructor(
     override fun getAnimeSearch(
         searchQuery: String,
         type: String?,
+        rating: String?,
         status: String?,
-        rating: String?
+        sort: String?,
+        genres: String?
     ): Flow<PagingData<Anime>> {
         return Pager(
             config = PagingConfig(
@@ -144,8 +150,10 @@ class AnimeRepository @Inject constructor(
                 animeNetworkService.getAnimeSearch(
                     searchQuery = searchQuery,
                     type = type,
+                    rating = rating,
                     status = status,
-                    rating = rating
+                    sort = sort,
+                    genres = genres
                 )
             }
         ).flow.map { pagingData ->

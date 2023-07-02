@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.feature.explore.screen
+package com.lelestacia.lelenime.feature.explore.ui.viewmodel
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.lelestacia.lelenime.core.common.displayStyle.DisplayStyle
+import com.lelestacia.lelenime.core.common.util.toQueryParam
 import com.lelestacia.lelenime.core.domain.usecases.explore.IExploreUseCases
 import com.lelestacia.lelenime.core.domain.usecases.settings.IUserPreferencesUseCases
 import com.lelestacia.lelenime.core.model.Anime
@@ -216,14 +217,22 @@ class ExplorationScreenViewModel @Inject constructor(
             .debounce(0)
             .distinctUntilChanged()
             .flatMapLatest { filter ->
-                val animeType = filter.type?.name?.lowercase()
+                val animeType: String? = filter.type?.name?.lowercase()
+                val animeRating = filter.rating?.query
+                val animeFilter = filter.filter?.query
                 useCases.getPopularAnime(
                     type = animeType,
+                    filter = animeFilter,
+                    rating = animeRating
                 )
             }.cachedIn(viewModelScope)
 
     private val airingAnime: Flow<PagingData<Anime>> =
-        useCases.getAiringAnime().cachedIn(viewModelScope)
+        _airingAnimeFilter.flatMapLatest { filter ->
+            useCases.getAiringAnime(
+                type = filter.type?.name?.lowercase()
+            )
+        }.cachedIn(viewModelScope)
 
     private val upcomingAnime: Flow<PagingData<Anime>> =
         _upcomingAnimeFilter.flatMapLatest { filter ->
@@ -245,8 +254,10 @@ class ExplorationScreenViewModel @Inject constructor(
             useCases.getAnimeSearch(
                 searchQuery = searchQuery,
                 type = filter.type?.name?.lowercase(),
+                rating = filter.rating?.query,
                 status = filter.status?.name?.lowercase(),
-                rating = filter.rating?.query
+                sort = filter.sort.query,
+                genres = filter.genres.toQueryParam()
             )
         }
         .cachedIn(viewModelScope)

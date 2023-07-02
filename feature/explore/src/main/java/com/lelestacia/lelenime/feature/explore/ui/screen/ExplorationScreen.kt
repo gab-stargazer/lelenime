@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.feature.explore.screen
+package com.lelestacia.lelenime.feature.explore.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

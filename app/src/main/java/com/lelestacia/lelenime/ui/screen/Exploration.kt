@@ -18,8 +18,8 @@ import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.lelestacia.lelenime.core.common.route.Screen
-import com.lelestacia.lelenime.feature.explore.screen.ExplorationScreen
-import com.lelestacia.lelenime.feature.explore.screen.ExplorationScreenViewModel
+import com.lelestacia.lelenime.feature.explore.ui.screen.ExplorationScreen
+import com.lelestacia.lelenime.feature.explore.ui.viewmodel.ExplorationScreenViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
