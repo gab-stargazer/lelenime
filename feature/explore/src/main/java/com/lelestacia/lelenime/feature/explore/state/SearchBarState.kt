@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.feature.explore.stateAndEvent
+package com.lelestacia.lelenime.feature.explore.state
 
 data class SearchBarState(
     val query: String = "",

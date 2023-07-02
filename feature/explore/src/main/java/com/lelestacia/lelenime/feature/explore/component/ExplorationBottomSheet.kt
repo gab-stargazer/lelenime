@@ -37,9 +37,9 @@ import com.lelestacia.lelenime.core.common.request.param.PopularAnimeFilter
 import com.lelestacia.lelenime.core.common.theme.LelenimeTheme
 import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.AnimeFilter
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.BottomSheetEvent
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreBottomSheetState
+import com.lelestacia.lelenime.feature.explore.state.AnimeFilterState
+import com.lelestacia.lelenime.feature.explore.event.BottomSheetEvent
+import com.lelestacia.lelenime.feature.explore.state.ExploreBottomSheetState
 
 /**
  * Composable function that displays an exploration bottom sheet containing various anime filter options.
@@ -49,7 +49,7 @@ import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreBottomSheetS
  * @param onDismiss Lambda function to handle the dismissal of the bottom sheet. It does not take any parameters and returns `Unit`.
  * @param modifier Optional [Modifier] that can be used to adjust the layout or appearance of the bottom sheet.
  *
- * The [ExplorationBottomSheet] composable displays a bottom sheet with anime filter options. The bottom sheet contains various filter menus,
+ * The [ExploreBottomSheet] composable displays a bottom sheet with anime filter options. The bottom sheet contains various filter menus,
  * such as anime type, rating, status, sort, and genres, based on the [DisplayType] of the anime list (popular, airing, upcoming, or search).
  *
  * The [state] parameter holds the current and applied anime filters. It helps to determine the selected options in the filter menus and indicates
@@ -85,7 +85,7 @@ import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreBottomSheetS
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ExplorationBottomSheet(
+fun ExploreBottomSheet(
     state: ExploreBottomSheetState,
     onEvent: (BottomSheetEvent) -> Unit,
     onDismiss: () -> Unit,
@@ -94,9 +94,9 @@ fun ExplorationBottomSheet(
     /**
      * Represents a lambda function to handle changes in the anime filter.
      *
-     * @param filter The new [AnimeFilter] to be applied.
+     * @param filter The new [AnimeFilterState] to be applied.
      */
-    val onFilterChanged: (AnimeFilter) -> Unit = { filter ->
+    val onFilterChanged: (AnimeFilterState) -> Unit = { filter ->
         onEvent(BottomSheetEvent.OnAnimeFilterChanged(filter))
     }
 
@@ -132,39 +132,39 @@ fun ExplorationBottomSheet(
             item {
                 AnimeTypeFilterMenu(
                     selectedAnimeType = when (state.displayType) {
-                        DisplayType.POPULAR -> state.currentAnimeFilter.popularAnimeFilter.type
-                        DisplayType.AIRING -> state.currentAnimeFilter.airingAnimeFilter.type
-                        DisplayType.UPCOMING -> state.currentAnimeFilter.upcomingAnimeFilter.type
-                        DisplayType.SEARCH -> state.currentAnimeFilter.searchAnimeFilter.type
+                        DisplayType.POPULAR -> state.currentAnimeFilterState.popularAnimeFilter.type
+                        DisplayType.AIRING -> state.currentAnimeFilterState.airingAnimeFilter.type
+                        DisplayType.UPCOMING -> state.currentAnimeFilterState.upcomingAnimeFilter.type
+                        DisplayType.SEARCH -> state.currentAnimeFilterState.searchAnimeFilter.type
                     },
                     onAnimeTypeChanged = { selectedType: AnimeType? ->
-                        val modifierAnimeFilter: AnimeFilter =
+                        val modifierAnimeFilterState: AnimeFilterState =
                             when (state.displayType) {
-                                DisplayType.POPULAR -> state.currentAnimeFilter.copy(
-                                    popularAnimeFilter = state.currentAnimeFilter.popularAnimeFilter.copy(
+                                DisplayType.POPULAR -> state.currentAnimeFilterState.copy(
+                                    popularAnimeFilter = state.currentAnimeFilterState.popularAnimeFilter.copy(
                                         type = selectedType
                                     )
                                 )
 
-                                DisplayType.AIRING -> state.currentAnimeFilter.copy(
-                                    airingAnimeFilter = state.currentAnimeFilter.airingAnimeFilter.copy(
+                                DisplayType.AIRING -> state.currentAnimeFilterState.copy(
+                                    airingAnimeFilter = state.currentAnimeFilterState.airingAnimeFilter.copy(
                                         type = selectedType
                                     )
                                 )
 
-                                DisplayType.UPCOMING -> state.currentAnimeFilter.copy(
-                                    upcomingAnimeFilter = state.currentAnimeFilter.upcomingAnimeFilter.copy(
+                                DisplayType.UPCOMING -> state.currentAnimeFilterState.copy(
+                                    upcomingAnimeFilter = state.currentAnimeFilterState.upcomingAnimeFilter.copy(
                                         type = selectedType
                                     )
                                 )
 
-                                DisplayType.SEARCH -> state.currentAnimeFilter.copy(
-                                    searchAnimeFilter = state.currentAnimeFilter.searchAnimeFilter.copy(
+                                DisplayType.SEARCH -> state.currentAnimeFilterState.copy(
+                                    searchAnimeFilter = state.currentAnimeFilterState.searchAnimeFilter.copy(
                                         type = selectedType
                                     )
                                 )
                             }
-                        onFilterChanged(modifierAnimeFilter)
+                        onFilterChanged(modifierAnimeFilterState)
                     }
                 )
             }
@@ -172,11 +172,11 @@ fun ExplorationBottomSheet(
             if (state.displayType == DisplayType.POPULAR) {
                 item {
                     PopularAnimeFilter(
-                        selectedPopularAnimeFilter = state.currentAnimeFilter.popularAnimeFilter.filter,
+                        selectedPopularAnimeFilter = state.currentAnimeFilterState.popularAnimeFilter.filter,
                         onPopularAnimeFilterChanged = { selectedPopularAnimeFilter: PopularAnimeFilter? ->
                             val modifiedFilter = when (state.displayType) {
-                                DisplayType.POPULAR -> state.currentAnimeFilter.copy(
-                                    popularAnimeFilter = state.currentAnimeFilter.popularAnimeFilter.copy(
+                                DisplayType.POPULAR -> state.currentAnimeFilterState.copy(
+                                    popularAnimeFilter = state.currentAnimeFilterState.popularAnimeFilter.copy(
                                         filter = selectedPopularAnimeFilter
                                     )
                                 )
@@ -195,20 +195,20 @@ fun ExplorationBottomSheet(
                     AnimeRatingFilterMenu(
                         selectedAnimeRating =
                         when (state.displayType) {
-                            DisplayType.POPULAR -> state.currentAnimeFilter.popularAnimeFilter.rating
-                            DisplayType.SEARCH -> state.currentAnimeFilter.searchAnimeFilter.rating
+                            DisplayType.POPULAR -> state.currentAnimeFilterState.popularAnimeFilter.rating
+                            DisplayType.SEARCH -> state.currentAnimeFilterState.searchAnimeFilter.rating
                             else -> null
                         },
                         onAnimeRatingSelected = { selectedRating: AnimeRating? ->
                             val modifiedFilter = when (state.displayType) {
-                                DisplayType.POPULAR -> state.currentAnimeFilter.copy(
-                                    popularAnimeFilter = state.currentAnimeFilter.popularAnimeFilter.copy(
+                                DisplayType.POPULAR -> state.currentAnimeFilterState.copy(
+                                    popularAnimeFilter = state.currentAnimeFilterState.popularAnimeFilter.copy(
                                         rating = selectedRating
                                     )
                                 )
 
-                                DisplayType.SEARCH -> state.currentAnimeFilter.copy(
-                                    searchAnimeFilter = state.currentAnimeFilter.searchAnimeFilter.copy(
+                                DisplayType.SEARCH -> state.currentAnimeFilterState.copy(
+                                    searchAnimeFilter = state.currentAnimeFilterState.searchAnimeFilter.copy(
                                         rating = selectedRating
                                     )
                                 )
@@ -225,11 +225,11 @@ fun ExplorationBottomSheet(
             if (state.displayType == DisplayType.SEARCH) {
                 item {
                     AnimeStatusFilterMenu(
-                        selectedAnimeStatus = state.currentAnimeFilter.searchAnimeFilter.status,
+                        selectedAnimeStatus = state.currentAnimeFilterState.searchAnimeFilter.status,
                         onAnimeStatusChanged = { selectedStatus: AnimeStatus? ->
                             val modifiedFilter = when (state.displayType) {
-                                DisplayType.SEARCH -> state.currentAnimeFilter.copy(
-                                    searchAnimeFilter = state.currentAnimeFilter.searchAnimeFilter.copy(
+                                DisplayType.SEARCH -> state.currentAnimeFilterState.copy(
+                                    searchAnimeFilter = state.currentAnimeFilterState.searchAnimeFilter.copy(
                                         status = selectedStatus
                                     )
                                 )
@@ -245,11 +245,11 @@ fun ExplorationBottomSheet(
             if (state.displayType == DisplayType.SEARCH) {
                 item {
                     AnimeSortFilterMenu(
-                        selectedAnimeSort = state.currentAnimeFilter.searchAnimeFilter.sort,
+                        selectedAnimeSort = state.currentAnimeFilterState.searchAnimeFilter.sort,
                         onAnimeSortChanged = { selectedSort: AnimeSort ->
                             val modifiedFilter = when (state.displayType) {
-                                DisplayType.SEARCH -> state.currentAnimeFilter.copy(
-                                    searchAnimeFilter = state.currentAnimeFilter.searchAnimeFilter.copy(
+                                DisplayType.SEARCH -> state.currentAnimeFilterState.copy(
+                                    searchAnimeFilter = state.currentAnimeFilterState.searchAnimeFilter.copy(
                                         sort = selectedSort
                                     )
                                 )
@@ -265,16 +265,16 @@ fun ExplorationBottomSheet(
             if (state.displayType == DisplayType.SEARCH) {
                 item {
                     AnimeGenreFilterMenu(
-                        selectedAnimeGenres = state.currentAnimeFilter.searchAnimeFilter.genres.toList(),
+                        selectedAnimeGenres = state.currentAnimeFilterState.searchAnimeFilter.genres.toList(),
                         onAnimeGenreAdded = { selectedGenre: AnimeGenre ->
-                            val modifiedGenre = state.currentAnimeFilter
+                            val modifiedGenre = state.currentAnimeFilterState
                                 .searchAnimeFilter
                                 .genres
                                 .toMutableList()
                             modifiedGenre.add(selectedGenre)
                             val modifiedFilter = when (state.displayType) {
-                                DisplayType.SEARCH -> state.currentAnimeFilter.copy(
-                                    searchAnimeFilter = state.currentAnimeFilter.searchAnimeFilter.copy(
+                                DisplayType.SEARCH -> state.currentAnimeFilterState.copy(
+                                    searchAnimeFilter = state.currentAnimeFilterState.searchAnimeFilter.copy(
                                         genres = modifiedGenre.toList()
                                     )
                                 )
@@ -284,14 +284,14 @@ fun ExplorationBottomSheet(
                             modifiedFilter?.let(onFilterChanged)
                         },
                         onAnimeGenreRemoved = { selectedGenre: AnimeGenre ->
-                            val modifiedGenre = state.currentAnimeFilter
+                            val modifiedGenre = state.currentAnimeFilterState
                                 .searchAnimeFilter
                                 .genres
                                 .toMutableList()
                             modifiedGenre.remove(selectedGenre)
                             val modifiedFilter = when (state.displayType) {
-                                DisplayType.SEARCH -> state.currentAnimeFilter.copy(
-                                    searchAnimeFilter = state.currentAnimeFilter.searchAnimeFilter.copy(
+                                DisplayType.SEARCH -> state.currentAnimeFilterState.copy(
+                                    searchAnimeFilter = state.currentAnimeFilterState.searchAnimeFilter.copy(
                                         genres = modifiedGenre
                                     )
                                 )
@@ -302,8 +302,8 @@ fun ExplorationBottomSheet(
                         },
                         onAnimeGenreCleared = {
                             val modifiedFilter = when (state.displayType) {
-                                DisplayType.SEARCH -> state.currentAnimeFilter.copy(
-                                    searchAnimeFilter = state.currentAnimeFilter.searchAnimeFilter.copy(
+                                DisplayType.SEARCH -> state.currentAnimeFilterState.copy(
+                                    searchAnimeFilter = state.currentAnimeFilterState.searchAnimeFilter.copy(
                                         genres = emptyList()
                                     )
                                 )
@@ -316,7 +316,7 @@ fun ExplorationBottomSheet(
                 }
             }
 
-            if (state.currentAnimeFilter != state.appliedAnimeFilter) {
+            if (state.currentAnimeFilterState != state.appliedAnimeFilterState) {
                 item {
                     Button(
                         onClick = {
@@ -345,7 +345,7 @@ fun PreviewExplorationBottomSheet() {
         var state by remember {
             mutableStateOf(ExploreBottomSheetState())
         }
-        ExplorationBottomSheet(
+        ExploreBottomSheet(
             state = state,
             onEvent = { event ->
                 state = when (event) {
@@ -357,7 +357,7 @@ fun PreviewExplorationBottomSheet() {
 
                     is BottomSheetEvent.OnAnimeFilterChanged -> {
                         state.copy(
-                            currentAnimeFilter = event.animeFilter
+                            currentAnimeFilterState = event.animeFilterState
                         )
                     }
 

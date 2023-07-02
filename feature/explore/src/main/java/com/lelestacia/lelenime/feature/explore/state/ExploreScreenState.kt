@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.feature.explore.stateAndEvent
+package com.lelestacia.lelenime.feature.explore.state
 
 import androidx.paging.PagingData
 import com.lelestacia.lelenime.core.common.displayStyle.DisplayStyle

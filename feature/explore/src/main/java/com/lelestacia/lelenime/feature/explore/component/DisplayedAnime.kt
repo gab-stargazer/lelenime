@@ -18,9 +18,9 @@ import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
 import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayTypeButton
 import com.lelestacia.lelenime.feature.explore.component.displayType.ExplorationDisplayType
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.BottomSheetEvent
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState
+import com.lelestacia.lelenime.feature.explore.event.BottomSheetEvent
+import com.lelestacia.lelenime.feature.explore.event.ExploreScreenEvent
+import com.lelestacia.lelenime.feature.explore.state.ExploreScreenState
 
 @Composable
 fun DisplayedAnimeMenu(

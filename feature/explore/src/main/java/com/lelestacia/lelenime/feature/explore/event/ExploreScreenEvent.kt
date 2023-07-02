@@ -1,8 +1,19 @@
-package com.lelestacia.lelenime.feature.explore.stateAndEvent
+package com.lelestacia.lelenime.feature.explore.event
 
 import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
+import com.lelestacia.lelenime.feature.explore.state.AnimeFilterState
 
+/**
+ * Sealed class representing various events that can occur on the Explore Screen.
+ * It serves as a container for different types of events that can be handled by the Explore Screen.
+ */
 sealed class ExploreScreenEvent {
+
+    /**
+     * Data class representing the event when the display type is changed on the Explore Screen.
+     *
+     * @param selectedType The [DisplayType] representing the newly selected display type.
+     */
     data class OnDisplayTypeChanged(val selectedType: DisplayType) : ExploreScreenEvent()
 }
 
@@ -50,9 +61,9 @@ sealed class BottomSheetEvent : ExploreScreenEvent() {
     /**
      * Event indicating that the anime filter in the bottom sheet has changed.
      *
-     * @property animeFilter The new [AnimeFilter] selected in the bottom sheet.
+     * @property animeFilterState The new [AnimeFilterState] selected in the bottom sheet.
      */
-    data class OnAnimeFilterChanged(val animeFilter: AnimeFilter) : BottomSheetEvent()
+    data class OnAnimeFilterChanged(val animeFilterState: AnimeFilterState) : BottomSheetEvent()
 
     /**
      * Event indicating that the anime filter in the bottom sheet has been applied.

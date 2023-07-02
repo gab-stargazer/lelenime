@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.feature.explore.ui.viewmodel
+package com.lelestacia.lelenime.feature.explore.viewmodel
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -16,13 +16,13 @@ import com.lelestacia.lelenime.feature.explore.component.filter.AiringAnimeFilte
 import com.lelestacia.lelenime.feature.explore.component.filter.PopularAnimeFilter
 import com.lelestacia.lelenime.feature.explore.component.filter.SearchAnimeFilter
 import com.lelestacia.lelenime.feature.explore.component.filter.UpcomingAnimeFilter
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.AnimeFilter
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.BottomSheetEvent
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreBottomSheetState
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.SearchBarEvent
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.SearchBarState
+import com.lelestacia.lelenime.feature.explore.state.AnimeFilterState
+import com.lelestacia.lelenime.feature.explore.event.BottomSheetEvent
+import com.lelestacia.lelenime.feature.explore.state.ExploreBottomSheetState
+import com.lelestacia.lelenime.feature.explore.event.ExploreScreenEvent
+import com.lelestacia.lelenime.feature.explore.state.ExploreScreenState
+import com.lelestacia.lelenime.feature.explore.event.SearchBarEvent
+import com.lelestacia.lelenime.feature.explore.state.SearchBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -191,22 +191,24 @@ class ExplorationScreenViewModel @Inject constructor(
      * The state flow emits the combined anime filter values from popular, upcoming, and searched anime filters.
      * It provides a single source of truth for the currently applied anime filter.
      */
-    private val _appliedAnimeFilter: StateFlow<AnimeFilter> = combine(
+    private val _appliedAnimeFilterState: StateFlow<AnimeFilterState> = combine(
         flow = _popularAnimeFilter,
         flow2 = _airingAnimeFilter,
         flow3 = _upcomingAnimeFilter,
         flow4 = _searchedAnimeFilter,
-        transform = ::AnimeFilter
+        transform = ::AnimeFilterState
     ).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
-        initialValue = AnimeFilter()
+        initialValue = AnimeFilterState()
     )
 
     /**
      * Holds the current anime filter as a mutable state flow.
      */
-    private val _currentAnimeFilter: MutableStateFlow<AnimeFilter> = MutableStateFlow(AnimeFilter())
+    private val _currentAnimeFilterState: MutableStateFlow<AnimeFilterState> = MutableStateFlow(
+        AnimeFilterState()
+    )
 
     /**
      * Represents a flow of paging data for popular anime.
@@ -298,8 +300,8 @@ class ExplorationScreenViewModel @Inject constructor(
 
     val bottomSheetState = combine(
         flow = _currentDisplayType,
-        flow2 = _currentAnimeFilter,
-        flow3 = _appliedAnimeFilter,
+        flow2 = _currentAnimeFilterState,
+        flow3 = _appliedAnimeFilterState,
         transform = ::ExploreBottomSheetState
     ).stateIn(
         scope = viewModelScope,
@@ -364,7 +366,7 @@ class ExplorationScreenViewModel @Inject constructor(
             }
 
             is BottomSheetEvent.OnAnimeFilterChanged -> {
-                _currentAnimeFilter.update { event.animeFilter }
+                _currentAnimeFilterState.update { event.animeFilterState }
             }
 
             BottomSheetEvent.OnAnimeFilterApplied -> {
@@ -373,7 +375,7 @@ class ExplorationScreenViewModel @Inject constructor(
                     _animeListState.value[_currentDisplayType.value]?.scrollToItem(0, 0)
                 }
 
-                val currentAnimeFilter = _currentAnimeFilter.value
+                val currentAnimeFilter = _currentAnimeFilterState.value
                 _popularAnimeFilter.update { currentAnimeFilter.popularAnimeFilter }
                 _airingAnimeFilter.update { currentAnimeFilter.airingAnimeFilter }
                 _upcomingAnimeFilter.update { currentAnimeFilter.upcomingAnimeFilter }

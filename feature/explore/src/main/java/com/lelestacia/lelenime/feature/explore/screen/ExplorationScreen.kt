@@ -1,4 +1,4 @@
-package com.lelestacia.lelenime.feature.explore.ui.screen
+package com.lelestacia.lelenime.feature.explore.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -60,15 +60,30 @@ import com.lelestacia.lelenime.core.common.theme.spacing
 import com.lelestacia.lelenime.core.model.Anime
 import com.lelestacia.lelenime.feature.explore.R
 import com.lelestacia.lelenime.feature.explore.component.DisplayedAnimeMenu
-import com.lelestacia.lelenime.feature.explore.component.ExplorationBottomSheet
+import com.lelestacia.lelenime.feature.explore.component.ExploreBottomSheet
 import com.lelestacia.lelenime.feature.explore.component.displayType.DisplayType
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreBottomSheetState
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenEvent
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.ExploreScreenState
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.SearchBarEvent
-import com.lelestacia.lelenime.feature.explore.stateAndEvent.SearchBarState
+import com.lelestacia.lelenime.feature.explore.state.ExploreBottomSheetState
+import com.lelestacia.lelenime.feature.explore.event.ExploreScreenEvent
+import com.lelestacia.lelenime.feature.explore.state.ExploreScreenState
+import com.lelestacia.lelenime.feature.explore.event.SearchBarEvent
+import com.lelestacia.lelenime.feature.explore.state.SearchBarState
 import timber.log.Timber
 
+/**
+ * Composable function representing the Explore Screen, displaying a list/grid of anime.
+ *
+ * @param windowSize The [WindowSizeClass] representing the current window size information.
+ * @param screenState The current state of the Explore Screen, including the selected display type and style.
+ * @param animeGridState A map containing the [LazyGridState] for each display type of the anime grid.
+ * @param animeListState A map containing the [LazyListState] for each display type of the anime list.
+ * @param bottomSheetState The state of the Explore Screen's bottom sheet, containing filter options.
+ * @param searchBarState The state of the search bar, including query and active state.
+ * @param modifier The [Modifier] for the root element of this composable.
+ * @param onEvent The event handler for handling different [ExploreScreenEvent] events.
+ * @param onAnimeClicked The callback function to be called when an anime item is clicked.
+ * @param onErrorParsingRequest A function to handle the parsing of throwable errors and display an error message.
+ * @param onRequestFocus The callback function to request or remove focus from the search bar.
+ */
 @OptIn(
     ExperimentalComposeUiApi::class,
     ExperimentalMaterial3Api::class
@@ -80,40 +95,15 @@ fun ExplorationScreen(
     animeGridState: Map<DisplayType, LazyGridState>,
     animeListState: Map<DisplayType, LazyListState>,
     bottomSheetState: ExploreBottomSheetState,
+    searchBarState: SearchBarState,
+    modifier: Modifier = Modifier,
     onEvent: (ExploreScreenEvent) -> Unit,
     onAnimeClicked: (Anime) -> Unit,
     onErrorParsingRequest: (Throwable) -> String,
-    modifier: Modifier = Modifier,
-    searchBarState: SearchBarState,
     onRequestFocus: (Boolean) -> Unit
 ) {
-    /**
-     * Retrieves a lazy paging items object for anime based on the screen state.
-     * It collects the anime data as a lazy paging items stream and assigns it to the 'pagingAnime' variable.
-     *
-     * @return The lazy paging items object for anime.
-     */
     val pagingAnime: LazyPagingItems<Anime> = screenState.anime.collectAsLazyPagingItems()
-
-    /**
-     * Remembers a [ModalBottomSheetState] that will be retained across compositions.
-     *
-     * The state can be used with the [ModalBottomSheet] composable for controlling
-     * the visibility and behavior of the bottom sheet.
-     *
-     * @return A [ModalBottomSheetState] that can be used to control the modal bottom sheet.
-     */
     val modalBottomSheetState = rememberModalBottomSheetState()
-
-    /**
-     * A boolean variable to keep track of whether the filter menu is opened or closed.
-     *
-     * This variable is used in conjunction with [rememberSaveable] to store and retrieve the state
-     * of the filter menu across configuration changes. It represents whether the filter menu is
-     * currently opened or closed.
-     *
-     * @see rememberSaveable
-     */
     var isFilterMenuOpened by rememberSaveable {
         mutableStateOf(false)
     }
@@ -280,8 +270,8 @@ fun ExplorationScreen(
 
                         if (screenState.displayStyle == DisplayStyle.LIST) {
                             LazyListAnime(
-                                lazyListState = animeListState[screenState.displayType]
-                                    ?: rememberLazyListState(),
+                                lazyListState =
+                                animeListState[screenState.displayType] ?: rememberLazyListState(),
                                 pagingAnime = pagingAnime,
                                 onAnimeClicked = onAnimeClicked,
                                 modifier = Modifier
@@ -291,8 +281,8 @@ fun ExplorationScreen(
                         } else {
                             LazyGridAnime(
                                 windowSize = windowSize,
-                                lazyGridState = animeGridState[screenState.displayType]
-                                    ?: rememberLazyGridState(),
+                                lazyGridState =
+                                animeGridState[screenState.displayType] ?: rememberLazyGridState(),
                                 pagingAnime = pagingAnime,
                                 displayStyle = screenState.displayStyle,
                                 onAnimeClicked = onAnimeClicked,
@@ -314,7 +304,7 @@ fun ExplorationScreen(
                     sheetState = modalBottomSheetState,
                     onDismissRequest = onDismissFilterMenu,
                     content = {
-                        ExplorationBottomSheet(
+                        ExploreBottomSheet(
                             onEvent = onEvent,
                             state = bottomSheetState,
                             onDismiss = onDismissFilterMenu
